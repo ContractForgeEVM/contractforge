@@ -39,6 +39,7 @@ import {
 import { useAccount, useChainId } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { formatDistanceToNow } from 'date-fns'
+import { formatEther } from 'ethers'
 
 interface DeployedContract {
   id: string
@@ -111,7 +112,7 @@ const DeployedContracts: React.FC = () => {
         transactionHash: deployment.transaction_hash || '',
         status: deployment.success ? 'success' : 'failed',
         gasUsed: deployment.gas_used || 'N/A',
-        deploymentCost: deployment.value ? `${deployment.value} ${getNativeToken(deployment.chain)}` : 'N/A',
+        deploymentCost: formatDeploymentCost(deployment.value, deployment.chain),
         hasCustomPage: deployment.template === 'nft'
       }))
 
@@ -190,6 +191,35 @@ const DeployedContracts: React.FC = () => {
       'monad': 'MON'
     }
     return nativeTokens[chainName.toLowerCase()] || 'ETH'
+  }
+
+  const formatDeploymentCost = (value: string, chainName: string): string => {
+    if (!value || value === '0') return 'N/A'
+    
+    try {
+      // Convertir de wei vers ETH/token natif
+      const ethValue = formatEther(value)
+      const numValue = parseFloat(ethValue)
+      
+      // Formater avec un nombre approprié de décimales
+      let formattedValue: string
+      if (numValue === 0) {
+        formattedValue = '0'
+      } else if (numValue < 0.000001) {
+        formattedValue = numValue.toFixed(8).replace(/\.?0+$/, '')
+      } else if (numValue < 0.01) {
+        formattedValue = numValue.toFixed(6).replace(/\.?0+$/, '')
+      } else if (numValue < 1) {
+        formattedValue = numValue.toFixed(4).replace(/\.?0+$/, '')
+      } else {
+        formattedValue = numValue.toFixed(4).replace(/\.?0+$/, '')
+      }
+      
+      return `${formattedValue} ${getNativeToken(chainName)}`
+    } catch (error) {
+      console.error('Erreur formatage coût:', error)
+      return `${value} ${getNativeToken(chainName)}`
+    }
   }
 
   const getChainName = (chainId: number): string => {
