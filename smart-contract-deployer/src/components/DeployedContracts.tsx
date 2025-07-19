@@ -99,8 +99,27 @@ const DeployedContracts: React.FC = () => {
 
       console.log('📊 Données brutes reçues de Supabase:', deployments)
 
-      // Transformer les données Supabase pour correspondre à notre interface
-      const formattedContracts: DeployedContract[] = (deployments || []).map((deployment: any) => ({
+      // Filtrer les données mock/test (adresses qui contiennent des patterns de test)
+      const filteredDeployments = (deployments || []).filter((deployment: any) => {
+        const address = deployment.contract_address || ''
+        // Exclure les adresses mock communes
+        const mockPatterns = [
+          /0x1234.*5678/i,
+          /0x123456789012345678901234567890123456/i,
+          /0xabcdef/i,
+          /0x000000/i
+        ]
+        const isMock = mockPatterns.some(pattern => pattern.test(address))
+        if (isMock) {
+          console.log(`🚫 Données mock filtrées: ${address}`)
+        }
+        return !isMock
+      })
+
+      console.log(`📊 Contrats après filtrage: ${filteredDeployments.length}/${(deployments || []).length}`)
+
+      // Transformer les données Supabase pour correspondre à notre interface  
+      const formattedContracts: DeployedContract[] = filteredDeployments.map((deployment: any) => ({
         id: deployment.id,
         address: deployment.contract_address || 'N/A',
         template: deployment.template,
