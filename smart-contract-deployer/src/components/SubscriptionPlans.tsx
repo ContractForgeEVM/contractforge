@@ -236,7 +236,8 @@ const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' },
          gap: 3,
          maxWidth: 1400,
-         mx: 'auto'
+         mx: 'auto',
+         pt: 2  // Padding top pour éviter que le badge "Most popular" soit coupé
        }}>
         {filteredPlans.map((plan) => (
           <Fade in={true} key={plan.id} style={{ transitionDelay: plans.indexOf(plan) * 100 + 'ms' }}>
@@ -262,10 +263,13 @@ const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
                    size="small"
                    sx={{
                      position: 'absolute',
-                     top: -10,
+                     top: -12,
                      left: '50%',
                      transform: 'translateX(-50%)',
-                     zIndex: 1
+                     zIndex: 1,
+                     fontWeight: 'bold',
+                     fontSize: '0.75rem',
+                     boxShadow: 2
                    }}
                  />
                )}
