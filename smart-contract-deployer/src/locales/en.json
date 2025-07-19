@@ -654,7 +654,7 @@
     "viewOnExplorer": "View on Explorer",
     "viewCode": "View Code",
     "viewMintPage": "View Mint Page",
-    "status": {
+    "statusValues": {
       "success": "Success",
       "failed": "Failed",
       "pending": "Pending"

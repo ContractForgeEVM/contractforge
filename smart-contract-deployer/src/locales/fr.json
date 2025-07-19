@@ -612,7 +612,7 @@
     "viewOnExplorer": "Voir sur l'explorateur",
     "viewCode": "Voir le code",
     "viewMintPage": "Voir la page de mint",
-    "status": {
+    "statusValues": {
       "success": "Succès",
       "failed": "Échoué",
       "pending": "En attente"
