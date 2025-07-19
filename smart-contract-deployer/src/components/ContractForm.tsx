@@ -171,16 +171,7 @@ const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying }: Con
           )}
         </Box>
       )}
-      {/* Debug info - Temporary */}
-      {process.env.NODE_ENV === 'development' && (
-        <Alert severity="info" sx={{ mt: 1, mb: 1 }}>
-          <Typography variant="caption">
-            Debug: Connected={isConnected.toString()}, Deploying={isDeploying.toString()}, 
-            CanDeploy={permissions?.canDeploy?.toString() || 'undefined'}, 
-            PermissionsLoading={permissionsLoading.toString()}
-          </Typography>
-        </Alert>
-      )}
+
       
       <Button
         variant="contained"
