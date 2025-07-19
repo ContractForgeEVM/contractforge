@@ -662,7 +662,8 @@
     "summary": "Summary",
     "totalContracts": "Total Contracts",
     "uniqueChains": "Unique Chains",
-    "successRate": "Success Rate"
+    "successRate": "Success Rate",
+    "customPages": "Custom Pages"
   },
   "mintPage": {
     "steps": {

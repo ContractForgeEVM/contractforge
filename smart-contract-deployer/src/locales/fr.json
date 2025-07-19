@@ -620,7 +620,8 @@
     "summary": "Résumé",
     "totalContracts": "Total des contrats",
     "uniqueChains": "Chaînes uniques",
-    "successRate": "Taux de réussite"
+    "successRate": "Taux de réussite",
+    "customPages": "Pages personnalisées"
   },
   "mintPage": {
     "steps": {

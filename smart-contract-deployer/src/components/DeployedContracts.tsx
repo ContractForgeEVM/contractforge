@@ -40,6 +40,7 @@ import { useAccount, useChainId } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { formatDistanceToNow } from 'date-fns'
 import { formatEther } from 'ethers'
+import { useDeploymentPermissions } from '../hooks/useDeploymentPermissions'
 
 interface DeployedContract {
   id: string
@@ -67,6 +68,7 @@ const DeployedContracts: React.FC = () => {
   const { address } = useAccount()
   const chainId = useChainId()
   const { t } = useTranslation()
+  const { permissions } = useDeploymentPermissions()
 
   useEffect(() => {
     if (address) {
@@ -505,12 +507,12 @@ const DeployedContracts: React.FC = () => {
         <Card sx={{ mt: 3 }}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
-              Résumé
+              {t('deployments.summary')}
             </Typography>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3}>
               <Box>
                 <Typography variant="body2" color="text.secondary">
-                  Total des contrats
+                  {t('deployments.totalContracts')}
                 </Typography>
                 <Typography variant="h5">
                   {contracts.length}
@@ -518,7 +520,7 @@ const DeployedContracts: React.FC = () => {
               </Box>
               <Box>
                 <Typography variant="body2" color="text.secondary">
-                  Chaînes utilisées
+                  {t('deployments.uniqueChains')}
                 </Typography>
                 <Typography variant="h5">
                   {uniqueChains.length}
@@ -526,7 +528,7 @@ const DeployedContracts: React.FC = () => {
               </Box>
               <Box>
                 <Typography variant="body2" color="text.secondary">
-                  Taux de réussite
+                  {t('deployments.successRate')}
                 </Typography>
                 <Typography variant="h5" color="success.main">
                   {contracts.length > 0 
@@ -534,14 +536,17 @@ const DeployedContracts: React.FC = () => {
                     : 0}%
                 </Typography>
               </Box>
-              <Box>
-                <Typography variant="body2" color="text.secondary">
-                  Pages personnalisées
-                </Typography>
-                <Typography variant="h5" color="warning.main">
-                  {contracts.filter(c => c.hasCustomPage).length}
-                </Typography>
-              </Box>
+              {/* Afficher les pages personnalisées seulement pour les plans payants */}
+              {permissions && permissions.plan !== 'free' && (
+                <Box>
+                  <Typography variant="body2" color="text.secondary">
+                    {t('deployments.customPages')}
+                  </Typography>
+                  <Typography variant="h5" color="warning.main">
+                    {contracts.filter(c => c.hasCustomPage).length}
+                  </Typography>
+                </Box>
+              )}
             </Stack>
           </CardContent>
         </Card>
