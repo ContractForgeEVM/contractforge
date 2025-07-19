@@ -1,219 +1,347 @@
-# ContractForge.io - No-Code Smart Contract Deployment Platform
+# ContractForge.io - Professional Smart Contract Deployment Platform
 
-A professional platform for deploying smart contracts without writing code. Deploy ERC20 tokens, NFT collections, DAOs, and token locks with premium features and multi-chain support.
+A comprehensive no-code platform for deploying and managing smart contracts with subscription-based pricing, analytics, and premium features. Deploy ERC20 tokens, NFT collections, DAOs, token locks, and more across multiple blockchains.
 
-## Features
+## 🚀 Live Platform
 
-### Core Features
-- 🚀 **No-Code Deployment** - Deploy contracts through an intuitive UI
-- 📝 **Multiple Templates** - ERC20 Token, NFT Collection, DAO, Token Lock
-- 🔍 **Real-time Code Preview** - See the Solidity code before deployment
-- ⛽ **Gas Estimation** - Real-time gas cost estimation with Infura/Alchemy
-- 🌐 **Multi-Chain Support** - Ethereum, Polygon, Arbitrum, Optimism, BSC, and more
-- 🌍 **Multi-Language** - English and French support
-- 💰 **Platform Fee** - 2% commission on deployments
+**Website**: [ContractForge.io](https://contractforge.io)  
+**Repository**: [GitHub - ContractForgeEVM/contractforge](https://github.com/ContractForgeEVM/contractforge)
 
-### Premium Features
-- ⏸️ **Pausable** - Emergency pause functionality
-- 🔥 **Burnable** - Token burning capability
-- 🪙 **Mintable** - Mint new tokens after deployment
-- 🎯 **Capped Supply** - Maximum supply limit
-- 📸 **Snapshot** - Token balance snapshots
-- ✍️ **Permit** - Gasless approvals
-- 🗳️ **Voting Power** - Governance functionality
-- 💎 **Royalties** - NFT royalty support
-- And many more...
+## ✨ Key Features
 
-## Technology Stack
+### 🎯 Core Platform
+- **No-Code Deployment** - Deploy smart contracts through intuitive UI
+- **Real-time Code Preview** - See Solidity code before deployment
+- **Gas Estimation** - Live gas cost calculation with multiple providers
+- **Multi-Chain Support** - 12+ blockchain networks supported
+- **Multi-Language** - English and French localization
+- **Wallet Integration** - RainbowKit with multiple wallet support
 
-### Frontend
-- **Framework**: React 18 + TypeScript
-- **Build Tool**: Vite
-- **UI Framework**: Material-UI v5 with custom dark theme
-- **Wallet Integration**: RainbowKit v2 + wagmi + viem
+### 💎 Premium Features
+- **Pausable Contracts** - Emergency pause functionality
+- **Burnable Tokens** - Token burning capability  
+- **Mintable Tokens** - Post-deployment minting
+- **Capped Supply** - Maximum supply limits
+- **Snapshot Governance** - Token balance snapshots
+- **Permit Functionality** - Gasless approvals (EIP-2612)
+- **Voting Power** - Governance token features
+- **NFT Royalties** - EIP-2981 royalty support
+- **Access Control** - Role-based permissions
+- **Upgradeable Contracts** - Proxy pattern support
+
+### 🔧 Smart Contract Templates
+1. **ERC20 Token** - Standard and premium fungible tokens
+2. **NFT Collection** - ERC721 with advanced features
+3. **DAO Governance** - Decentralized autonomous organization
+4. **Token Lock** - Time-based token vesting
+5. **Airdrop** - Bulk token distribution
+6. **Multisig** - Multi-signature wallet
+7. **Vesting** - Token vesting schedules
+
+### 💳 Subscription System
+- **Free Plan** - Basic compilation and testing (2% fees)
+- **Starter Plan** - $9/month - 5 deployments, 1.5% fees
+- **Pro Plan** - $19/month - 100 deployments, 2% fees, all templates
+- **Enterprise Plan** - $99/month - 1000 deployments, 1.5% fees, API access
+
+### 🪙 Crypto Payment Integration
+- **USDC Payments** - Stable coin subscription payments
+- **Multi-Chain Support** - Pay on Ethereum, Polygon, Arbitrum
+- **Auto-Renewal** - Automatic subscription renewal
+- **Transparent Pricing** - No hidden fees
+
+### 📊 Analytics Dashboard
+- **Real-time Metrics** - Deployment statistics and usage
+- **User Analytics** - Session tracking and behavior
+- **Performance Monitoring** - Platform health metrics
+- **Revenue Tracking** - Subscription and fee analytics
+
+### 🎨 Mint Page Generator
+- **Custom Domains** - Branded mint pages
+- **Subdomain System** - Free .contractforge.io subdomains
+- **Customizable Design** - Color schemes and branding
+- **Mobile Responsive** - Optimized for all devices
+
+## 🏗️ Architecture
+
+### Frontend Stack
+- **Framework**: React 18 + TypeScript + Vite
+- **UI Library**: Material-UI v5 with custom dark theme
+- **Web3**: wagmi v2 + viem + RainbowKit
+- **State Management**: React Context + Hooks
 - **Internationalization**: i18next
 - **Code Highlighting**: react-syntax-highlighter
+- **Analytics**: Supabase integration
+
+### Backend Services
+- **API Server**: Node.js + Express + TypeScript
+- **Smart Contract Compiler**: Foundry + Solc integration
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Wallet-based auth
+- **File Storage**: Local + cloud integration
+- **Rate Limiting**: Express rate limiter
 
 ### Smart Contracts
 - **Solidity Version**: ^0.8.20
-- **Standards**: OpenZeppelin Contracts v5
-- **Compilation**: Foundry + Solc (primary) & Hardhat (fallback)
-- **Testing**: Foundry Test Suite
-- **Deployment**: Custom factory contracts
-- **Standards**: EIP Standards Compliant
+- **Standards**: OpenZeppelin Contracts v5.0
+- **Compilation**: Foundry (primary) + Hardhat (fallback)
+- **Testing**: Comprehensive test suite
+- **Verification**: Etherscan integration
+- **Security**: Audited contract templates
 
-### Infrastructure
-- **Platform Fee Address**: `0x09789515d075Ad4f657cF33a7f4adCe485Ee4f2E`
-- **Factory Contracts**: Deployed on 10+ networks
-- **Multi-Network Support**: Ethereum, Polygon, Arbitrum, Scroll, Gnosis, etc.
+## 🌐 Multi-Chain Support
 
-## Factory Contract Addresses
+### Production Networks
 
-### Mainnet Deployments
+| Network | Chain ID | Factory Address | Features |
+|---------|----------|-----------------|----------|
+| **Ethereum** | 1 | `0x2f9258a0024d389ee69bf9f4e44ab9120a359dc7` | Full Suite |
+| **Polygon** | 137 | `0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a` | Full Suite |
+| **Arbitrum** | 42161 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | Full Suite |
+| **Optimism** | 10 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | Full Suite |
+| **BSC** | 56 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | Full Suite |
+| **Avalanche** | 43114 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | Full Suite |
+| **Base** | 8453 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | Full Suite |
+| **Scroll** | 534352 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | Premium |
+| **Gnosis** | 100 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | Premium |
+| **Celo** | 42220 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | Full Suite |
+| **Linea** | 59144 | `0x836ef37aa08F6089B4efEAdc55A864f6caff4a16` | Premium |
+| **Zora** | 7777777 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | Full Suite |
 
-| Network | Chain ID | Factory Address | Status |
-|---------|----------|-----------------|--------|
-| **Ethereum** | 1 | `0x2f9258a0024d389ee69bf9f4e44ab9120a359dc7` | ✅ Active |
-| **Polygon** | 137 | `0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a` | ✅ Active |
-| **Arbitrum** | 42161 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-| **Optimism** | 10 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-| **BSC** | 56 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-| **Avalanche** | 43114 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-| **Base** | 8453 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-| **Scroll** | 534352 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-| **Gnosis** | 100 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-| **Celo** | 42220 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-| **Linea** | 59144 | `0x836ef37aa08F6089B4efEAdc55A864f6caff4a16` | ✅ Active |
-| **Zora** | 7777777 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-| **HyperEVM** | 999 | `0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9` | ✅ Active |
+### Testnet Support
+- **Monad Testnet** | 10143 | Full testing environment
+- **Base Sepolia** | 84532 | Development testing
 
-### Pending Deployments
+## 🛠️ Development Setup
 
-| Network | Chain ID | Status |
-|---------|----------|--------|
-| **Polygon zkEVM** | 1101 | 🟡 Scheduled |
-| **zkSync Era** | 324 | 🟡 Scheduled |
+### Prerequisites
+- Node.js v18+
+- npm or yarn
+- Git
+- Foundry (for smart contract compilation)
 
-### Testnet Deployments
+### Installation
 
-| Network | Chain ID | Factory Address | Status |
-|---------|----------|-----------------|--------|
-| **Monad Testnet** | 10143 | `0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7` | ✅ Active |
-
-### Features by Factory
-
-- **Full Factory** (8 premium features): Scroll, Gnosis, HyperEVM Big Blocks, Linea
-- **Standard Factory** (6 features): Ethereum, Polygon, Arbitrum, Optimism, BSC, Avalanche, Base, Celo
-- **Lite Factory** (2 features): HyperEVM Fast Blocks, Testnet deployments
-
-## Prerequisites
-
-- Node.js v18+ and npm/yarn
-- Infura Project ID
-- Alchemy API Key
-- WalletConnect Project ID
-
-## Installation
-
-1. Clone the repository:
+1. **Clone the repository**:
 ```bash
-git clone https://github.com/yourusername/contractforge.git
-cd contractforge/smart-contract-deployer
+git clone https://github.com/ContractForgeEVM/contractforge.git
+cd contractforge
 ```
 
-2. Install dependencies:
+2. **Install dependencies**:
 ```bash
+# Frontend
+cd smart-contract-deployer
+npm install
+
+# Backend API
+cd ../smart-contract-compiler-api
+npm install
+
+# Frontend Generator
+cd ../frontend-generator
 npm install
 ```
 
-3. Configure environment variables:
-```bash
-cp .env.example .env
-```
+3. **Environment Configuration**:
 
-Edit `.env` and add your API keys:
-```
+Create `.env` files in each directory:
+
+**smart-contract-deployer/.env**:
+```env
 VITE_INFURA_PROJECT_ID=your_infura_project_id
 VITE_ALCHEMY_API_KEY=your_alchemy_api_key
 VITE_WALLETCONNECT_PROJECT_ID=your_walletconnect_project_id
+VITE_API_URL=http://localhost:3004
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-4. Start development server:
+**smart-contract-compiler-api/.env**:
+```env
+NODE_ENV=development
+PORT=3004
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_key
+FOUNDRY_PATH=/usr/local/bin/forge
+ETHERSCAN_API_KEY=your_etherscan_api_key
+```
+
+4. **Start development servers**:
+
 ```bash
+# Terminal 1 - Frontend
+cd smart-contract-deployer
 npm run dev
+
+# Terminal 2 - Backend API
+cd smart-contract-compiler-api
+npm run dev
+
+# Terminal 3 - Frontend Generator
+cd frontend-generator
+npm start
 ```
 
-## Production Deployment
+## 🚀 Production Deployment
 
-### Build for Production
+### Automated Deployment Script
+
+The project includes a comprehensive production deployment script:
 
 ```bash
+./deploy-production.sh
+```
+
+This script:
+- Builds all services (frontend, backend, frontend-generator)
+- Creates Docker containers
+- Deploys to production server (192.168.1.60)
+- Sets up health checks and monitoring
+
+### Manual Deployment
+
+1. **Build for production**:
+```bash
+cd smart-contract-deployer
+npm run build
+
+cd ../smart-contract-compiler-api
+npm run build
+
+cd ../frontend-generator
 npm run build
 ```
 
-The build artifacts will be stored in the `dist/` directory.
+2. **Docker deployment**:
+```bash
+# Frontend
+docker build -t contractforge-frontend ./smart-contract-deployer
 
-### Environment Configuration
+# Backend
+docker build -t contractforge-backend ./smart-contract-compiler-api
 
-For production, ensure all environment variables are properly set:
+# Frontend Generator
+docker build -t contractforge-frontend-generator ./frontend-generator
+```
 
-- **API Keys**: Infura, Alchemy, WalletConnect (required)
-- **Platform Fee Address**: Update to your production address
-- **Chain Configuration**: Set default chain and testnet availability
-- **Security**: Enable contract verification with Etherscan API key
+3. **Run containers**:
+```bash
+docker run -d -p 5173:5173 contractforge-frontend
+docker run -d -p 3004:3004 contractforge-backend
+docker run -d -p 3006:3006 contractforge-frontend-generator
+```
 
-### Deployment Options
+## 📊 Database Schema
 
-1. **Static Hosting** (Vercel, Netlify, AWS S3 + CloudFront):
-   ```bash
-   npm run build
-   # Deploy the dist/ folder
-   ```
+The platform uses Supabase with comprehensive schemas:
 
-2. **Docker**:
-   ```dockerfile
-   FROM node:18-alpine as builder
-   WORKDIR /app
-   COPY package*.json ./
-   RUN npm ci
-   COPY . .
-   RUN npm run build
+### Analytics Tables
+- `page_views` - User navigation tracking
+- `deployments` - Contract deployment history
+- `premium_features` - Feature usage analytics
+- `user_sessions` - Session management
 
-   FROM nginx:alpine
-   COPY --from=builder /app/dist /usr/share/nginx/html
-   EXPOSE 80
-   ```
+### Subscription Tables
+- `subscription_plans` - Available plans and pricing
+- `users` - User wallet management
+- `subscriptions` - Active subscriptions
+- `checkout_sessions` - Payment processing
+- `usage_tracking` - Resource usage monitoring
 
-3. **Traditional Server**:
-   - Build the project
-   - Serve the `dist/` folder with nginx/Apache
-   - Configure SSL certificates
+### Features Tables
+- `mint_pages` - Custom mint page configurations
+- `api_keys` - User API key management
 
-### Security Considerations
+## 🔐 Security Features
 
-1. **API Keys**: Never expose sensitive keys in frontend code
-2. **Platform Fee Address**: Use a multi-sig wallet for production
-3. **Contract Verification**: Always verify deployed contracts on Etherscan
-4. **Rate Limiting**: Implement rate limiting for API calls
-5. **CORS**: Configure proper CORS policies
-6. **CSP**: Set Content Security Policy headers
+- **Wallet-based Authentication** - No passwords required
+- **Contract Verification** - Automatic Etherscan verification
+- **Rate Limiting** - API and deployment rate limits
+- **Input Validation** - Comprehensive parameter validation
+- **Audit Trail** - Complete deployment history
+- **Multi-sig Support** - Enterprise-grade security
 
-### Performance Optimization
+## 📈 Monitoring & Analytics
 
-1. **CDN**: Use a CDN for static assets
-2. **Compression**: Enable gzip/brotli compression
-3. **Caching**: Set proper cache headers
-4. **Code Splitting**: Already implemented with Vite
-5. **Image Optimization**: Optimize all images
+### Real-time Metrics
+- Deployment success rates
+- User engagement analytics
+- Revenue tracking
+- Performance monitoring
 
-## Monitoring & Analytics
+### Health Checks
+- Service availability monitoring
+- Database connection status
+- Blockchain network status
+- API endpoint health
 
-1. **Error Tracking**: Integrate Sentry or similar
-2. **Analytics**: Google Analytics / Mixpanel integration ready
-3. **Performance**: Use Web Vitals monitoring
-4. **Uptime**: Monitor with services like UptimeRobot
+## 🎨 Frontend Features
 
-## Maintenance
+### User Interface
+- **Dark Theme** - Professional dark mode design
+- **Responsive Design** - Mobile-first approach
+- **Accessibility** - WCAG compliant
+- **Loading States** - Smooth user experience
+- **Error Handling** - Comprehensive error messages
 
-### Regular Updates
-- Update OpenZeppelin contracts regularly
-- Keep dependencies up to date
-- Monitor gas price APIs for changes
-- Update chain configurations as needed
+### User Experience
+- **Step-by-step Wizards** - Guided deployment process
+- **Real-time Preview** - Live code generation
+- **Gas Estimation** - Accurate cost prediction
+- **Transaction Tracking** - Deployment progress monitoring
 
-### Backup & Recovery
-- Regular database backups (if using backend)
-- Store deployment history
-- Keep contract source code verified
+## 🔧 API Documentation
 
-## Support
+### Authentication
+```javascript
+// Wallet-based authentication
+const auth = useAccount()
+```
 
-For issues and feature requests, please use the GitHub issue tracker.
+### Deployment API
+```javascript
+POST /api/deploy
+{
+  "template": "erc20",
+  "parameters": { ... },
+  "network": "ethereum"
+}
+```
 
-## License
+### Subscription API
+```javascript
+GET /api/subscription/plans
+POST /api/subscription/checkout
+GET /api/subscription/status
+```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 🤝 Contributing
 
-## Disclaimer
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Users are responsible for understanding the smart contracts they deploy. Always review the generated code and understand the implications before deployment. This platform is provided as-is without warranties.
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- OpenZeppelin for secure contract templates
+- Foundry for fast compilation
+- Material-UI for beautiful components
+- Supabase for backend infrastructure
+- The Ethereum community for continuous innovation
+
+## 📞 Support
+
+- **GitHub Issues**: [Report bugs and feature requests](https://github.com/ContractForgeEVM/contractforge/issues)
+- **Documentation**: [Full documentation](https://docs.contractforge.io)
+- **Community**: [Discord community](https://discord.gg/contractforge)
+
+## ⚠️ Disclaimer
+
+Users are responsible for understanding the smart contracts they deploy. Always review generated code and understand implications before deployment. This platform is provided as-is without warranties. Smart contract deployment involves real cryptocurrency transactions and should be done with caution.

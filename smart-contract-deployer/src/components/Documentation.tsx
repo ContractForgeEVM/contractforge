@@ -95,7 +95,7 @@ const Documentation = () => {
     // Special Factory Networks
     { name: 'Polygon', chainId: 137, status: t('documentation.networks.live'), gasToken: 'MATIC', factoryType: 'Special', tier: 'mainnet', factoryAddress: '0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a' },
     { name: 'Linea', chainId: 59144, status: t('documentation.networks.live'), gasToken: 'ETH', factoryType: 'Special', tier: 'mainnet', factoryAddress: '0x836ef37aa08F6089B4efEAdc55A864f6caff4a16' },
-    { name: 'HyperEVM', chainId: 999, status: t('documentation.networks.live'), gasToken: 'HYPE', factoryType: 'Special', tier: 'mainnet', factoryAddress: '0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9' },
+    { name: 'HyperEVM', chainId: 999, status: t('documentation.networks.live'), gasToken: 'HYPE', factoryType: 'Special', tier: 'mainnet', factoryAddress: '0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7' },
     
     // Testnet Networks
     { name: 'Monad Testnet', chainId: 10143, status: t('documentation.networks.testnet'), gasToken: 'MON', factoryType: 'Primary', tier: 'testnet' },
@@ -308,7 +308,7 @@ const Documentation = () => {
                       <Box>
                         <Typography variant="caption" color="text.primary" sx={{ fontWeight: 'medium' }}>HyperEVM: </Typography>
                         <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.200', p: 0.3, borderRadius: 0.3, color: 'grey.800', border: '1px solid', borderColor: 'grey.300' }}>
-                          0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9
+                          0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
                         </Typography>
                       </Box>
                     </Box>
@@ -628,7 +628,7 @@ const Documentation = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography variant="body2" sx={{ minWidth: 120 }}>HyperEVM:</Typography>
                   <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.100', p: 0.5, borderRadius: 0.5 }}>
-                    0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9
+                    0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
                   </Typography>
                 </Box>
               </Box>
@@ -1041,7 +1041,7 @@ Content-Type: application/json
                            borderColor: 'grey.300',
                            fontSize: '0.75rem'
                          }}>
-                           0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9
+                           0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
                          </Typography>
                        </Box>
                      </Box>
