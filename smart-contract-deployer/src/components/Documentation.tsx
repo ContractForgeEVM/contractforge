@@ -615,19 +615,40 @@ const Documentation = () => {
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography variant="body2" sx={{ minWidth: 120 }}>Polygon:</Typography>
-                  <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.100', p: 0.5, borderRadius: 0.5 }}>
+                  <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                    bgcolor: 'grey.200', 
+                    color: 'grey.800', 
+                    p: 0.5, 
+                    borderRadius: 0.5,
+                    border: '1px solid',
+                    borderColor: 'grey.300' 
+                  }}>
                     0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography variant="body2" sx={{ minWidth: 120 }}>Linea:</Typography>
-                  <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.100', p: 0.5, borderRadius: 0.5 }}>
+                  <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                    bgcolor: 'grey.200', 
+                    color: 'grey.800', 
+                    p: 0.5, 
+                    borderRadius: 0.5,
+                    border: '1px solid',
+                    borderColor: 'grey.300' 
+                  }}>
                     0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography variant="body2" sx={{ minWidth: 120 }}>HyperEVM:</Typography>
-                  <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.100', p: 0.5, borderRadius: 0.5 }}>
+                  <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                    bgcolor: 'grey.200', 
+                    color: 'grey.800', 
+                    p: 0.5, 
+                    borderRadius: 0.5,
+                    border: '1px solid',
+                    borderColor: 'grey.300' 
+                  }}>
                     0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
                   </Typography>
                 </Box>
