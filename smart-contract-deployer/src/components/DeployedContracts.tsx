@@ -111,7 +111,7 @@ const DeployedContracts: React.FC = () => {
         transactionHash: deployment.transaction_hash || '',
         status: deployment.success ? 'success' : 'failed',
         gasUsed: deployment.gas_used || 'N/A',
-        deploymentCost: deployment.value ? `${deployment.value} POL` : 'N/A',
+        deploymentCost: deployment.value ? `${deployment.value} ${getNativeToken(deployment.chain)}` : 'N/A',
         hasCustomPage: deployment.template === 'nft'
       }))
 
@@ -168,6 +168,28 @@ const DeployedContracts: React.FC = () => {
       'linea': 'Linea'
     }
     return chainDisplayNames[chainName.toLowerCase()] || chainName.charAt(0).toUpperCase() + chainName.slice(1)
+  }
+
+  const getNativeToken = (chainName: string): string => {
+    const nativeTokens: Record<string, string> = {
+      'ethereum': 'ETH',
+      'polygon': 'POL',
+      'arbitrum': 'ETH',
+      'optimism': 'ETH',
+      'bsc': 'BNB',
+      'avalanche': 'AVAX',
+      'base': 'ETH',
+      'fantom': 'FTM',
+      'gnosis': 'xDAI',
+      'zksync': 'ETH',
+      'scroll': 'ETH',
+      'linea': 'ETH',
+      'hyperevm': 'HYPE',
+      'celo': 'CELO',
+      'zora': 'ETH',
+      'monad': 'MON'
+    }
+    return nativeTokens[chainName.toLowerCase()] || 'ETH'
   }
 
   const getChainName = (chainId: number): string => {
