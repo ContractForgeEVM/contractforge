@@ -1,0 +1,121 @@
+import fs from 'fs'
+import path from 'path'
+import { v4 as uuidv4 } from 'uuid'
+import bcrypt from 'bcryptjs'
+export interface ApiKeyData {
+  id: string
+  name: string
+  keyHash: string
+  userId: string
+  createdAt: Date
+  lastUsed?: Date
+  usageCount: number
+  rateLimit: {
+    requestsPerMinute: number
+    requestsPerHour: number
+    requestsPerDay: number
+  }
+  permissions: string[]
+  isActive: boolean
+}
+const DATA_FILE = path.join(__dirname, '../../data/apiKeys.json')
+class ApiKeyManager {
+  private apiKeys: Map<string, ApiKeyData> = new Map()
+  constructor() {
+    this.loadApiKeys()
+  }
+  private loadApiKeys() {
+    try {
+      if (fs.existsSync(DATA_FILE)) {
+        const data = fs.readFileSync(DATA_FILE, 'utf-8')
+        const keys = JSON.parse(data)
+        keys.forEach((key: any) => {
+          this.apiKeys.set(key.id, {
+            ...key,
+            createdAt: new Date(key.createdAt),
+            lastUsed: key.lastUsed ? new Date(key.lastUsed) : undefined
+          })
+        })
+      }
+    } catch (error) {
+      console.error('Error loading API keys:', error)
+    }
+  }
+  private saveApiKeys() {
+    try {
+      const dir = path.dirname(DATA_FILE)
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true })
+      }
+      const keysArray = Array.from(this.apiKeys.values())
+      fs.writeFileSync(DATA_FILE, JSON.stringify(keysArray, null, 2))
+    } catch (error) {
+      console.error('Error saving API keys:', error)
+    }
+  }
+  async createApiKey(name: string, userId: string, permissions: string[] = ['compile']): Promise<{ id: string, key: string }> {
+    const id = uuidv4()
+    const key = `cfk_${Buffer.from(uuidv4()).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 32)}`
+    const keyHash = await bcrypt.hash(key, 12)
+    const apiKeyData: ApiKeyData = {
+      id,
+      name,
+      keyHash,
+      userId,
+      createdAt: new Date(),
+      usageCount: 0,
+      rateLimit: {
+        requestsPerMinute: 60,
+        requestsPerHour: 1000,
+        requestsPerDay: 10000
+      },
+      permissions,
+      isActive: true
+    }
+    this.apiKeys.set(id, apiKeyData)
+    this.saveApiKeys()
+    return { id, key }
+  }
+  async validateApiKey(key: string): Promise<ApiKeyData | null> {
+    try {
+      for (const [id, apiKeyData] of this.apiKeys) {
+        if (apiKeyData.isActive && await bcrypt.compare(key, apiKeyData.keyHash)) {
+          apiKeyData.lastUsed = new Date()
+          apiKeyData.usageCount++
+          this.saveApiKeys()
+          return apiKeyData
+        }
+      }
+      return null
+    } catch (error) {
+      console.error('Error validating API key:', error)
+      return null
+    }
+  }
+  async revokeApiKey(id: string): Promise<boolean> {
+    const apiKey = this.apiKeys.get(id)
+    if (apiKey) {
+      apiKey.isActive = false
+      this.saveApiKeys()
+      return true
+    }
+    return false
+  }
+  async getApiKey(id: string): Promise<ApiKeyData | null> {
+    return this.apiKeys.get(id) || null
+  }
+  async listApiKeys(userId?: string): Promise<ApiKeyData[]> {
+    const keys = Array.from(this.apiKeys.values())
+    return userId ? keys.filter(key => key.userId === userId) : keys
+  }
+  async updateRateLimit(id: string, rateLimit: Partial<ApiKeyData['rateLimit']>): Promise<boolean> {
+    const apiKey = this.apiKeys.get(id)
+    if (apiKey) {
+      apiKey.rateLimit = { ...apiKey.rateLimit, ...rateLimit }
+      this.saveApiKeys()
+      return true
+    }
+    return false
+  }
+}
+export const apiKeyManager = new ApiKeyManager()

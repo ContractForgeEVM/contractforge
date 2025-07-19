@@ -1,0 +1,181 @@
+{
+  "summary": {
+    "totalCost": 57.5,
+    "productionCost": 54,
+    "testnetCost": 3.5,
+    "networks": 25
+  },
+  "networks": {
+    "Ethereum": {
+      "cost": 3,
+      "token": "ETH",
+      "amount": 0.001,
+      "gasEstimate": 500000
+    },
+    "Polygon": {
+      "cost": 3,
+      "token": "MATIC",
+      "amount": 3,
+      "gasEstimate": 300000
+    },
+    "Arbitrum": {
+      "cost": 3,
+      "token": "ETH",
+      "amount": 0.001,
+      "gasEstimate": 400000
+    },
+    "Optimism": {
+      "cost": 3,
+      "token": "ETH",
+      "amount": 0.001,
+      "gasEstimate": 400000
+    },
+    "BSC": {
+      "cost": 3,
+      "token": "BNB",
+      "amount": 0.01,
+      "gasEstimate": 300000
+    },
+    "Avalanche": {
+      "cost": 3,
+      "token": "AVAX",
+      "amount": 0.05,
+      "gasEstimate": 300000
+    },
+    "Fantom": {
+      "cost": 3,
+      "token": "FTM",
+      "amount": 5,
+      "gasEstimate": 300000
+    },
+    "Gnosis": {
+      "cost": 3,
+      "token": "XDAI",
+      "amount": 3,
+      "gasEstimate": 300000
+    },
+    "Base": {
+      "cost": 3,
+      "token": "ETH",
+      "amount": 0.001,
+      "gasEstimate": 400000
+    },
+    "Moonbeam": {
+      "cost": 3,
+      "token": "GLMR",
+      "amount": 0.5,
+      "gasEstimate": 300000
+    },
+    "Moonriver": {
+      "cost": 3,
+      "token": "MOVR",
+      "amount": 0.5,
+      "gasEstimate": 300000
+    },
+    "Celo": {
+      "cost": 3,
+      "token": "CELO",
+      "amount": 1,
+      "gasEstimate": 300000
+    },
+    "Harmony One": {
+      "cost": 3,
+      "token": "ONE",
+      "amount": 50,
+      "gasEstimate": 300000
+    },
+    "ZKSync Era": {
+      "cost": 3,
+      "token": "ETH",
+      "amount": 0.001,
+      "gasEstimate": 500000
+    },
+    "Scroll": {
+      "cost": 3,
+      "token": "ETH",
+      "amount": 0.001,
+      "gasEstimate": 400000
+    },
+    "Linea": {
+      "cost": 3,
+      "token": "ETH",
+      "amount": 0.001,
+      "gasEstimate": 400000
+    },
+    "HyperEVM": {
+      "cost": 3,
+      "token": "HYPE",
+      "amount": 3,
+      "gasEstimate": 300000
+    },
+    "Zora": {
+      "cost": 3,
+      "token": "ETH",
+      "amount": 0.001,
+      "gasEstimate": 400000
+    },
+    "Sepolia": {
+      "cost": 0.5,
+      "token": "ETH",
+      "amount": 0.0001,
+      "gasEstimate": 300000
+    },
+    "Mumbai": {
+      "cost": 0.5,
+      "token": "MATIC",
+      "amount": 0.5,
+      "gasEstimate": 200000
+    },
+    "Base Sepolia": {
+      "cost": 0.5,
+      "token": "ETH",
+      "amount": 0.0001,
+      "gasEstimate": 300000
+    },
+    "Scroll Sepolia": {
+      "cost": 0.5,
+      "token": "ETH",
+      "amount": 0.0001,
+      "gasEstimate": 300000
+    },
+    "Linea Sepolia": {
+      "cost": 0.5,
+      "token": "ETH",
+      "amount": 0.0001,
+      "gasEstimate": 300000
+    },
+    "Monad Testnet": {
+      "cost": 0.5,
+      "token": "MON",
+      "amount": 0.1,
+      "gasEstimate": 300000
+    },
+    "HyperEVM Testnet": {
+      "cost": 0.5,
+      "token": "HYPE",
+      "amount": 0.5,
+      "gasEstimate": 300000
+    }
+  },
+  "recommendations": {
+    "priority": [
+      "Ethereum",
+      "Polygon",
+      "Arbitrum",
+      "Optimism",
+      "BSC",
+      "Avalanche",
+      "Fantom",
+      "Gnosis"
+    ],
+    "optional": [
+      "Sepolia",
+      "Mumbai",
+      "Base Sepolia",
+      "Scroll Sepolia",
+      "Linea Sepolia",
+      "Monad Testnet",
+      "HyperEVM Testnet"
+    ]
+  }
+}

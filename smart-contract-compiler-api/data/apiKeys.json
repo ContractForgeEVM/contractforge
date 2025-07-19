@@ -1,0 +1,40 @@
+[
+  {
+    "id": "c408a4e8-3e07-4bc1-98f2-8ac80b4386b6",
+    "name": "Production API Key",
+    "keyHash": "$2b$12$wrcSQZnajBSR5yClxlwb4O9gZrOydBfIPpTBSbJIRrb.tkjYADVXm",
+    "userId": "admin",
+    "createdAt": "2025-07-12T23:03:33.743Z",
+    "usageCount": 0,
+    "rateLimit": {
+      "requestsPerMinute": 60,
+      "requestsPerHour": 1000,
+      "requestsPerDay": 10000
+    },
+    "permissions": [
+      "compile",
+      "deploy",
+      "gas-estimate",
+      "contract-info",
+      "verify"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "2c5cccba-c05c-4895-8b74-6b65e5b9bff1",
+    "name": "Test Key",
+    "keyHash": "$2b$12$7rKYbxk21vAwv.bfi6kl8.hJbYtDxL6lVhOXA8DQ8LR.yLrs0maTW",
+    "userId": "test",
+    "createdAt": "2025-07-12T23:04:36.228Z",
+    "usageCount": 0,
+    "rateLimit": {
+      "requestsPerMinute": 60,
+      "requestsPerHour": 1000,
+      "requestsPerDay": 10000
+    },
+    "permissions": [
+      "compile"
+    ],
+    "isActive": true
+  }
+]

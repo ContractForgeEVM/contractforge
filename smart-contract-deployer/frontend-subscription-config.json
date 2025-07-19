@@ -1,0 +1,69 @@
+{
+  "contracts": {
+    "8453": {
+      "SubscriptionManager": "0x9Ba797D0968bF4b48b639988C7FfedF28d3FEe5a",
+      "PriceOracle": "0x836ef37aa08F6089B4efEAdc55A864f6caff4a16",
+      "name": "Base",
+      "symbol": "ETH",
+      "chainId": 8453,
+      "rpcUrl": "https://mainnet.base.org",
+      "blockExplorer": "https://basescan.org"
+    },
+    "42161": {
+      "SubscriptionManager": "0x7a9DEfAfCFf15732860Ed3f598d41bFd392f36EF",
+      "PriceOracle": "0x9Ba797D0968bF4b48b639988C7FfedF28d3FEe5a",
+      "name": "Arbitrum",
+      "symbol": "ETH",
+      "chainId": 42161,
+      "rpcUrl": "https://arb1.arbitrum.io/rpc",
+      "blockExplorer": "https://arbiscan.io"
+    },
+    "1": {
+      "SubscriptionManager": "0x58bf6972a4088dca56f95ea505e5CC1368CF1038",
+      "PriceOracle": "0xD38Ab369227d2e15a538C8DA1B614bcf4D5Ee4aB",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "chainId": 1,
+      "rpcUrl": "https://eth.llamarpc.com",
+      "blockExplorer": "https://etherscan.io"
+    }
+  },
+  "plans": {
+    "STARTER": {
+      "id": "starter",
+      "name": "Starter",
+      "monthlyUSDC": "9.0",
+      "yearlyUSDC": "90.0",
+      "deploymentsLimit": "5",
+      "platformFeeRate": "1.5%"
+    },
+    "PRO": {
+      "id": "pro",
+      "name": "Pro",
+      "monthlyUSDC": "19.0",
+      "yearlyUSDC": "190.0",
+      "deploymentsLimit": "100",
+      "platformFeeRate": "2%"
+    },
+    "ENTERPRISE": {
+      "id": "enterprise",
+      "name": "Enterprise",
+      "monthlyUSDC": "99.0",
+      "yearlyUSDC": "990.0",
+      "deploymentsLimit": "1000",
+      "platformFeeRate": "1.5%"
+    }
+  },
+  "config": {
+    "preferredChain": 42161,
+    "fallbackChain": 8453,
+    "supportedChains": [8453, 42161, 1],
+    "treasury": "0x09789515d075Ad4f657cF33a7f4adCe485Ee4f2E",
+    "platformFee": "0x09789515d075Ad4f657cF33a7f4adCe485Ee4f2E"
+  },
+  "deployment": {
+    "timestamp": "2024-01-19T15:30:00Z",
+    "deployer": "0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9",
+    "version": "1.0.0"
+  }
+}
