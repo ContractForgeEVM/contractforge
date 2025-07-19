@@ -247,25 +247,25 @@ const Documentation = () => {
                     </Typography>
                   </Box>
 
-                  {/* Deployer Info */}
-                  <Box sx={{ mb: 2, p: 2, bgcolor: 'secondary.50', borderRadius: 1, border: '1px solid', borderColor: 'secondary.200' }}>
-                    <Typography variant="subtitle2" fontWeight="bold" color="secondary.dark" gutterBottom>
-                      👤 Contract Deployer
-                    </Typography>
-                    <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                      bgcolor: 'secondary.100', 
-                      p: 0.5, 
-                      borderRadius: 0.5,
-                      color: 'secondary.dark',
-                      display: 'block',
-                      wordBreak: 'break-all'
-                    }}>
-                      0xa3cb5b568529b27e93ae726c7d8aef18cd551621
-                    </Typography>
-                    <Typography variant="caption" color="secondary.dark" sx={{ mt: 0.5, display: 'block' }}>
-                      EOA that deployed all factory contracts
-                    </Typography>
-                  </Box>
+                                     {/* Deployer Info */}
+                   <Box sx={{ mb: 2, p: 2, bgcolor: 'secondary.50', borderRadius: 1, border: '1px solid', borderColor: 'secondary.200' }}>
+                     <Typography variant="subtitle2" fontWeight="bold" color="secondary.dark" gutterBottom>
+                       👤 Contract Deployer
+                     </Typography>
+                     <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                       bgcolor: 'secondary.100', 
+                       p: 0.5, 
+                       borderRadius: 0.5,
+                       color: 'secondary.dark',
+                       display: 'block',
+                       wordBreak: 'break-all'
+                     }}>
+                       0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9
+                     </Typography>
+                     <Typography variant="caption" color="secondary.dark" sx={{ mt: 0.5, display: 'block' }}>
+                       EOA that deployed all factory contracts
+                     </Typography>
+                   </Box>
 
                   {/* Main Factory */}
                   <Box sx={{ mb: 2, p: 2, bgcolor: 'success.50', borderRadius: 1, border: '1px solid', borderColor: 'success.200' }}>
@@ -561,28 +561,28 @@ const Documentation = () => {
               </Paper>
             </Box>
 
-            {/* Deployer Address */}
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="subtitle1" fontWeight="bold" color="secondary" gutterBottom>
-                Factory Contract Deployer
-              </Typography>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                EOA that deployed all factory contracts across networks:
-              </Typography>
-              <Paper sx={{ p: 2, bgcolor: 'grey.200', display: 'flex', alignItems: 'center', gap: 1, border: '1px solid', borderColor: 'grey.300' }}>
-                <Typography component="code" variant="body2" fontFamily="monospace" sx={{ flex: 1, color: 'grey.800' }}>
-                  0xa3cb5b568529b27e93ae726c7d8aef18cd551621
-                </Typography>
-                <Tooltip title={copiedCode === 'deployer-address' ? 'Copied!' : 'Copy Address'}>
-                  <IconButton
-                    size="small"
-                    onClick={() => copyToClipboard('0xa3cb5b568529b27e93ae726c7d8aef18cd551621', 'deployer-address')}
-                  >
-                    <CopyIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </Paper>
-            </Box>
+                         {/* Deployer Address */}
+             <Box sx={{ mb: 3 }}>
+               <Typography variant="subtitle1" fontWeight="bold" color="secondary" gutterBottom>
+                 Factory Contract Deployer
+               </Typography>
+               <Typography variant="body2" color="text.secondary" gutterBottom>
+                 EOA that deployed all factory contracts across networks:
+               </Typography>
+               <Paper sx={{ p: 2, bgcolor: 'grey.200', display: 'flex', alignItems: 'center', gap: 1, border: '1px solid', borderColor: 'grey.300' }}>
+                 <Typography component="code" variant="body2" fontFamily="monospace" sx={{ flex: 1, color: 'grey.800' }}>
+                   0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9
+                 </Typography>
+                 <Tooltip title={copiedCode === 'deployer-address' ? 'Copied!' : 'Copy Address'}>
+                   <IconButton
+                     size="small"
+                     onClick={() => copyToClipboard('0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9', 'deployer-address')}
+                   >
+                     <CopyIcon fontSize="small" />
+                   </IconButton>
+                 </Tooltip>
+               </Paper>
+             </Box>
 
             {/* Factory Addresses */}
             <Box>
