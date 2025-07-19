@@ -289,25 +289,25 @@ const Documentation = () => {
 
                   {/* Special Networks */}
                   <Box sx={{ p: 2, bgcolor: 'warning.50', borderRadius: 1, border: '1px solid', borderColor: 'warning.200' }}>
-                    <Typography variant="subtitle2" fontWeight="bold" color="warning.dark" gutterBottom>
+                    <Typography variant="subtitle2" fontWeight="bold" color="orange" gutterBottom>
                       ⚠️ Special Network Addresses
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                       <Box>
-                        <Typography variant="caption" color="warning.dark">Polygon: </Typography>
-                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'warning.100', p: 0.3, borderRadius: 0.3, color: 'warning.dark' }}>
+                        <Typography variant="caption" color="text.primary" sx={{ fontWeight: 'medium' }}>Polygon: </Typography>
+                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.200', p: 0.3, borderRadius: 0.3, color: 'grey.800', border: '1px solid', borderColor: 'grey.300' }}>
                           0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a
                         </Typography>
                       </Box>
                       <Box>
-                        <Typography variant="caption" color="warning.dark">Linea: </Typography>
-                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'warning.100', p: 0.3, borderRadius: 0.3, color: 'warning.dark' }}>
+                        <Typography variant="caption" color="text.primary" sx={{ fontWeight: 'medium' }}>Linea: </Typography>
+                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.200', p: 0.3, borderRadius: 0.3, color: 'grey.800', border: '1px solid', borderColor: 'grey.300' }}>
                           0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
                         </Typography>
                       </Box>
                       <Box>
-                        <Typography variant="caption" color="warning.dark">HyperEVM: </Typography>
-                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'warning.100', p: 0.3, borderRadius: 0.3, color: 'warning.dark' }}>
+                        <Typography variant="caption" color="text.primary" sx={{ fontWeight: 'medium' }}>HyperEVM: </Typography>
+                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.200', p: 0.3, borderRadius: 0.3, color: 'grey.800', border: '1px solid', borderColor: 'grey.300' }}>
                           0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9
                         </Typography>
                       </Box>
@@ -752,12 +752,12 @@ Content-Type: application/json
                             variant="caption" 
                             fontFamily="monospace"
                             sx={{ 
-                              bgcolor: network.factoryType === 'Primary' ? 'success.100' : 'warning.100',
-                              color: network.factoryType === 'Primary' ? 'success.dark' : 'warning.dark',
+                              bgcolor: network.factoryType === 'Primary' ? 'success.100' : 'grey.200',
+                              color: network.factoryType === 'Primary' ? 'success.dark' : 'grey.800',
                               p: 0.5, 
                               borderRadius: 0.5,
                               border: '1px solid',
-                              borderColor: network.factoryType === 'Primary' ? 'success.300' : 'warning.300'
+                              borderColor: network.factoryType === 'Primary' ? 'success.300' : 'grey.300'
                             }}
                           >
                             {network.factoryAddress || '0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7'}
@@ -1001,47 +1001,50 @@ Content-Type: application/json
                     <Typography variant="subtitle2" fontWeight="bold" color="warning.main" gutterBottom>
                       Special Network Factories
                     </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="caption" sx={{ minWidth: 60 }}>Polygon:</Typography>
-                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                          bgcolor: 'warning.100', 
-                          p: 0.5, 
-                          borderRadius: 0.5,
-                          color: 'warning.dark',
-                          border: '1px solid',
-                          borderColor: 'warning.300'
-                        }}>
-                          0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="caption" sx={{ minWidth: 60 }}>Linea:</Typography>
-                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                          bgcolor: 'warning.100', 
-                          p: 0.5, 
-                          borderRadius: 0.5,
-                          color: 'warning.dark',
-                          border: '1px solid',
-                          borderColor: 'warning.300'
-                        }}>
-                          0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="caption" sx={{ minWidth: 60 }}>HyperEVM:</Typography>
-                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                          bgcolor: 'warning.100', 
-                          p: 0.5, 
-                          borderRadius: 0.5,
-                          color: 'warning.dark',
-                          border: '1px solid',
-                          borderColor: 'warning.300'
-                        }}>
-                          0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9
-                        </Typography>
-                      </Box>
-                    </Box>
+                                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                         <Typography variant="caption" color="text.primary" sx={{ minWidth: 60, fontWeight: 'medium' }}>Polygon:</Typography>
+                         <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                           bgcolor: 'grey.200', 
+                           p: 0.5, 
+                           borderRadius: 0.5,
+                           color: 'grey.800',
+                           border: '1px solid',
+                           borderColor: 'grey.300',
+                           fontSize: '0.75rem'
+                         }}>
+                           0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a
+                         </Typography>
+                       </Box>
+                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                         <Typography variant="caption" color="text.primary" sx={{ minWidth: 60, fontWeight: 'medium' }}>Linea:</Typography>
+                         <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                           bgcolor: 'grey.200', 
+                           p: 0.5, 
+                           borderRadius: 0.5,
+                           color: 'grey.800',
+                           border: '1px solid',
+                           borderColor: 'grey.300',
+                           fontSize: '0.75rem'
+                         }}>
+                           0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
+                         </Typography>
+                       </Box>
+                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                         <Typography variant="caption" color="text.primary" sx={{ minWidth: 60, fontWeight: 'medium' }}>HyperEVM:</Typography>
+                         <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                           bgcolor: 'grey.200', 
+                           p: 0.5, 
+                           borderRadius: 0.5,
+                           color: 'grey.800',
+                           border: '1px solid',
+                           borderColor: 'grey.300',
+                           fontSize: '0.75rem'
+                         }}>
+                           0x661b30Bf65e46B3Ae775e6Ac7Cdb5Fa7dab54df9
+                         </Typography>
+                       </Box>
+                     </Box>
                   </Box>
                 </CardContent>
               </Card>
