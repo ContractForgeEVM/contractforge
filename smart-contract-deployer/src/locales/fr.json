@@ -600,6 +600,7 @@
     "allChains": "Toutes les chaînes",
     "allTemplates": "Tous les modèles",
     "noContracts": "Aucun contrat déployé trouvé",
+    "noMatchingContracts": "Aucun contrat ne correspond à vos critères de recherche",
     "contract": "Contrat",
     "template": "Modèle",
     "chain": "Chaîne",

@@ -264,7 +264,7 @@ const DeployedContracts: React.FC = () => {
         <CardContent>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
             <TextField
-              placeholder="Rechercher par adresse, nom ou type..."
+              placeholder={t('deployments.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               size="small"
@@ -279,13 +279,13 @@ const DeployedContracts: React.FC = () => {
             />
             
             <FormControl size="small" sx={{ minWidth: 150 }}>
-              <InputLabel>Chaîne</InputLabel>
+              <InputLabel>{t('deployments.filterByChain')}</InputLabel>
               <Select
                 value={filterChain}
                 onChange={(e) => setFilterChain(e.target.value)}
-                label="Chaîne"
+                label={t('deployments.filterByChain')}
               >
-                <MenuItem value="all">Toutes les chaînes</MenuItem>
+                <MenuItem value="all">{t('deployments.allChains')}</MenuItem>
                 {uniqueChains.map(chain => (
                   <MenuItem key={chain} value={chain}>{chain}</MenuItem>
                 ))}
@@ -293,13 +293,13 @@ const DeployedContracts: React.FC = () => {
             </FormControl>
             
             <FormControl size="small" sx={{ minWidth: 150 }}>
-              <InputLabel>Type</InputLabel>
+              <InputLabel>{t('deployments.filterByTemplate')}</InputLabel>
               <Select
                 value={filterTemplate}
                 onChange={(e) => setFilterTemplate(e.target.value)}
-                label="Type"
+                label={t('deployments.filterByTemplate')}
               >
-                <MenuItem value="all">Tous les types</MenuItem>
+                <MenuItem value="all">{t('deployments.allTemplates')}</MenuItem>
                 {uniqueTemplates.map(template => (
                   <MenuItem key={template} value={template}>
                     {getTemplateDisplayName(template)}
@@ -319,8 +319,8 @@ const DeployedContracts: React.FC = () => {
       {filteredContracts.length === 0 ? (
         <Alert severity="info">
           {contracts.length === 0 
-            ? "Aucun contrat déployé trouvé. Commencez par déployer un contrat dans la section Deploy !"
-            : "Aucun contrat ne correspond à vos critères de recherche."
+            ? t('deployments.noContracts')
+            : t('deployments.noMatchingContracts')
           }
         </Alert>
       ) : (
@@ -328,13 +328,13 @@ const DeployedContracts: React.FC = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Contrat</TableCell>
-                <TableCell>Type</TableCell>
-                <TableCell>Chaîne</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Statut</TableCell>
-                <TableCell>Coût</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell>{t('deployments.contract')}</TableCell>
+                <TableCell>{t('deployments.template')}</TableCell>
+                <TableCell>{t('deployments.chain')}</TableCell>
+                <TableCell>{t('deployments.date')}</TableCell>
+                <TableCell>{t('deployments.status')}</TableCell>
+                <TableCell>{t('deployments.cost')}</TableCell>
+                <TableCell align="right">{t('deployments.actions')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

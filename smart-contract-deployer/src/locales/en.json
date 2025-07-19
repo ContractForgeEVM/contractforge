@@ -642,6 +642,7 @@
     "allChains": "All Chains",
     "allTemplates": "All Templates",
     "noContracts": "No deployed contracts found",
+    "noMatchingContracts": "No contracts match your search criteria",
     "contract": "Contract",
     "template": "Template",
     "chain": "Chain",

@@ -10,14 +10,25 @@ const resources = {
     translation: frTranslations
   }
 }
+// Récupérer la langue sauvegardée ou utiliser 'en' par défaut
+const savedLanguage = localStorage.getItem('language') || 'en'
+
+// Debug: Afficher la langue récupérée
+console.log('🌐 Langue sauvegardée:', savedLanguage)
+
 i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'en',
+    lng: savedLanguage,
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false
     }
   })
+
+// Sauvegarder la langue quand elle change
+i18n.on('languageChanged', (lng) => {
+  localStorage.setItem('language', lng)
+})
 export default i18n

@@ -1,11 +1,33 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '@mui/material'
 import { Language as LanguageIcon } from '@mui/icons-material'
+import { useState, useEffect } from 'react'
+
 const LanguageToggle = () => {
   const { i18n } = useTranslation()
-  const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'fr' : 'en'
-    i18n.changeLanguage(newLang)
+  const [currentLang, setCurrentLang] = useState(i18n.language)
+  
+  useEffect(() => {
+    // S'assurer que l'état reflète la langue actuelle
+    setCurrentLang(i18n.language)
+    
+    // Écouter les changements de langue
+    const handleLanguageChange = (lng: string) => {
+      setCurrentLang(lng)
+    }
+    
+    i18n.on('languageChanged', handleLanguageChange)
+    
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange)
+    }
+  }, [i18n])
+  
+  const toggleLanguage = async () => {
+    const newLang = currentLang === 'en' ? 'fr' : 'en'
+    console.log(`🌐 Changement de langue: ${currentLang} → ${newLang}`)
+    await i18n.changeLanguage(newLang)
+    setCurrentLang(newLang)
   }
   return (
     <Button
@@ -22,7 +44,7 @@ const LanguageToggle = () => {
         },
       }}
     >
-      {i18n.language === 'en' ? 'EN' : 'FR'}
+      {currentLang === 'en' ? 'EN' : 'FR'}
     </Button>
   )
 }
