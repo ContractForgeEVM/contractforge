@@ -55,15 +55,18 @@ export const useDeploymentPermissions = (): DeploymentPermissionsResult => {
           const result = await response.json()
           if (result.success && result.data) {
             console.log('✅ Permissions récupérées depuis le backend')
-            // Utiliser les vraies données de l'API
+            
+            const plan = result.data.plan || 'free'
+            const isFree = plan === 'free'
+            
             setPermissions({
-              canDeploy: result.data.allowed,
-              platformFeeRate: result.data.platformFeeRate || 1.0,
-              plan: result.data.plan || 'free',
-              subscriptionStatus: 'active',
-              payAsYouGo: false,
-              hasSubscriptionLimits: true,
-              reason: result.data.reason
+              canDeploy: isFree ? true : result.data.allowed, // Free plan = toujours autorisé
+              platformFeeRate: isFree ? 2.0 : (result.data.platformFeeRate || 1.0), // Free = 2%, Payant = selon backend
+              plan: plan,
+              subscriptionStatus: isFree ? undefined : 'active',
+              payAsYouGo: isFree, // Free = pay-as-you-go, Payant = subscription
+              hasSubscriptionLimits: !isFree, // Free = pas de limites, Payant = limites
+              reason: isFree ? 'Pay-as-you-go deployments available' : result.data.reason
             })
             return
           }
