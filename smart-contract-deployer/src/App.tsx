@@ -80,12 +80,22 @@ function App() {
     setSelectedTemplate(template)
     setContractParams({})
     setSelectedFeatures([])
+    setFeatureConfigs({})
     setDeploymentResult(null)
     trackTemplateSelection(template.id)
   }
 
   const handleParamsChange = (params: Record<string, any>) => {
     setContractParams(params)
+  }
+
+  // Add handlers for premium features
+  const handleFeaturesChange = (features: string[]) => {
+    setSelectedFeatures(features)
+  }
+
+  const handleFeatureConfigsChange = (configs: any) => {
+    setFeatureConfigs(configs)
   }
 
   const handleDeploy = async () => {
@@ -204,9 +214,9 @@ function App() {
                     <PremiumFeatures
                       template={selectedTemplate}
                       selectedFeatures={selectedFeatures}
-                      onFeaturesChange={setSelectedFeatures}
+                      onFeaturesChange={handleFeaturesChange}
                       featureConfigs={featureConfigs}
-                      onFeatureConfigChange={setFeatureConfigs}
+                      onFeatureConfigChange={handleFeatureConfigsChange}
                     />
                     <DeploymentInfo
                       gasEstimate={gasEstimate}
@@ -220,7 +230,11 @@ function App() {
                 <Box sx={{ flex: 1 }}>
                   <CodeViewer
                     template={selectedTemplate}
-                    params={contractParams}
+                    params={{
+                      ...contractParams,
+                      premiumFeatures: selectedFeatures,
+                      featureConfigs: featureConfigs
+                    }}
                   />
                 </Box>
               </Box>

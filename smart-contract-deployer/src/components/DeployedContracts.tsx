@@ -78,13 +78,10 @@ const DeployedContracts: React.FC = () => {
 
   const fetchDeployedContracts = async () => {
     setLoading(true)
-    console.log('🔍 Récupération des contrats pour:', address)
     
     try {
       // Récupérer les vrais contrats déployés depuis Supabase
       const { supabase } = await import('../config/supabase')
-      
-      console.log('📡 Requête Supabase pour user_id:', address)
       
       const { data: deployments, error } = await supabase
         .from('deployments')
@@ -99,29 +96,8 @@ const DeployedContracts: React.FC = () => {
         return
       }
 
-      console.log('📊 Données brutes reçues de Supabase:', deployments)
-
-      // Filtrer les données mock/test (adresses qui contiennent des patterns de test)
-      const filteredDeployments = (deployments || []).filter((deployment: any) => {
-        const address = deployment.contract_address || ''
-        // Exclure les adresses mock communes
-        const mockPatterns = [
-          /0x1234.*5678/i,
-          /0x123456789012345678901234567890123456/i,
-          /0xabcdef/i,
-          /0x000000/i
-        ]
-        const isMock = mockPatterns.some(pattern => pattern.test(address))
-        if (isMock) {
-          console.log(`🚫 Données mock filtrées: ${address}`)
-        }
-        return !isMock
-      })
-
-      console.log(`📊 Contrats après filtrage: ${filteredDeployments.length}/${(deployments || []).length}`)
-
       // Transformer les données Supabase pour correspondre à notre interface  
-      const formattedContracts: DeployedContract[] = filteredDeployments.map((deployment: any) => ({
+      const formattedContracts: DeployedContract[] = deployments.map(deployment => ({
         id: deployment.id,
         address: deployment.contract_address || 'N/A',
         template: deployment.template,
@@ -138,7 +114,6 @@ const DeployedContracts: React.FC = () => {
       }))
 
       setContracts(formattedContracts)
-      console.log('✅ Contrats formatés:', formattedContracts)
     } catch (error) {
       console.error('❌ Erreur lors de la récupération:', error)
       setContracts([])

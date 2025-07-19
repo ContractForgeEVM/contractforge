@@ -110,8 +110,6 @@ const MintPageGenerator: React.FC = () => {
 
   const fetchNFTContracts = async () => {
     try {
-      console.log('🎨 Récupération des contrats NFT pour:', address)
-      
       // Récupérer les vrais contrats NFT depuis Supabase
       const { supabase } = await import('../config/supabase')
       
@@ -129,8 +127,6 @@ const MintPageGenerator: React.FC = () => {
         return
       }
 
-      console.log('🎨 Contrats NFT trouvés:', deployments)
-
       // Transformer en format NFTContract
       const nftContracts: NFTContract[] = (deployments || []).map((deployment: any) => ({
         address: deployment.contract_address,
@@ -142,7 +138,6 @@ const MintPageGenerator: React.FC = () => {
       }))
 
       setContracts(nftContracts)
-      console.log('✅ Contrats NFT formatés:', nftContracts)
     } catch (error) {
       console.error('❌ Erreur récupération NFT:', error)
       
@@ -172,8 +167,6 @@ const MintPageGenerator: React.FC = () => {
     
     setCheckingSubdomain(true)
     try {
-      console.log('🔍 Vérification disponibilité sous-domaine via API:', subdomain)
-      
       // Utiliser votre API pour vérifier la disponibilité
       const apiUrl = import.meta.env.VITE_API_URL || 'https://contractforge.io'
       const response = await fetch(`${apiUrl}/api/mint-pages/check-subdomain`, {
@@ -187,7 +180,6 @@ const MintPageGenerator: React.FC = () => {
       if (response.ok) {
         const result = await response.json()
         setSubdomainAvailable(result.available)
-        console.log(`✅ API: "${subdomain}" ${result.available ? 'disponible' : 'non disponible'}`)
         if (!result.available && result.reason) {
           console.log(`   Raison: ${result.reason}`)
         }
@@ -198,7 +190,6 @@ const MintPageGenerator: React.FC = () => {
         const reserved = ['test', 'demo', 'admin', 'api', 'www', 'mail', 'ftp', 'app', 'blog', 'shop', 'mint', 'nft']
         const isAvailable = !reserved.includes(subdomain.toLowerCase())
         setSubdomainAvailable(isAvailable)
-        console.log(`✅ Vérification locale: "${subdomain}" ${isAvailable ? 'disponible' : 'réservé'}`)
       }
       
     } catch (error) {
@@ -207,7 +198,6 @@ const MintPageGenerator: React.FC = () => {
       const reserved = ['test', 'demo', 'admin', 'api', 'www', 'mail', 'ftp', 'app', 'blog', 'shop', 'mint', 'nft']
       const isAvailable = !reserved.includes(subdomain.toLowerCase())
       setSubdomainAvailable(isAvailable)
-      console.log(`✅ Fallback local: "${subdomain}" ${isAvailable ? 'disponible' : 'réservé'}`)
     } finally {
       setCheckingSubdomain(false)
     }
@@ -235,8 +225,6 @@ const MintPageGenerator: React.FC = () => {
   const handleCreatePage = async () => {
     setCreating(true)
     try {
-      console.log('🚀 Création de la page de mint via API:', config)
-      
       // Utiliser votre API pour créer la page
       const apiUrl = import.meta.env.VITE_API_URL || 'https://contractforge.io'
       const response = await fetch(`${apiUrl}/api/mint-pages/create`, {
@@ -263,7 +251,6 @@ const MintPageGenerator: React.FC = () => {
       
       if (response.ok) {
         const result = await response.json()
-        console.log('✅ Page de mint créée avec succès via API:', result)
         setCreatedPageUrl(result.url)
         setCreated(true)
       } else {

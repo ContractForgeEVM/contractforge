@@ -1,4 +1,17 @@
-export type TemplateType = 'token' | 'nft' | 'dao' | 'lock'
+export type TemplateType = 
+  | 'token' 
+  | 'nft' 
+  | 'dao' 
+  | 'lock'
+  | 'liquidity-pool'
+  | 'yield-farming'
+  | 'gamefi-token'
+  | 'nft-marketplace'
+  | 'revenue-sharing'
+  | 'loyalty-program'
+  | 'dynamic-nft'
+  | 'social-token'
+
 export type ContractTemplate = {
   id: TemplateType
   name: string
@@ -10,9 +23,10 @@ export type ContractTemplate = {
 export type TemplateField = {
   name: string
   label: string
-  type: 'text' | 'number' | 'address' | 'datetime'
+  type: 'text' | 'number' | 'address' | 'datetime' | 'select' | 'boolean'
   placeholder?: string
   defaultValue?: any
+  options?: { value: any; label: string }[]
   validation?: {
     required?: boolean
     min?: number

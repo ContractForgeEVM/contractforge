@@ -337,9 +337,9 @@ const Documentation = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '100%' }}>
                   <Typography variant="h2" sx={{ fontSize: '2rem' }}>{template.icon}</Typography>
                   <Box sx={{ flex: 1 }}>
-                    <Typography variant="h6">{t(template.name)}</Typography>
+                    <Typography variant="h6">{t(`documentation.templates.${template.id}.name`)}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {t(template.description)}
+                      {t(`documentation.templates.${template.id}.description`)}
                     </Typography>
                   </Box>
                   <Chip

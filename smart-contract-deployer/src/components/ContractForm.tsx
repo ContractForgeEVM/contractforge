@@ -9,6 +9,12 @@ import {
   Alert,
   CircularProgress,
   Chip,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Switch,
+  FormControlLabel,
 } from '@mui/material'
 import { ArrowBack, Lock, Star } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
@@ -99,35 +105,100 @@ const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying }: Con
         </Alert>
       )}
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {template.fields.map((field) => (
-          <TextField
-            key={field.name}
-            label={t(`templates.${template.id}.fields.${field.name}`) || field.label}
-            value={formData[field.name] || ''}
-            onChange={(e) => handleChange(field.name, e.target.value)}
-            type={field.type === 'number' ? 'number' : 'text'}
-            required={field.validation?.required}
-            error={!!errors[field.name]}
-            helperText={errors[field.name] || t(`templates.${template.id}.placeholders.${field.name}`, { defaultValue: field.placeholder })}
-            fullWidth
-            variant="outlined"
-            InputProps={{
-              ...(field.type === 'datetime' && {
-                type: 'datetime-local',
-              }),
-            }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: 'rgba(92, 107, 192, 0.3)',
+        {template.fields.map((field) => {
+          // Render different field types
+          if (field.type === 'select') {
+            return (
+              <FormControl key={field.name} fullWidth error={!!errors[field.name]}>
+                <InputLabel>{t(`templates.${template.id}.fields.${field.name}`) || field.label}</InputLabel>
+                <Select
+                  value={formData[field.name] || field.defaultValue || ''}
+                  onChange={(e) => handleChange(field.name, e.target.value)}
+                  label={t(`templates.${template.id}.fields.${field.name}`) || field.label}
+                  required={field.validation?.required}
+                  sx={{
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'rgba(92, 107, 192, 0.3)',
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'rgba(92, 107, 192, 0.5)',
+                    },
+                  }}
+                >
+                  {field.options?.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors[field.name] && (
+                  <Typography variant="caption" color="error" sx={{ mt: 0.5 }}>
+                    {errors[field.name]}
+                  </Typography>
+                )}
+              </FormControl>
+            )
+          }
+
+          if (field.type === 'boolean') {
+            return (
+              <FormControlLabel
+                key={field.name}
+                control={
+                  <Switch
+                    checked={formData[field.name] || field.defaultValue || false}
+                    onChange={(e) => handleChange(field.name, e.target.checked)}
+                    sx={{
+                      '& .MuiSwitch-switchBase.Mui-checked': {
+                        color: '#5C6BC0',
+                      },
+                      '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                        backgroundColor: '#5C6BC0',
+                      },
+                    }}
+                  />
+                }
+                label={t(`templates.${template.id}.fields.${field.name}`) || field.label}
+                sx={{
+                  '& .MuiFormControlLabel-label': {
+                    color: 'text.primary',
+                  },
+                }}
+              />
+            )
+          }
+
+          // Default text field for other types
+          return (
+            <TextField
+              key={field.name}
+              label={t(`templates.${template.id}.fields.${field.name}`) || field.label}
+              value={formData[field.name] || ''}
+              onChange={(e) => handleChange(field.name, e.target.value)}
+              type={field.type === 'number' ? 'number' : 'text'}
+              required={field.validation?.required}
+              error={!!errors[field.name]}
+              helperText={errors[field.name] || t(`templates.${template.id}.placeholders.${field.name}`, { defaultValue: field.placeholder })}
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                ...(field.type === 'datetime' && {
+                  type: 'datetime-local',
+                }),
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'rgba(92, 107, 192, 0.3)',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'rgba(92, 107, 192, 0.5)',
+                  },
                 },
-                '&:hover fieldset': {
-                  borderColor: 'rgba(92, 107, 192, 0.5)',
-                },
-              },
-            }}
-          />
-        ))}
+              }}
+            />
+          )
+        })}
       </Box>
       {}
       {permissions && !permissionsLoading && (

@@ -263,7 +263,7 @@ const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
                    size="small"
                    sx={{
                      position: 'absolute',
-                     top: -12,
+                     top: -0,
                      left: '50%',
                      transform: 'translateX(-50%)',
                      zIndex: 1,

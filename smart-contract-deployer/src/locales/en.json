@@ -25,10 +25,26 @@
   "nft": "NFT Collection",
   "dao": "DAO",
   "lock": "Token Lock",
+  "liquidity-pool": "Liquidity Pool",
+  "yield-farming": "Yield Farming",
+  "gamefi-token": "GameFi Token",
+  "nft-marketplace": "NFT Marketplace",
+  "revenue-sharing": "Revenue Sharing",
+  "loyalty-program": "Loyalty Program",
+  "dynamic-nft": "Dynamic NFT",
+  "social-token": "Social Token",
   "tokenDesc": "Create your own ERC20 token with customizable supply and decimals",
   "nftDesc": "Deploy an NFT collection with minting capabilities",
   "daoDesc": "Create a decentralized autonomous organization",
   "lockDesc": "Lock tokens until a specified time",
+  "liquidity-poolDesc": "Create automated market maker pools for token trading",
+  "yield-farmingDesc": "Deploy staking contracts with automatic reward distribution",
+  "gamefi-tokenDesc": "Optimized tokens for gaming and play-to-earn applications",
+  "nft-marketplaceDesc": "Complete marketplace for buying and selling NFTs",
+  "revenue-sharingDesc": "Tokens that automatically distribute business revenue to holders",
+  "loyalty-programDesc": "Blockchain-based loyalty and rewards program",
+  "dynamic-nftDesc": "NFTs that evolve, merge, and change over time",
+  "social-tokenDesc": "Community tokens for creators and social platforms",
   "contractName": "Contract Name",
   "contractSymbol": "Contract Symbol",
   "symbol": "Symbol",
@@ -215,6 +231,102 @@
     "flashmint": {
       "name": "Flash Minting",
       "description": "Enable flash loans for your token"
+    },
+    "oracle": {
+      "name": "Oracle Integration",
+      "description": "Integrate Chainlink price feeds for accurate pricing"
+    },
+    "antiBot": {
+      "name": "Anti-Bot Protection",
+      "description": "Protect against bot manipulation and front-running"
+    },
+    "evolution": {
+      "name": "NFT Evolution",
+      "description": "Allow NFTs to evolve and upgrade over time"
+    },
+    "breeding": {
+      "name": "NFT Breeding",
+      "description": "Enable NFT breeding mechanics for new token generation"
+    },
+    "auction": {
+      "name": "Auction System",
+      "description": "Built-in auction functionality for NFT sales"
+    },
+    "escrow": {
+      "name": "Escrow Protection",
+      "description": "Secure escrow system for safe transactions"
+    },
+    "governance": {
+      "name": "Community Governance",
+      "description": "Token-based voting and governance system"
+    },
+    "accounting": {
+      "name": "Revenue Accounting",
+      "description": "Automated revenue tracking and distribution"
+    },
+    "tiered": {
+      "name": "Tiered Rewards",
+      "description": "Multi-level reward system based on user activity"
+    },
+    "rewards": {
+      "name": "Reward System",
+      "description": "Automated reward distribution and management"
+    },
+    "tipping": {
+      "name": "Creator Tipping",
+      "description": "Direct tipping system for content creators"
+    },
+    "communityGoverned": {
+      "name": "Community Governance",
+      "description": "Community-based voting and proposal system"
+    },
+    "lockup": {
+      "name": "Token Lockup",
+      "description": "Temporary lockup mechanism for staked tokens"
+    },
+    "curation": {
+      "name": "NFT Curation",
+      "description": "Curated marketplace with approval system for NFT listings"
+    },
+    "lazyMint": {
+      "name": "Lazy Minting",
+      "description": "Gas-efficient minting where users pay for their own NFT minting"
+    },
+    "crossChain": {
+      "name": "Cross-Chain Bridge",
+      "description": "Bridge tokens between different blockchain networks"
+    },
+    "analytics": {
+      "name": "Advanced Analytics",
+      "description": "Comprehensive analytics and reporting dashboard for contract activity"
+    },
+    "api": {
+      "name": "API Access",
+      "description": "Full API access for programmatic contract interaction"
+    },
+    "webhook": {
+      "name": "Webhook Integration",
+      "description": "Real-time webhook notifications for contract events"
+    },
+    "backup": {
+      "name": "Contract Backup",
+      "description": "Automated backup and recovery system for contract data"
+    },
+    "monitoring": {
+      "name": "Smart Monitoring",
+      "description": "Advanced monitoring and alerting system for contract health"
+    },
+    "partnership": {
+      "name": "Partnership Program",
+      "description": "Built-in partnership and collaboration features for business growth"
+    },
+    "exclusive": {
+      "name": "Exclusive Access",
+      "description": "Exclusive content and features for premium token holders"
+    },
+    "insurance": {
+      "name": "DeFi Insurance",
+      "description": "Insurance coverage for DeFi protocols and liquidity pools"
     }
   },
   "platformFee": "Platform Fee",
@@ -277,6 +389,135 @@
         "beneficiary": "e.g. 0x...",
         "unlockTime": "Select date and time"
       }
+    },
+    "liquidity-pool": {
+      "name": "Liquidity Pool",
+      "fields": {
+        "name": "Pool Name",
+        "tokenA": "Token A Address",
+        "tokenB": "Token B Address",
+        "fee": "Pool Fee (basis points)",
+        "initialPrice": "Initial Price"
+      },
+      "placeholders": {
+        "name": "e.g. ETH/USDC Pool",
+        "tokenA": "e.g. 0x... (ETH token address)",
+        "tokenB": "e.g. 0x... (USDC token address)",
+        "fee": "e.g. 3000 (0.3%)",
+        "initialPrice": "e.g. 1.0"
+      }
+    },
+    "yield-farming": {
+      "name": "Yield Farming",
+      "fields": {
+        "name": "Farm Name",
+        "stakingToken": "Staking Token Address",
+        "rewardToken": "Reward Token Address",
+        "rewardRate": "Reward Rate (tokens/second)",
+        "duration": "Farming Duration (days)"
+      },
+      "placeholders": {
+        "name": "e.g. My Yield Farm",
+        "stakingToken": "e.g. 0x... (LP token address)",
+        "rewardToken": "e.g. 0x... (reward token address)",
+        "rewardRate": "e.g. 0.001",
+        "duration": "e.g. 30"
+      }
+    },
+    "gamefi-token": {
+      "name": "GameFi Token",
+      "fields": {
+        "name": "Token Name",
+        "symbol": "Token Symbol",
+        "maxSupply": "Max Supply",
+        "mintPrice": "Mint Price (ETH)",
+        "burnRate": "Burn Rate (%)"
+      },
+      "placeholders": {
+        "name": "e.g. GameToken",
+        "symbol": "e.g. GAME",
+        "maxSupply": "e.g. 1000000",
+        "mintPrice": "e.g. 0.01",
+        "burnRate": "e.g. 2"
+      }
+    },
+    "nft-marketplace": {
+      "name": "NFT Marketplace",
+      "fields": {
+        "name": "Marketplace Name",
+        "nftContract": "NFT Contract Address",
+        "platformFee": "Platform Fee (%)",
+        "creatorFee": "Creator Fee (%)"
+      },
+      "placeholders": {
+        "name": "e.g. My NFT Market",
+        "nftContract": "e.g. 0x... (NFT contract address)",
+        "platformFee": "e.g. 2.5",
+        "creatorFee": "e.g. 5.0"
+      }
+    },
+    "revenue-sharing": {
+      "name": "Revenue Sharing Token",
+      "fields": {
+        "name": "Token Name",
+        "symbol": "Token Symbol",
+        "totalSupply": "Total Supply",
+        "businessWallet": "Business Wallet Address",
+        "distributionPeriod": "Distribution Period (days)"
+      },
+      "placeholders": {
+        "name": "e.g. Revenue Token",
+        "symbol": "e.g. REV",
+        "totalSupply": "e.g. 1000000",
+        "businessWallet": "e.g. 0x... (business wallet)",
+        "distributionPeriod": "e.g. 30"
+      }
+    },
+    "loyalty-program": {
+      "name": "Loyalty Program",
+      "fields": {
+        "name": "Program Name",
+        "pointsPerPurchase": "Points per Purchase",
+        "redemptionRate": "Redemption Rate",
+        "transferable": "Transferable Points",
+        "expirable": "Expirable Points"
+      },
+      "placeholders": {
+        "name": "e.g. My Loyalty Program",
+        "pointsPerPurchase": "e.g. 10",
+        "redemptionRate": "e.g. 0.01"
+      }
+    },
+    "dynamic-nft": {
+      "name": "Dynamic NFT",
+      "fields": {
+        "name": "Collection Name",
+        "symbol": "Collection Symbol",
+        "maxSupply": "Max Supply",
+        "evolvable": "Evolvable NFTs",
+        "mergeable": "Mergeable NFTs"
+      },
+      "placeholders": {
+        "name": "e.g. Dynamic NFTs",
+        "symbol": "e.g. DNFT",
+        "maxSupply": "e.g. 10000"
+      }
+    },
+    "social-token": {
+      "name": "Social Token",
+      "fields": {
+        "creatorName": "Creator Name",
+        "symbol": "Token Symbol",
+        "initialSupply": "Initial Supply",
+        "creatorShare": "Creator Share (%)",
+        "communityGoverned": "Community Governed"
+      },
+      "placeholders": {
+        "creatorName": "e.g. My Community",
+        "symbol": "e.g. SOCIAL",
+        "initialSupply": "e.g. 1000000",
+        "creatorShare": "e.g. 20"
+      }
     }
   },
   "documentation": {
@@ -331,8 +572,134 @@
        "optional": "Optional",
        "default": "Default",
        "fields": "fields",
-       "usageExample": "Usage Example"
-     },
+       "usageExample": "Usage Example",
+      "token": {
+        "name": "ERC20 Token",
+        "description": "Create your own ERC20 token with customizable supply and decimals",
+        "fields": {
+          "name": "Token Name",
+          "symbol": "Token Symbol",
+          "totalSupply": "Total Supply",
+          "decimals": "Decimals"
+        }
+      },
+      "nft": {
+        "name": "NFT Collection",
+        "description": "Deploy an NFT collection with minting capabilities",
+        "fields": {
+          "name": "Collection Name",
+          "symbol": "Collection Symbol",
+          "maxSupply": "Max Supply",
+          "baseURI": "Base URI"
+        }
+      },
+      "dao": {
+        "name": "DAO",
+        "description": "Create a decentralized autonomous organization",
+        "fields": {
+          "name": "DAO Name",
+          "governanceTokenAddress": "Governance Token Address",
+          "proposalThreshold": "Proposal Threshold",
+          "votingPeriod": "Voting Period (blocks)"
+        }
+      },
+      "lock": {
+        "name": "Token Lock",
+        "description": "Lock tokens until a specified time",
+        "fields": {
+          "tokenAddress": "Token Address",
+          "beneficiary": "Beneficiary Address",
+          "unlockTime": "Unlock Time"
+        }
+      },
+      "liquidity-pool": {
+        "name": "Liquidity Pool",
+        "description": "Create automated market maker pools for token trading",
+        "fields": {
+          "name": "Pool Name",
+          "tokenA": "Token A Address",
+          "tokenB": "Token B Address",
+          "fee": "Pool Fee (basis points)",
+          "initialPrice": "Initial Price"
+        }
+      },
+      "yield-farming": {
+        "name": "Yield Farming",
+        "description": "Deploy staking contracts with automatic reward distribution",
+        "fields": {
+          "name": "Farm Name",
+          "stakingToken": "Staking Token Address",
+          "rewardToken": "Reward Token Address",
+          "rewardRate": "Reward Rate (tokens/second)",
+          "duration": "Farming Duration (days)"
+        }
+      },
+      "gamefi-token": {
+        "name": "GameFi Token",
+        "description": "Optimized tokens for gaming and play-to-earn applications",
+        "fields": {
+          "name": "Token Name",
+          "symbol": "Token Symbol",
+          "maxSupply": "Max Supply",
+          "mintPrice": "Mint Price (ETH)",
+          "burnRate": "Burn Rate (%)"
+        }
+      },
+      "nft-marketplace": {
+        "name": "NFT Marketplace",
+        "description": "Complete marketplace for buying and selling NFTs",
+        "fields": {
+          "name": "Marketplace Name",
+          "nftContract": "NFT Contract Address",
+          "platformFee": "Platform Fee (%)",
+          "creatorFee": "Creator Fee (%)"
+        }
+      },
+      "revenue-sharing": {
+        "name": "Revenue Sharing Token",
+        "description": "Tokens that automatically distribute business revenue to holders",
+        "fields": {
+          "name": "Token Name",
+          "symbol": "Token Symbol",
+          "totalSupply": "Total Supply",
+          "businessWallet": "Business Wallet Address",
+          "distributionPeriod": "Distribution Period (days)"
+        }
+      },
+      "loyalty-program": {
+        "name": "Loyalty Program",
+        "description": "Blockchain-based loyalty and rewards program",
+        "fields": {
+          "name": "Program Name",
+          "pointsPerPurchase": "Points per Purchase",
+          "redemptionRate": "Redemption Rate",
+          "transferable": "Transferable Points",
+          "expirable": "Expirable Points"
+        }
+      },
+      "dynamic-nft": {
+        "name": "Dynamic NFT",
+        "description": "NFTs that evolve, merge, and change over time",
+        "fields": {
+          "name": "Collection Name",
+          "symbol": "Collection Symbol",
+          "maxSupply": "Max Supply",
+          "evolvable": "Evolvable NFTs",
+          "mergeable": "Mergeable NFTs"
+        }
+      },
+      "social-token": {
+        "name": "Social Token",
+        "description": "Community tokens for creators and social platforms",
+        "fields": {
+          "creatorName": "Creator Name",
+          "symbol": "Token Symbol",
+          "initialSupply": "Initial Supply",
+          "creatorShare": "Creator Share (%)",
+          "communityGoverned": "Community Governed"
+        }
+      }
+    },
     "premiumFeatures": {
       "title": "Premium Features",
       "catalog": "Premium Features Catalog",

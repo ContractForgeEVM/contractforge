@@ -11,10 +11,26 @@
   "nft": "Collection NFT",
   "dao": "DAO",
   "lock": "Verrouillage de tokens",
+  "liquidity-pool": "Pool de Liquidité",
+  "yield-farming": "Yield Farming",
+  "gamefi-token": "Token GameFi",
+  "nft-marketplace": "Marketplace NFT",
+  "revenue-sharing": "Partage de Revenus",
+  "loyalty-program": "Programme de Fidélité",
+  "dynamic-nft": "NFT Dynamique",
+  "social-token": "Token Social",
   "tokenDesc": "Créez votre propre token ERC20 avec approvisionnement et décimales personnalisables",
   "nftDesc": "Déployez une collection NFT avec capacités de frappe",
   "daoDesc": "Créez une organisation autonome décentralisée",
   "lockDesc": "Verrouillez des tokens jusqu'à un moment spécifié",
+  "liquidity-poolDesc": "Créez des pools de market maker automatisés pour le trading de tokens",
+  "yield-farmingDesc": "Déployez des contrats de staking avec distribution automatique de récompenses",
+  "gamefi-tokenDesc": "Tokens optimisés pour les applications de gaming et play-to-earn",
+  "nft-marketplaceDesc": "Marketplace complet pour acheter et vendre des NFTs",
+  "revenue-sharingDesc": "Tokens qui distribuent automatiquement les revenus d'entreprise aux détenteurs",
+  "loyalty-programDesc": "Programme de fidélité et récompenses basé sur la blockchain",
+  "dynamic-nftDesc": "NFTs qui évoluent, fusionnent et changent au fil du temps",
+  "social-tokenDesc": "Tokens communautaires pour créateurs et plateformes sociales",
   "contractName": "Nom du contrat",
   "contractSymbol": "Symbole du contrat",
   "symbol": "Symbole",
@@ -211,6 +227,102 @@
     "flashmint": {
       "name": "Flash Minting",
       "description": "Activer les prêts flash pour votre jeton"
+    },
+    "oracle": {
+      "name": "Intégration Oracle",
+      "description": "Intégrer les flux de prix Chainlink pour un prix précis"
+    },
+    "antiBot": {
+      "name": "Protection Anti-Bot",
+      "description": "Protéger contre la manipulation par bots et le front-running"
+    },
+    "evolution": {
+      "name": "Évolution NFT",
+      "description": "Permettre aux NFTs d'évoluer et de s'améliorer au fil du temps"
+    },
+    "breeding": {
+      "name": "Reproduction NFT",
+      "description": "Activer les mécaniques de reproduction NFT pour la génération de nouveaux tokens"
+    },
+    "auction": {
+      "name": "Système d'Enchères",
+      "description": "Fonctionnalité d'enchères intégrée pour les ventes NFT"
+    },
+    "escrow": {
+      "name": "Protection Escrow",
+      "description": "Système d'escrow sécurisé pour des transactions sûres"
+    },
+    "governance": {
+      "name": "Gouvernance Communautaire",
+      "description": "Système de vote et de gouvernance basé sur les tokens"
+    },
+    "accounting": {
+      "name": "Comptabilité des Revenus",
+      "description": "Suivi et distribution automatisés des revenus"
+    },
+    "tiered": {
+      "name": "Récompenses par Niveaux",
+      "description": "Système de récompenses multi-niveaux basé sur l'activité utilisateur"
+    },
+    "rewards": {
+      "name": "Système de Récompenses",
+      "description": "Distribution et gestion automatisées des récompenses"
+    },
+    "tipping": {
+      "name": "Pourboires Créateur",
+      "description": "Système de pourboires direct pour les créateurs de contenu"
+    },
+    "communityGoverned": {
+      "name": "Gouvernance Communautaire",
+      "description": "Système de vote et de propositions communautaire"
+    },
+    "lockup": {
+      "name": "Verrouillage de Tokens",
+      "description": "Mécanisme de verrouillage temporaire pour les tokens stakés"
+    },
+    "curation": {
+      "name": "Curatelle NFT",
+      "description": "Marketplace curaté avec système d'approbation pour les listages NFT"
+    },
+    "lazyMint": {
+      "name": "Minting Paresseux",
+      "description": "Minting efficace en gas où les utilisateurs paient pour leur propre minting NFT"
+    },
+    "crossChain": {
+      "name": "Pont Cross-Chain",
+      "description": "Bridger les tokens entre différents réseaux blockchain"
+    },
+    "analytics": {
+      "name": "Analytics Avancés",
+      "description": "Tableau de bord d'analytics et de reporting complet pour l'activité des contrats"
+    },
+    "api": {
+      "name": "Accès API",
+      "description": "Accès API complet pour l'interaction programmatique avec les contrats"
+    },
+    "webhook": {
+      "name": "Intégration Webhook",
+      "description": "Notifications webhook en temps réel pour les événements de contrats"
+    },
+    "backup": {
+      "name": "Sauvegarde de Contrat",
+      "description": "Système de sauvegarde et de récupération automatisé pour les données de contrats"
+    },
+    "monitoring": {
+      "name": "Monitoring Intelligent",
+      "description": "Système de monitoring et d'alerte avancé pour la santé des contrats"
+    },
+    "partnership": {
+      "name": "Programme de Partenariat",
+      "description": "Fonctionnalités de partenariat et de collaboration intégrées pour la croissance business"
+    },
+    "exclusive": {
+      "name": "Accès Exclusif",
+      "description": "Contenu et fonctionnalités exclusifs pour les détenteurs de tokens premium"
+    },
+    "insurance": {
+      "name": "Assurance DeFi",
+      "description": "Couverture d'assurance pour les protocoles DeFi et pools de liquidité"
     }
   },
   "templates": {
@@ -272,6 +384,136 @@
         "beneficiary": "ex. 0x...",
         "unlockTime": "Sélectionnez date et heure"
       }
+    },
+    "liquidity-pool": {
+      "name": "Pool de Liquidité",
+      "fields": {
+        "name": "Nom du Pool",
+        "tokenA": "Adresse Token A",
+        "tokenB": "Adresse Token B",
+        "fee": "Frais du Pool (points de base)",
+        "initialPrice": "Prix Initial"
+      },
+      "placeholders": {
+        "name": "ex. Pool ETH/USDC",
+        "tokenA": "ex. 0x... (adresse token ETH)",
+        "tokenB": "ex. 0x... (adresse token USDC)",
+        "fee": "ex. 3000 (0.3%)",
+        "initialPrice": "ex. 1.0"
+      }
+    },
+    "yield-farming": {
+      "name": "Yield Farming",
+      "fields": {
+        "name": "Nom de la Ferme",
+        "stakingToken": "Adresse Token de Staking",
+        "rewardToken": "Adresse Token de Récompense",
+        "rewardRate": "Taux de Récompense (tokens/seconde)",
+        "duration": "Durée de Farming (jours)"
+      },
+      "placeholders": {
+        "name": "ex. Ma Ferme de Yield",
+        "stakingToken": "ex. 0x... (adresse token LP)",
+        "rewardToken": "ex. 0x... (adresse token récompense)",
+        "rewardRate": "ex. 0.001",
+        "duration": "ex. 30"
+      }
+    },
+    "gamefi-token": {
+      "name": "Token GameFi",
+      "fields": {
+        "name": "Nom du Token",
+        "symbol": "Symbole du Token",
+        "maxSupply": "Approvisionnement Maximum",
+        "mintPrice": "Prix de Frappe (ETH)",
+        "burnRate": "Taux de Brûlage (%)"
+      },
+      "placeholders": {
+        "name": "ex. GameToken",
+        "symbol": "ex. GAME",
+        "maxSupply": "ex. 1000000",
+        "mintPrice": "ex. 0.01",
+        "burnRate": "ex. 2"
+      }
+    },
+    "nft-marketplace": {
+      "name": "Marketplace NFT",
+      "fields": {
+        "name": "Nom du Marketplace",
+        "nftContract": "Adresse Contrat NFT",
+        "platformFee": "Frais de Plateforme (%)",
+        "creatorFee": "Frais Créateur (%)",
+        "allowMinting": "Autoriser la Frappe NFT"
+      },
+      "placeholders": {
+        "name": "ex. Mon Marketplace NFT",
+        "nftContract": "ex. 0x... (adresse contrat NFT)",
+        "platformFee": "ex. 2.5",
+        "creatorFee": "ex. 5.0"
+      }
+    },
+    "revenue-sharing": {
+      "name": "Token de Partage de Revenus",
+      "fields": {
+        "name": "Nom du Token",
+        "symbol": "Symbole du Token",
+        "totalSupply": "Approvisionnement Total",
+        "businessWallet": "Adresse Wallet Business",
+        "distributionPeriod": "Période de Distribution (jours)"
+      },
+      "placeholders": {
+        "name": "ex. Token Revenus",
+        "symbol": "ex. REV",
+        "totalSupply": "ex. 1000000",
+        "businessWallet": "ex. 0x... (wallet business)",
+        "distributionPeriod": "ex. 30"
+      }
+    },
+    "loyalty-program": {
+      "name": "Programme de Fidélité",
+      "fields": {
+        "name": "Nom du Programme",
+        "pointsPerPurchase": "Points par Achat",
+        "redemptionRate": "Taux de Rédemption",
+        "transferable": "Points Transférables",
+        "expirable": "Points Expirables"
+      },
+      "placeholders": {
+        "name": "ex. Mon Programme de Fidélité",
+        "pointsPerPurchase": "ex. 10",
+        "redemptionRate": "ex. 0.01"
+      }
+    },
+    "dynamic-nft": {
+      "name": "NFT Dynamique",
+      "fields": {
+        "name": "Nom de la Collection",
+        "symbol": "Symbole de la Collection",
+        "maxSupply": "Approvisionnement Maximum",
+        "evolvable": "NFTs Évolutifs",
+        "mergeable": "NFTs Fusionnables"
+      },
+      "placeholders": {
+        "name": "ex. NFTs Dynamiques",
+        "symbol": "ex. DNFT",
+        "maxSupply": "ex. 10000"
+      }
+    },
+    "social-token": {
+      "name": "Token Social",
+      "fields": {
+        "creatorName": "Nom du Créateur",
+        "symbol": "Symbole du Token",
+        "initialSupply": "Approvisionnement Initial",
+        "creatorShare": "Part du Créateur (%)",
+        "communityGoverned": "Gouverné par la Communauté"
+      },
+      "placeholders": {
+        "creatorName": "ex. Ma Communauté",
+        "symbol": "ex. SOCIAL",
+        "initialSupply": "ex. 1000000",
+        "creatorShare": "ex. 20"
+      }
     }
   },
   "documentation": {
@@ -322,7 +564,133 @@
       "usageExample": "Exemple d'Utilisation",
       "exampleParams": "Paramètres d'Exemple",
       "copyExample": "Copier l'exemple",
-      "copied": "Copié!"
+      "copied": "Copié!",
+      "token": {
+        "name": "Token ERC20",
+        "description": "Créez votre propre token ERC20 avec approvisionnement et décimales personnalisables",
+        "fields": {
+          "name": "Nom du Token",
+          "symbol": "Symbole du Token",
+          "totalSupply": "Approvisionnement Total",
+          "decimals": "Décimales"
+        }
+      },
+      "nft": {
+        "name": "Collection NFT",
+        "description": "Déployez une collection NFT avec capacités de minting",
+        "fields": {
+          "name": "Nom de la Collection",
+          "symbol": "Symbole de la Collection",
+          "maxSupply": "Approvisionnement Maximum",
+          "baseURI": "URI de Base"
+        }
+      },
+      "dao": {
+        "name": "DAO",
+        "description": "Créez une organisation autonome décentralisée",
+        "fields": {
+          "name": "Nom de la DAO",
+          "governanceTokenAddress": "Adresse Token de Gouvernance",
+          "proposalThreshold": "Seuil de Proposition",
+          "votingPeriod": "Période de Vote (blocs)"
+        }
+      },
+      "lock": {
+        "name": "Verrouillage de Token",
+        "description": "Verrouillez des tokens jusqu'à une heure spécifiée",
+        "fields": {
+          "tokenAddress": "Adresse du Token",
+          "beneficiary": "Adresse du Bénéficiaire",
+          "unlockTime": "Heure de Déverrouillage"
+        }
+      },
+      "liquidity-pool": {
+        "name": "Pool de Liquidité",
+        "description": "Créer des pools de liquidité automatisés pour le trading de tokens",
+        "fields": {
+          "name": "Nom du Pool",
+          "tokenA": "Adresse Token A",
+          "tokenB": "Adresse Token B",
+          "fee": "Frais du Pool (points de base)",
+          "initialPrice": "Prix Initial"
+        }
+      },
+      "yield-farming": {
+        "name": "Yield Farming",
+        "description": "Déployer des contrats de staking avec distribution automatique de récompenses",
+        "fields": {
+          "name": "Nom de la Ferme",
+          "stakingToken": "Adresse Token de Staking",
+          "rewardToken": "Adresse Token de Récompense",
+          "rewardRate": "Taux de Récompense (tokens/seconde)",
+          "duration": "Durée de Farming (jours)"
+        }
+      },
+      "gamefi-token": {
+        "name": "Token GameFi",
+        "description": "Tokens optimisés pour les applications de gaming et play-to-earn",
+        "fields": {
+          "name": "Nom du Token",
+          "symbol": "Symbole du Token",
+          "maxSupply": "Approvisionnement Maximum",
+          "mintPrice": "Prix de Mint (ETH)",
+          "burnRate": "Taux de Brûlage (%)"
+        }
+      },
+      "nft-marketplace": {
+        "name": "Marketplace NFT",
+        "description": "Marketplace complet pour acheter et vendre des NFTs",
+        "fields": {
+          "name": "Nom du Marketplace",
+          "nftContract": "Adresse Contrat NFT",
+          "platformFee": "Frais de Plateforme (%)",
+          "creatorFee": "Frais Créateur (%)"
+        }
+      },
+      "revenue-sharing": {
+        "name": "Token de Partage de Revenus",
+        "description": "Tokens qui distribuent automatiquement les revenus d'entreprise aux détenteurs",
+        "fields": {
+          "name": "Nom du Token",
+          "symbol": "Symbole du Token",
+          "totalSupply": "Approvisionnement Total",
+          "businessWallet": "Adresse Wallet Business",
+          "distributionPeriod": "Période de Distribution (jours)"
+        }
+      },
+      "loyalty-program": {
+        "name": "Programme de Fidélité",
+        "description": "Programme de fidélité et récompenses basé sur la blockchain",
+        "fields": {
+          "name": "Nom du Programme",
+          "pointsPerPurchase": "Points par Achat",
+          "redemptionRate": "Taux de Rédemption",
+          "transferable": "Points Transférables",
+          "expirable": "Points Expirables"
+        }
+      },
+      "dynamic-nft": {
+        "name": "NFT Dynamique",
+        "description": "NFTs qui évoluent, fusionnent et changent au fil du temps",
+        "fields": {
+          "name": "Nom de la Collection",
+          "symbol": "Symbole de la Collection",
+          "maxSupply": "Approvisionnement Maximum",
+          "evolvable": "NFTs Évolutifs",
+          "mergeable": "NFTs Fusionnables"
+        }
+      },
+      "social-token": {
+        "name": "Token Social",
+        "description": "Tokens communautaires pour créateurs et plateformes sociales",
+        "fields": {
+          "creatorName": "Nom du Créateur",
+          "symbol": "Symbole du Token",
+          "initialSupply": "Approvisionnement Initial",
+          "creatorShare": "Part du Créateur (%)",
+          "communityGoverned": "Gouvernance Communautaire"
+        }
+      }
     },
     "premiumFeatures": {
       "title": "Fonctionnalités Premium",

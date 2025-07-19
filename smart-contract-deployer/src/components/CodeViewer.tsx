@@ -7,15 +7,18 @@ import { generateContract } from '../utils/contractGenerator'
 import type { ContractTemplate, DeploymentParams } from '../types'
 import { useTranslation } from 'react-i18next'
 import { useChainId } from 'wagmi'
+
 interface CodeViewerProps {
   template: ContractTemplate
   params: Record<string, any>
 }
+
 const CodeViewer = ({ template, params }: CodeViewerProps) => {
   const { t } = useTranslation()
   const chainId = useChainId()
   const [code, setCode] = useState<string>('')
   const [copied, setCopied] = useState(false)
+
   useEffect(() => {
     try {
       const deploymentParams: DeploymentParams = {
@@ -23,19 +26,23 @@ const CodeViewer = ({ template, params }: CodeViewerProps) => {
         params,
         chainId,
         premiumFeatures: params.premiumFeatures || [],
+        premiumFeatureConfigs: params.featureConfigs
       }
+
       const generatedCode = generateContract(deploymentParams)
       setCode(generatedCode)
     } catch (error) {
-      console.error('Error generating contract:', error)
+      console.error('❌ CodeViewer - Error generating contract:', error)
       setCode('// Error generating contract code')
     }
   }, [template, params, chainId])
+
   const handleCopy = () => {
     navigator.clipboard.writeText(code)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
+
   return (
     <Paper
       elevation={0}
@@ -76,6 +83,7 @@ const CodeViewer = ({ template, params }: CodeViewerProps) => {
           </IconButton>
         </Tooltip>
       </Box>
+
       <Box
         sx={{
           backgroundColor: '#1e1e1e',
@@ -153,4 +161,5 @@ const CodeViewer = ({ template, params }: CodeViewerProps) => {
     </Paper>
   )
 }
+
 export default CodeViewer
