@@ -81,7 +81,6 @@ const AccountDashboard: React.FC = () => {
     try {
       // Utiliser les vraies données des permissions et analytiques
       if (permissions) {
-        // Récupérer les vraies statistiques d'utilisation depuis Supabase
         let realUsageData = {
           deployments: 0,
           compilations: 0,
@@ -89,37 +88,70 @@ const AccountDashboard: React.FC = () => {
         }
 
         try {
-          // Import dynamique de Supabase pour récupérer les vraies données
-          const { supabase } = await import('../config/supabase')
+          // Import correct de la configuration Supabase
+          const { supabase, isSupabaseEnabled } = await import('../config/supabase')
           
-          // Compter les déploiements de l'utilisateur
-          const { count: deploymentsCount } = await supabase
-            .from('deployments')
-            .select('*', { count: 'exact', head: true })
-            .eq('user_id', address)
-            .eq('success', true)
+          console.log('📊 Récupération statistiques pour:', address)
+          
+          if (!address) {
+            console.warn('⚠️ Pas d\'adresse utilisateur')
+            return
+          }
+          
+          if (!isSupabaseEnabled) {
+            console.warn('⚠️ Supabase n\'est pas configuré')
+            realUsageData = {
+              deployments: 0,
+              compilations: 0,
+              apiCalls: 0
+            }
+            return
+          }
+          
+          // Récupérer les données spécifiques à l'utilisateur
+          const [deploymentsResult, premiumResult, pageViewsResult] = await Promise.all([
+            supabase
+              .from('deployments')
+              .select('*', { count: 'exact' })
+              .eq('user_id', address)
+              .eq('success', true),
+            
+            supabase
+              .from('premium_features')  
+              .select('*', { count: 'exact' })
+              .eq('user_id', address),
+              
+            supabase
+              .from('page_views')
+              .select('*', { count: 'exact' })
+              .eq('user_id', address)
+          ])
 
-          // Compter les fonctionnalités premium utilisées (proxy pour compilations)
-          const { count: premiumCount } = await supabase
-            .from('premium_features')
-            .select('*', { count: 'exact', head: true })
-            .eq('user_id', address)
+          const { data: deployments, count: deploymentsCount, error: deploymentsError } = deploymentsResult
+          const { data: premiumFeatures, count: premiumCount, error: premiumError } = premiumResult  
+          const { data: pageViews, count: pageViewsCount, error: pageViewsError } = pageViewsResult
 
-          // Compter les vues de pages (proxy pour API calls)
-          const { count: pageViewsCount } = await supabase
-            .from('page_views')
-            .select('*', { count: 'exact', head: true })
-            .eq('user_id', address)
+          if (deploymentsError || premiumError || pageViewsError) {
+            console.error('❌ Erreurs Supabase:', { deploymentsError, premiumError, pageViewsError })
+          }
 
+          // Mettre à jour realUsageData avec les vraies données
           realUsageData = {
             deployments: deploymentsCount || 0,
             compilations: premiumCount || 0,
             apiCalls: pageViewsCount || 0
           }
-
-          console.log('📊 Vraies données Supabase récupérées:', realUsageData)
-        } catch (supabaseError) {
-          console.warn('Impossible de récupérer les données Supabase:', supabaseError)
+          
+          console.log('✅ Statistiques récupérées:', realUsageData)
+          
+        } catch (error) {
+          console.error('❌ Erreur récupération statistiques:', error)
+          // En cas d'erreur, tout à 0 - PAS de données mock
+          realUsageData = {
+            deployments: 0,
+            compilations: 0,
+            apiCalls: 0
+          }
         }
 
         const subscriptionData = {

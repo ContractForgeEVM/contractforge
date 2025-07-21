@@ -12,6 +12,7 @@ import gasEstimateRoutes from './routes/gasEstimate'
 import verifyRoutes from './routes/verify'
 import analyticsRoutes from './routes/analytics'
 import subscriptionRoutes from './routes/subscription'
+import healthRoutes from './routes/health'
 
 import cryptoPaymentRoutes from './routes/cryptoPayment'
 import mintPagesRoutes from './routes/mintPages'
@@ -42,14 +43,29 @@ app.use(cors({
   },
   credentials: true
 }))
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: 'Too many requests from this IP, please try again later.'
+
+// Rate limiter général (plus permissif)
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 500, // Augmenté de 100 à 500
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
 })
-app.use('/api/', limiter)
+
+// Rate limiter spécifique pour les health checks (très permissif)
+const healthLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 20, // 20 requêtes par 5 minutes (largement suffisant pour 1 check toutes les 5 minutes)
+  message: 'Too many health checks from this IP',
+  standardHeaders: true,
+  legacyHeaders: false,
+})
+
+app.use('/api/', generalLimiter)
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
+
 app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
@@ -58,6 +74,7 @@ app.get('/health', (req, res) => {
     version: '2.0.0-foundry'
   })
 })
+
 app.use('/api/web', compilerRoutes)
 app.use('/api/keys', authenticateApiKey, apiKeyRoutes)
 app.use('/api/compile', authenticateApiKey, apiKeyRateLimit, compilerRoutes)
@@ -67,8 +84,10 @@ app.use('/api/gas-estimate', authenticateApiKey, gasEstimateRoutes)
 app.use('/api/verify', authenticateApiKey, verifyRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/subscription', subscriptionRoutes)
+app.use('/api/compiler', healthLimiter, healthRoutes) // Applique le rate limiter spécifique aux health checks
 app.use('/api/crypto', cryptoPaymentRoutes)
 app.use('/api/mint-pages', mintPagesRoutes)
+
 app.use((err: any, req: any, res: any, next: any) => {
   console.error('Error:', err)
   res.status(500).json({
@@ -77,6 +96,7 @@ app.use((err: any, req: any, res: any, next: any) => {
     timestamp: new Date().toISOString()
   })
 })
+
 app.use('*', (req, res) => {
   res.status(404).json({
     success: false,
@@ -86,24 +106,16 @@ app.use('*', (req, res) => {
       'POST /api/web/compile',
       'GET /api/web/cache-stats',
       'POST /api/web/warmup-cache',
-      'POST /api/web/clear-cache'
+      'POST /api/web/clear-cache',
+      'POST /api/compiler/health'
     ]
   })
 })
-async function startServer() {
-  try {
-    console.log('🚀 Starting Smart Contract Compiler API v2.0.0 with Foundry...')
-    app.listen(PORT, () => {
-      console.log(`✅ Server running on port ${PORT}`)
-      console.log(`🌐 Health check: http://localhost:${PORT}/health`)
-      console.log(`📡 Public API: http://localhost:${PORT}/api/web`)
-      console.log(`🔒 Private API: http://localhost:${PORT}/api/compile`)
-      console.log(`⚡ Compiler: Foundry (Real-time compilation)`)
-      console.log(`🎯 Performance optimization: FOUNDRY-POWERED`)
-    })
-  } catch (error) {
-    console.error('❌ Failed to start server:', error)
-    process.exit(1)
-  }
-}
-startServer()
+
+app.listen(PORT, () => {
+  console.log(`🚀 Smart Contract Compiler API server is running on port ${PORT}`)
+  console.log(`📊 Rate limits configured:`)
+  console.log(`   - General: 500 requests per 15 minutes`)
+  console.log(`   - Health checks: 20 requests per 5 minutes`)
+  console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`)
+})

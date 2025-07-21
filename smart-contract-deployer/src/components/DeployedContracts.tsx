@@ -81,7 +81,15 @@ const DeployedContracts: React.FC = () => {
     
     try {
       // Récupérer les vrais contrats déployés depuis Supabase
-      const { supabase } = await import('../config/supabase')
+      const { supabase, isSupabaseEnabled } = await import('../config/supabase')
+      
+      console.log('🔍 Récupération contrats pour:', address)
+      
+      if (!isSupabaseEnabled) {
+        console.warn('⚠️ Supabase non configuré')
+        setContracts([])
+        return
+      }
       
       const { data: deployments, error } = await supabase
         .from('deployments')
@@ -91,31 +99,43 @@ const DeployedContracts: React.FC = () => {
         .order('timestamp', { ascending: false })
 
       if (error) {
-        console.error('❌ Erreur Supabase:', error)
+        console.error('❌ Erreur Supabase:', error.message)
         setContracts([])
         return
       }
 
-      // Transformer les données Supabase pour correspondre à notre interface  
-      const formattedContracts: DeployedContract[] = deployments.map(deployment => ({
-        id: deployment.id,
-        address: deployment.contract_address || 'N/A',
-        template: deployment.template,
-        templateName: getTemplateDisplayName(deployment.template),
-        contractName: `${getTemplateDisplayName(deployment.template)} Contract`,
-        chain: getChainDisplayName(deployment.chain),
-        chainId: getChainIdFromName(deployment.chain),
-        deploymentDate: new Date(deployment.timestamp),
-        transactionHash: deployment.transaction_hash || '',
-        status: deployment.success ? 'success' : 'failed',
-        gasUsed: deployment.gas_used || 'N/A',
-        deploymentCost: formatDeploymentCost(deployment.value, deployment.chain),
-        hasCustomPage: deployment.template === 'nft'
-      }))
+      if (!deployments || deployments.length === 0) {
+        console.log('ℹ️ Aucun contrat trouvé pour cet utilisateur')
+        setContracts([])
+        return
+      }
 
+      console.log(`✅ ${deployments.length} contrats récupérés`)
+
+      // Transformer les données Supabase pour correspondre à notre interface  
+      const formattedContracts: DeployedContract[] = deployments.map(deployment => {
+        return {
+          id: deployment.id,
+          address: deployment.contract_address || 'N/A',
+          template: deployment.template,
+          templateName: getTemplateDisplayName(deployment.template),
+          contractName: `${getTemplateDisplayName(deployment.template)} Contract`,
+          chain: getChainDisplayName(deployment.chain),
+          chainId: getChainIdFromName(deployment.chain),
+          deploymentDate: new Date(deployment.timestamp),
+          transactionHash: deployment.transaction_hash || '',
+          status: deployment.success ? 'success' : 'failed',
+          gasUsed: deployment.gas_used || 'N/A',
+          deploymentCost: formatDeploymentCost(deployment.value, deployment.chain),
+          hasCustomPage: deployment.template === 'nft'
+        }
+      })
+
+      console.log('✅ Contrats formatés:', formattedContracts)
       setContracts(formattedContracts)
+      
     } catch (error) {
-      console.error('❌ Erreur lors de la récupération:', error)
+      console.error('❌ Erreur récupération contrats:', error)
       setContracts([])
     } finally {
       setLoading(false)
@@ -193,27 +213,47 @@ const DeployedContracts: React.FC = () => {
     if (!value || value === '0') return 'N/A'
     
     try {
-      // Convertir de wei vers ETH/token natif
-      const ethValue = formatEther(value)
-      const numValue = parseFloat(ethValue)
+      // Vérifier si la valeur est déjà en ETH (contient un point décimal avec peu de chiffres)
+      // ou si c'est une valeur en wei (très grand nombre entier)
+      const numValue = parseFloat(value)
+      
+      let finalValue: number
+      
+      if (value.includes('.') && numValue < 1000000) {
+        // La valeur est déjà en ETH (ex: "0.08", "0.047")
+        finalValue = numValue
+      } else {
+        // La valeur est en wei, convertir vers ETH
+        const ethValue = formatEther(value)
+        finalValue = parseFloat(ethValue)
+      }
       
       // Formater avec un nombre approprié de décimales
       let formattedValue: string
-      if (numValue === 0) {
+      if (finalValue === 0) {
         formattedValue = '0'
-      } else if (numValue < 0.000001) {
-        formattedValue = numValue.toFixed(8).replace(/\.?0+$/, '')
-      } else if (numValue < 0.01) {
-        formattedValue = numValue.toFixed(6).replace(/\.?0+$/, '')
-      } else if (numValue < 1) {
-        formattedValue = numValue.toFixed(4).replace(/\.?0+$/, '')
+      } else if (finalValue < 0.000001) {
+        formattedValue = finalValue.toFixed(8).replace(/\.?0+$/, '')
+      } else if (finalValue < 0.01) {
+        formattedValue = finalValue.toFixed(6).replace(/\.?0+$/, '')
+      } else if (finalValue < 1) {
+        formattedValue = finalValue.toFixed(4).replace(/\.?0+$/, '')
       } else {
-        formattedValue = numValue.toFixed(4).replace(/\.?0+$/, '')
+        formattedValue = finalValue.toFixed(4).replace(/\.?0+$/, '')
       }
       
       return `${formattedValue} ${getNativeToken(chainName)}`
     } catch (error) {
       console.error('Erreur formatage coût:', error)
+      // Fallback : essayer de traiter comme nombre décimal direct
+      try {
+        const directValue = parseFloat(value)
+        if (!isNaN(directValue)) {
+          return `${directValue.toFixed(4).replace(/\.?0+$/, '')} ${getNativeToken(chainName)}`
+        }
+      } catch (e) {
+        console.error('Erreur fallback formatage:', e)
+      }
       return `${value} ${getNativeToken(chainName)}`
     }
   }
@@ -343,11 +383,23 @@ const DeployedContracts: React.FC = () => {
 
       {/* Table des contrats */}
       {filteredContracts.length === 0 ? (
-        <Alert severity="info">
-          {contracts.length === 0 
-            ? t('deployments.noContracts')
-            : t('deployments.noMatchingContracts')
-          }
+        <Alert severity="info" sx={{ my: 2 }}>
+          {contracts.length === 0 ? (
+            <Box>
+              <Typography variant="body2" gutterBottom>
+                🔍 Aucun contrat déployé trouvé pour votre adresse : <strong>{address}</strong>
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                ℹ️ Seules les données réelles de Supabase sont affichées - aucune donnée fictive/mock ne sera montrée.
+                <br />
+                Déployez un contrat pour qu'il apparaisse ici.
+              </Typography>
+            </Box>
+          ) : (
+            <Typography>
+              Aucun contrat ne correspond à vos filtres actuels.
+            </Typography>
+          )}
         </Alert>
       ) : (
         <TableContainer component={Paper}>

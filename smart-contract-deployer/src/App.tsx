@@ -16,15 +16,16 @@ import ProtectedAnalytics from './components/ProtectedAnalytics'
 import AccountDashboard from './components/AccountDashboard'
 import SEOHead from './components/SEOHead'
 import Analytics from './components/Analytics'
-import { estimateGas } from './utils/gasEstimator'
-import { deployContractWithWagmi } from './utils/contractDeployer'
+import PublicAnalytics from './components/PublicAnalytics'
+import { estimateGas } from './utils/factoryGasEstimator'
+import { deployContractWithWagmi } from './utils/factoryDeployer'
 import { trackDeployment, trackTemplateSelection } from './services/analytics'
 import type { ContractTemplate, GasEstimate, PremiumFeatureConfig } from './types'
 import theme from './theme'
 import { validateConfig } from './config'
 import './i18n'
 
-type PageType = 'deploy' | 'documentation' | 'account' | 'analytics'
+type PageType = 'deploy' | 'documentation' | 'account' | 'analytics' | 'public-analytics'
 
 function App() {
   const [selectedTemplate, setSelectedTemplate] = useState<ContractTemplate | null>(null)
@@ -66,7 +67,7 @@ function App() {
   useEffect(() => {
     if (selectedTemplate && contractParams && isConnected && publicClient) {
       setEstimatingGas(true)
-      estimateGas(chainId, selectedFeatures)
+      estimateGas(chainId, selectedTemplate.id, selectedFeatures)
         .then(setGasEstimate)
         .catch(error => {
           console.error('Gas estimation failed:', error)
@@ -104,10 +105,20 @@ function App() {
       return
     }
 
+    console.log('🎯🎯🎯 APP.TSX HANDLE DEPLOY CALLED 🎯🎯🎯')
+    
     setIsDeploying(true)
     setDeploymentResult(null)
 
     try {
+      // 🔍 DEBUG LOGS - TEMPORAIRE
+      console.log('🎯 === DÉPLOIEMENT DEBUG ===')
+      console.log('🏭 Template:', selectedTemplate.id)
+      console.log('📊 ChainId:', chainId)
+      console.log('🎨 Premium Features:', selectedFeatures)
+      console.log('🔧 Params:', contractParams)
+      console.log('===============================')
+
       const result = await deployContractWithWagmi(
         selectedTemplate.id,
         contractParams,
@@ -179,6 +190,10 @@ function App() {
     setCurrentPage('account')
   }
 
+  const handleNavigateToAnalytics = () => {
+    setCurrentPage('public-analytics')
+  }
+
   const renderPage = () => {
     switch (currentPage) {
       case 'documentation':
@@ -186,6 +201,9 @@ function App() {
       
       case 'analytics':
         return <ProtectedAnalytics />
+      
+      case 'public-analytics':
+        return <PublicAnalytics />
       
       case 'account':
         return <AccountDashboard />
@@ -255,6 +273,7 @@ function App() {
           onNavigateDeploy={handleNavigateToDeploy}
           onNavigateDocs={handleNavigateToDocs}
           onNavigateAccount={handleNavigateToAccount}
+          onNavigateAnalytics={handleNavigateToAnalytics}
           currentPage={currentPage}
         />
         

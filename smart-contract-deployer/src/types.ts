@@ -46,16 +46,20 @@ export type PremiumFeature = {
 export type PremiumFeatureConfig = {
   whitelist?: {
     addresses: string[]
+    maxTransactionAmount?: number
   }
   blacklist?: {
     addresses: string[]
   }
   tax?: {
-    rate: number
+    rate?: number
+    buyTaxRate?: number
+    sellTaxRate?: number
     recipient: string
   }
   capped?: {
     maxSupply: number
+    maxMintPerAddress?: number
   }
   vesting?: {
     schedules: {
@@ -64,6 +68,7 @@ export type PremiumFeatureConfig = {
       startTime: number
       duration: number
       cliff: number
+      revocable?: boolean
     }[]
   }
   multisig?: {
@@ -72,12 +77,18 @@ export type PremiumFeatureConfig = {
   }
   airdrop?: {
     recipients: {
-      address: string
+      address?: string
+      recipient?: string
       amount: number
+      claimed?: boolean
     }[]
+    totalAmount?: number
+    claimDeadline?: number
   }
   timelock?: {
     delay: number
+    proposers?: string[]
+    executors?: string[]
   }
 }
 export type DeploymentParams = {

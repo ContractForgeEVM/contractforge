@@ -15,12 +15,19 @@ import {
   InputLabel,
   Switch,
   FormControlLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material'
 import { ArrowBack, Lock, Star } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 import type { ContractTemplate } from '../types'
 import { useDeploymentPermissions } from '../hooks/useDeploymentPermissions'
+import { getGasRecommendations } from '../utils/gasEstimator'
+import CompilerMonitoring from './CompilerMonitoring'
+
 interface ContractFormProps {
   template: ContractTemplate
   onChange: (params: Record<string, any>) => void
@@ -34,6 +41,7 @@ const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying }: Con
   const { permissions, loading: permissionsLoading } = useDeploymentPermissions()
   const [formData, setFormData] = useState<Record<string, any>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
+
   useEffect(() => {
     const initialData: Record<string, any> = {}
     template.fields.forEach(field => {
@@ -78,6 +86,8 @@ const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying }: Con
     }
   }
   const showWarning = template.id === 'dao' || template.id === 'lock'
+  const gasRecommendations = getGasRecommendations(template.id)
+  
   return (
     <Paper
       elevation={0}
@@ -104,6 +114,9 @@ const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying }: Con
           {template.id === 'lock' && t('contractForm.lockWarning', 'Token Lock contracts require an existing ERC20 token address to lock.')}
         </Alert>
       )}
+      
+      {/* Monitoring du compilateur */}
+      <CompilerMonitoring template={template} />
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {template.fields.map((field) => {
           // Render different field types
@@ -243,6 +256,7 @@ const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying }: Con
         </Box>
       )}
 
+
       
       <Button
         variant="contained"
@@ -276,6 +290,8 @@ const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying }: Con
           : t('contractForm.deploy')
         }
       </Button>
+
+
     </Paper>
   )
 }

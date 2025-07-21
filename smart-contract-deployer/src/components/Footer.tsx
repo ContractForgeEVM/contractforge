@@ -99,7 +99,7 @@ const Footer = () => {
               Website
             </Link>
             <Link
-              href="https://github.com/contractforge"
+              href="https://github.com/ContractForgeEVM"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
@@ -123,7 +123,7 @@ const Footer = () => {
               </svg>
             </Link>
             <Link
-              href="https://twitter.com/contractforge"
+              href="https://x.com/contractforgeio"
               target="_blank"
               rel="noopener noreferrer"
               sx={{

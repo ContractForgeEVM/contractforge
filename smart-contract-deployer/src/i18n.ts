@@ -1,7 +1,8 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import enTranslations from './locales/en.json'
-import frTranslations from './locales/fr.json'
+import enTranslations from './locales/en'
+import frTranslations from './locales/fr'
+
 const resources = {
   en: {
     translation: enTranslations
@@ -10,6 +11,7 @@ const resources = {
     translation: frTranslations
   }
 }
+
 // Récupérer la langue sauvegardée ou utiliser 'en' par défaut
 const savedLanguage = localStorage.getItem('language') || 'en'
 
@@ -31,4 +33,5 @@ i18n
 i18n.on('languageChanged', (lng) => {
   localStorage.setItem('language', lng)
 })
+
 export default i18n

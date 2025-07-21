@@ -11,16 +11,26 @@ interface GasPrice {
 }
 export const estimateGas = async (
   chainId: number,
-  premiumFeatures: string[] = []
+  premiumFeatures: string[] = [],
+  templateType?: string
 ): Promise<GasEstimate> => {
   try {
     const gasPrice = await getGasPrice(chainId)
-    let baseGasLimit = 800000n
+    
+    // Gas limits adaptatifs selon le template
+    let baseGasLimit = getTemplateGasLimit(templateType)
+    
     if (premiumFeatures.length > 0) {
       const featureGas = BigInt(premiumFeatures.length * 50000)
       baseGasLimit += featureGas
     }
-    const gasLimit = (baseGasLimit * 110n) / 100n
+    
+    // Marge plus importante pour les contrats complexes
+    const margin = templateType && ['social-token', 'gamefi-token', 'liquidity-pool', 'yield-farming'].includes(templateType) 
+      ? 140n // +40% pour les contrats complexes
+      : 120n // +20% pour les contrats simples
+    
+    const gasLimit = (baseGasLimit * margin) / 100n
     const deploymentCost = gasLimit * gasPrice.fast
     const platformFee = (deploymentCost * 2n) / 100n
     const premiumPriceETH = getTotalPremiumPrice(premiumFeatures)
@@ -52,13 +62,13 @@ export const estimateGas = async (
   }
 }
 export const estimateContractDeployment = async (
-  _template: { id: string },
+  template: { id: string },
   params: Record<string, any>,
   _publicClient: any,
   chainId: number
 ): Promise<GasEstimate> => {
   const premiumFeatures = (params as any).premiumFeatures || []
-  return estimateGas(chainId, premiumFeatures)
+  return estimateGas(chainId, premiumFeatures, template.id)
 }
 async function getGasPrice(chainId: number): Promise<GasPrice> {
   // 🔗 Essayer les vraies APIs avec fallback robuste
@@ -192,6 +202,62 @@ async function getGasPrice(chainId: number): Promise<GasPrice> {
   }
   return defaultPrices[chainId] || defaultPrices[1]
 }
+
+// Fonction pour obtenir le gas limit selon le template
+function getTemplateGasLimit(templateType?: string): bigint {
+  const gasLimits: Record<string, bigint> = {
+    // Templates simples - gas limit bas
+    'token': 800000n,        // ERC20 simple
+    'nft': 900000n,          // ERC721 simple
+    'dao': 1000000n,         // DAO basique
+    'lock': 700000n,         // Token Lock simple
+    
+    // Templates complexes - gas limit élevé
+    'social-token': 2000000n,      // Social Token (complexe) - Augmenté
+    'liquidity-pool': 2200000n,    // Liquidity Pool (très complexe) - Augmenté
+    'yield-farming': 2500000n,     // Yield Farming (très complexe) - Augmenté
+    'gamefi-token': 2200000n,      // GameFi Token (complexe) - Augmenté
+    'nft-marketplace': 1600000n,   // NFT Marketplace (complexe)
+    'revenue-sharing': 1400000n,   // Revenue Sharing (complexe)
+    'loyalty-program': 1200000n,   // Loyalty Program (complexe)
+    'dynamic-nft': 1300000n,       // Dynamic NFT (complexe)
+  }
+  
+  return gasLimits[templateType || ''] || 1200000n // Par défaut pour les templates inconnus
+}
+
+// Fonction pour obtenir les recommandations de gas selon le template
+export const getGasRecommendations = (templateType?: string): {
+  recommended: bigint
+  safe: bigint
+  description: string
+} => {
+  const baseLimit = getTemplateGasLimit(templateType)
+  const recommended = (baseLimit * 120n) / 100n // +20% marge
+  const safe = (baseLimit * 150n) / 100n // +50% marge de sécurité
+  
+  const descriptions: Record<string, string> = {
+    'token': 'ERC20 simple - Gas limit bas',
+    'nft': 'ERC721 simple - Gas limit modéré',
+    'dao': 'DAO basique - Gas limit modéré',
+    'lock': 'Token Lock simple - Gas limit bas',
+    'social-token': 'Social Token complexe - Gas limit élevé',
+    'liquidity-pool': 'Liquidity Pool très complexe - Gas limit très élevé',
+    'yield-farming': 'Yield Farming très complexe - Gas limit très élevé',
+    'gamefi-token': 'GameFi Token complexe - Gas limit élevé',
+    'nft-marketplace': 'NFT Marketplace complexe - Gas limit élevé',
+    'revenue-sharing': 'Revenue Sharing complexe - Gas limit élevé',
+    'loyalty-program': 'Loyalty Program complexe - Gas limit modéré',
+    'dynamic-nft': 'Dynamic NFT complexe - Gas limit modéré',
+  }
+  
+  return {
+    recommended,
+    safe,
+    description: descriptions[templateType || ''] || 'Template standard'
+  }
+}
+
 function getDefaultGasPrice(chainId: number): bigint {
   const defaultPrices: Record<number, bigint> = {
     1: parseUnits('50', 9),

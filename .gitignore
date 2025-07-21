@@ -8,7 +8,15 @@
 # Documentation and deployment files
 Docs/
 deploy-production.sh
+deploy-frontend-only.sh
+deploy-backend-only.sh
 ethereum-deploy.log
+investor-presentation.html
+AUDIT_REPORT_UniversalFactoryV2.html
+Deployment JS/
+
+# Test files
+test/
 
 # Development and configuration directories
 frontend-generator/
@@ -122,6 +130,9 @@ backup-*/
 cache/
 artifacts/
 typechain-types/
+
+# Smart Contracts
+smart-contract-deployer/contracts/SubscriptionManagerUSDC.sol
 
 # Local development
 .local

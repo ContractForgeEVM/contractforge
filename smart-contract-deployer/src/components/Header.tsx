@@ -4,6 +4,7 @@ import {
   Code,
   MenuBook,
   AccountCircle,
+  Assessment,
   Menu as MenuIcon
 } from '@mui/icons-material'
 import { useState } from 'react'
@@ -15,10 +16,11 @@ interface HeaderProps {
   onNavigateDeploy?: () => void
   onNavigateDocs?: () => void
   onNavigateAccount?: () => void
-  currentPage?: 'deploy' | 'documentation' | 'account' | 'analytics'
+  onNavigateAnalytics?: () => void
+  currentPage?: 'deploy' | 'documentation' | 'account' | 'analytics' | 'public-analytics'
 }
 
-const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, currentPage = 'deploy' }: HeaderProps) => {
+const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigateAnalytics, currentPage = 'deploy' }: HeaderProps) => {
   const { t } = useTranslation()
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null)
   
@@ -33,7 +35,8 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, currentPa
   const navigationItems = [
     { key: 'deploy', label: t('nav.deploy'), icon: <Code />, action: onNavigateDeploy },
     { key: 'documentation', label: t('nav.documentation'), icon: <MenuBook />, action: onNavigateDocs },
-    { key: 'account', label: t('nav.account'), icon: <AccountCircle />, action: onNavigateAccount }
+    { key: 'account', label: t('nav.account'), icon: <AccountCircle />, action: onNavigateAccount },
+    { key: 'public-analytics', label: 'Analytics', icon: <Assessment />, action: onNavigateAnalytics }
   ]
 
   return (

@@ -18,6 +18,7 @@ import {
 } from '@mui/icons-material'
 import { useAccount, useWalletClient, usePublicClient, useChainId } from 'wagmi'
 import { encodeFunctionData } from 'viem'
+import { useTranslation } from 'react-i18next'
 import { 
   SUPPORTED_CHAINS, 
   SUPPORTED_TOKENS, 
@@ -78,6 +79,7 @@ const CryptoPayment: React.FC<CryptoPaymentProps> = ({
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
   const chainId = useChainId()
+  const { t } = useTranslation()
 
   const price = isYearly ? yearlyPrice : monthlyPrice
   const chainConfig = getChainConfig(chainId)
@@ -104,7 +106,7 @@ const CryptoPayment: React.FC<CryptoPaymentProps> = ({
     }
 
     if (!isChainSupported(chainId)) {
-      setError(`Please switch to a supported network: ${Object.values(SUPPORTED_CHAINS).map(c => c.name).join(', ')}`)
+      setError(t('cryptoPayment.switchNetwork', 'Switch to a supported network to continue') + ': Ethereum, Arbitrum, Base')
       return
     }
 
@@ -171,11 +173,17 @@ const CryptoPayment: React.FC<CryptoPaymentProps> = ({
         <Box sx={{ textAlign: 'center', mb: 3 }}>
           <Typography variant="h2" sx={{ fontSize: '3rem', mb: 1 }}>💵</Typography>
           <Typography variant="h5" fontWeight="bold" gutterBottom>
-            Pay with USDC
+            {t('cryptoPayment.title', 'Pay with USDC')}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Stable payments on {chainConfig?.name || 'supported networks'}
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            {t('cryptoPayment.subtitle', 'Stable payments on Ethereum, Arbitrum & Base networks')}
           </Typography>
+          <Chip
+            label={`${t('cryptoPayment.currentNetwork', 'Current')}: ${chainConfig?.name || 'Unknown'}`}
+            size="small"
+            color={chainConfig ? 'success' : 'warning'}
+            variant="outlined"
+          />
         </Box>
 
         {/* Plan Info */}
@@ -306,16 +314,21 @@ const CryptoPayment: React.FC<CryptoPaymentProps> = ({
         </Stack>
 
         {/* Network Info */}
-        <Box sx={{ mt: 2, textAlign: 'center' }}>
-          <Chip
-            label={chainConfig?.name || 'Unknown Network'}
-            size="small"
-            color="secondary"
-            sx={{ mr: 1 }}
-          />
-          <Typography variant="caption" color="text.secondary">
-            Paying with USDC stablecoin
+        <Box sx={{ mt: 2, p: 2, bgcolor: 'action.hover', borderRadius: 1 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+            {t('cryptoPayment.supportedNetworks', 'Supported networks: Ethereum, Arbitrum, Base')}
           </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
+            <Chip
+              label={chainConfig?.name || 'Unknown Network'}
+              size="small"
+              color={chainConfig ? 'success' : 'warning'}
+              variant="filled"
+            />
+            <Typography variant="caption" color="text.secondary">
+              • Paying with USDC stablecoin
+            </Typography>
+          </Box>
         </Box>
       </CardContent>
     </Card>

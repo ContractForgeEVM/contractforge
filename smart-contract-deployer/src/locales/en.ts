@@ -1,4 +1,4 @@
-{
+export default {
   "welcome": "Welcome",
   "home": "Home",
   "docs": "Documentation",
@@ -19,6 +19,15 @@
   "evmCompatible": "Deploy your smart contracts on any EVM-compatible blockchain",
   "moreSoon": "More Soon",
   "moreSoonDesc": "We're working on more templates! Click to contribute on GitHub",
+  "compilerMonitoring": {
+    "title": "Compiler Monitoring",
+    "status": "Status",
+    "uptime": "Uptime",
+    "responseTime": "Response time",
+    "lastCheck": "Last check",
+    "version": "Version",
+    "uptimeHistory": "Uptime of the last 10 checks"
+  },
   "connect": "Connect Wallet",
   "disconnect": "Disconnect",
   "token": "ERC20 Token",
@@ -45,6 +54,40 @@
   "loyalty-programDesc": "Blockchain-based loyalty and rewards program",
   "dynamic-nftDesc": "NFTs that evolve, merge, and change over time",
   "social-tokenDesc": "Community tokens for creators and social platforms",
+  "publicAnalytics": {
+    "title": "Public Analytics",
+    "subtitle": "Real-time statistics from the ContractForge platform",
+    "totalContracts": "Contracts Deployed",
+    "totalContractsSub": "Total",
+    "successRate": "Success Rate",
+    "successRateSub": "Successful deployments",
+    "averageCost": "Average Cost",
+    "averageCostSub": "Per deployment",
+    "totalValue": "Total Value",
+    "totalValueSub": "All deployments",
+    "recentActivity": "Recent Activity",
+    "today": "Today",
+    "thisWeek": "This week",
+    "thisMonth": "This month",
+    "popularTemplates": "Popular Templates",
+    "blockchainDistribution": "Blockchain Distribution",
+    "monthlyTrend": "Monthly Trend",
+    "premiumFeatures": "Premium Features",
+    "totalDeployments": "Total deployments",
+    "successful": "Successful",
+    "failed": "Failed",
+    "deployments": "Deployments",
+    "noPremiumFeatures": "No premium features used yet",
+    "dataSource": "Statistics updated in real-time from our Supabase database",
+    "refresh": "Refresh"
+  },
+  "cryptoPayment": {
+    "title": "Pay with USDC",
+    "subtitle": "Stable payments on Ethereum, Arbitrum & Base networks",
+    "currentNetwork": "Current network",
+    "supportedNetworks": "Supported networks: Ethereum, Arbitrum, Base",
+    "switchNetwork": "Switch to a supported network to continue"
+  },
   "contractName": "Contract Name",
   "contractSymbol": "Contract Symbol",
   "symbol": "Symbol",
@@ -65,7 +108,7 @@
   "switchLanguage": "Switch to French",
   "estimatedGas": "Estimated Gas",
   "deploymentCost": "Deployment Cost",
-  "platformFee": "Platform Fee (2%)",
+  "platformFee": "Platform Fee",
   "totalCost": "Total Cost",
   "deploymentSuccess": "Contract deployed successfully!",
   "deploymentError": "Deployment failed",
@@ -329,7 +372,6 @@
       "description": "Insurance coverage for DeFi protocols and liquidity pools"
     }
   },
-  "platformFee": "Platform Fee",
   "templates": {
     "token": {
       "name": "ERC20 Token",
@@ -533,46 +575,46 @@
       "deployment": "Deployment",
       "security": "Security"
     },
-         "overview": {
-       "description": "ContractForge.io is a no-code platform that allows users to deploy smart contracts on EVM-compatible blockchains without programming knowledge.",
-       "platformTitle": "ContractForge.io Platform",
-       "platformDesc": "ContractForge.io is a no-code platform that allows users to deploy smart contracts on EVM-compatible blockchains without programming knowledge.",
-       "keyFeatures": "Key Features",
-       "multiTemplate": "Multiple Contract Templates",
-       "multiTemplateDesc": "ERC20 tokens, NFT collections, DAO governance, and token lock contracts",
-       "premiumFeaturesTitle": "Premium Features",
-       "premiumFeaturesDesc": "20+ advanced features including pausable, burnable, mintable, and more",
-       "multiChain": "Multi-Chain Support",
-       "multiChainDesc": "Deploy on Ethereum, Polygon, Arbitrum, BSC, and other EVM-compatible chains",
-       "realTimeComp": "Real-Time Code Preview",
-       "realTimeCompDesc": "See your contract code with syntax highlighting before deployment",
-       "techStack": "Technology Stack",
-       "frontend": "Frontend",
-       "smartContracts": "Smart Contracts",
-       "quickStats": "Quick Statistics",
-       "templates": "Templates",
-       "supportedNetworks": "Supported Networks",
-       "platformFee": "Platform Fee",
-       "securityNote": "Always verify contract parameters before deployment. Smart contracts are immutable once deployed on mainnet.",
-       "reviewWarning": "Double-check all parameters before deployment. Contracts cannot be modified after deployment."
-     },
-         "templates": {
-       "title": "Contract Templates",
-       "availableTemplates": "Available Templates",
-       "requiredFields": "Required Fields",
-       "compatibleFeatures": "Compatible Premium Features",
-       "exampleParams": "Example Parameters",
-       "copyParams": "Copy Parameters",
-       "copied": "Copied!",
-       "copyExample": "Copy Example",
-       "field": "Field",
-       "type": "Type",
-       "description": "Description",
-       "required": "Required",
-       "optional": "Optional",
-       "default": "Default",
-       "fields": "fields",
-       "usageExample": "Usage Example",
+    "overview": {
+      "description": "ContractForge.io is a no-code platform that allows users to deploy smart contracts on EVM-compatible blockchains without programming knowledge.",
+      "platformTitle": "ContractForge.io Platform",
+      "platformDesc": "ContractForge.io is a no-code platform that allows users to deploy smart contracts on EVM-compatible blockchains without programming knowledge.",
+      "keyFeatures": "Key Features",
+      "multiTemplate": "Multiple Contract Templates",
+      "multiTemplateDesc": "ERC20 tokens, NFT collections, DAO governance, and token lock contracts",
+      "premiumFeaturesTitle": "Premium Features",
+      "premiumFeaturesDesc": "20+ advanced features including pausable, burnable, mintable, and more",
+      "multiChain": "Multi-Chain Support",
+      "multiChainDesc": "Deploy on Ethereum, Polygon, Arbitrum, BSC, and other EVM-compatible chains",
+      "realTimeComp": "Real-Time Code Preview",
+      "realTimeCompDesc": "See your contract code with syntax highlighting before deployment",
+      "techStack": "Technology Stack",
+      "frontend": "Frontend",
+      "smartContracts": "Smart Contracts",
+      "quickStats": "Quick Statistics",
+      "templates": "Templates",
+      "supportedNetworks": "Supported Networks",
+      "platformFee": "Platform Fee",
+      "securityNote": "Always verify contract parameters before deployment. Smart contracts are immutable once deployed on mainnet.",
+      "reviewWarning": "Double-check all parameters before deployment. Contracts cannot be modified after deployment."
+    },
+    "templates": {
+      "title": "Contract Templates",
+      "availableTemplates": "Available Templates",
+      "requiredFields": "Required Fields",
+      "compatibleFeatures": "Compatible Premium Features",
+      "exampleParams": "Example Parameters",
+      "copyParams": "Copy Parameters",
+      "copied": "Copied!",
+      "copyExample": "Copy Example",
+      "field": "Field",
+      "type": "Type",
+      "description": "Description",
+      "required": "Required",
+      "optional": "Optional",
+      "default": "Default",
+      "fields": "fields",
+      "usageExample": "Usage Example",
       "token": {
         "name": "ERC20 Token",
         "description": "Create your own ERC20 token with customizable supply and decimals",
@@ -753,10 +795,6 @@
       "step2": "Calculate current gas prices",
       "step3": "Add 20% safety margin",
       "step4": "Convert to native token value",
-      "title": "Supported Networks",
-      "description": "Deploy your contracts on any of these EVM-compatible networks",
-      "blockExplorer": "Block Explorer",
-      "gasEstDesc": "Gas costs are estimated using current network conditions and may vary during deployment.",
       "deploymentCost": "Base deployment cost estimation",
       "premiumOverhead": "Premium features overhead calculation",
       "platformFeeDesc": "Platform fee (2%) calculation",
@@ -924,17 +962,17 @@
         ]
       }
     },
-         "choosePlan": "Choose your plan",
-     "upgradeYourPlan": "Upgrade your plan",
-     "choosePlanDesc": "Powerful tools for all your smart contract needs",
-     "upgradeDesc": "Unlock more features with a higher plan",
-     "monthly": "Monthly",
-     "yearly": "Yearly",
-     "save2Months": "2 months free",
-     "deploymentsPerMonth": "deployments/month",
-     "platformFees": "platform fees",
-          "chooseThisPlan": "Choose this plan",
-     "alwaysFree": "Pay-as-you-go",
+    "choosePlan": "Choose your plan",
+    "upgradeYourPlan": "Upgrade your plan",
+    "choosePlanDesc": "Powerful tools for all your smart contract needs",
+    "upgradeDesc": "Unlock more features with a higher plan",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save2Months": "2 months free",
+    "deploymentsPerMonth": "deployments/month",
+    "platformFees": "platform fees",
+    "chooseThisPlan": "Choose this plan",
+    "alwaysFree": "Pay-as-you-go",
     "mostPopular": "Most popular",
     "connectWalletToSee": "Connect your wallet",
     "save": "Save",
@@ -944,29 +982,28 @@
     "cryptoPaymentDesc": "ETH or USDC • Non-custodial • Multi-chain",
     "creditCardPayment": "Credit Card",
     "creditCardPaymentDesc": "Visa, Mastercard • Recurring payment",
-
-         "upgradeToUnlock": "Subscribe for better rates",
+    "upgradeToUnlock": "Subscribe for better rates",
     "status": {
       "active": "active",
       "expired": "expired",
       "canceled": "canceled",
       "trial": "trial"
     },
-         "freePlanTooltip": {
-       "title": "Free Plan",
-       "features": [
-         "• Unlimited compilation",
-         "• Contract preview",
-         "• Pay-per-deployment available",
-         "**Subscribe for reduced fees!**"
-       ]
-     },
+    "freePlanTooltip": {
+      "title": "Free Plan",
+      "features": [
+        "• Unlimited compilation",
+        "• Contract preview",
+        "• Pay-per-deployment available",
+        "**Subscribe for reduced fees!**"
+      ]
+    },
     "paidPlanTooltip": {
       "title": "Plan {plan}",
       "deployments": "• Deployments allowed",
       "fees": "• Fees: {rate}%",
       "starterLimit": "• 5 deployments/month",
-      "proLimit": "• 100 deployments/month", 
+      "proLimit": "• 100 deployments/month",
       "enterpriseLimit": "• 1000 deployments/month"
     }
   },
@@ -1075,4 +1112,4 @@
       "createAnother": "Create Another"
     }
   }
-}
+} as const

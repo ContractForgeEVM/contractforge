@@ -79,28 +79,148 @@ const Documentation = () => {
     setCopiedCode(label)
     setTimeout(() => setCopiedCode(null), 2000)
   }
-  const networkInfo = [
-    // Mainnet Networks with Primary Factory (0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7)
-    { name: 'Ethereum Mainnet', chainId: 1, status: t('documentation.networks.live'), gasToken: 'ETH', factoryType: 'Primary', tier: 'mainnet' },
-    { name: 'Arbitrum One', chainId: 42161, status: t('documentation.networks.live'), gasToken: 'ETH', factoryType: 'Primary', tier: 'mainnet' },
-    { name: 'Optimism', chainId: 10, status: t('documentation.networks.live'), gasToken: 'ETH', factoryType: 'Primary', tier: 'mainnet' },
-    { name: 'BNB Smart Chain', chainId: 56, status: t('documentation.networks.live'), gasToken: 'BNB', factoryType: 'Primary', tier: 'mainnet' },
-    { name: 'Avalanche C-Chain', chainId: 43114, status: t('documentation.networks.live'), gasToken: 'AVAX', factoryType: 'Primary', tier: 'mainnet' },
-    { name: 'Base', chainId: 8453, status: t('documentation.networks.live'), gasToken: 'ETH', factoryType: 'Primary', tier: 'mainnet' },
-    { name: 'Scroll', chainId: 534352, status: t('documentation.networks.live'), gasToken: 'ETH', factoryType: 'Primary', tier: 'mainnet' },
-    { name: 'Gnosis Chain', chainId: 100, status: t('documentation.networks.live'), gasToken: 'XDAI', factoryType: 'Primary', tier: 'mainnet' },
-    { name: 'Celo', chainId: 42220, status: t('documentation.networks.live'), gasToken: 'CELO', factoryType: 'Primary', tier: 'mainnet' },
-    { name: 'Zora', chainId: 7777777, status: t('documentation.networks.live'), gasToken: 'ETH', factoryType: 'Primary', tier: 'mainnet' },
-    
-    // Special Factory Networks
-    { name: 'Polygon', chainId: 137, status: t('documentation.networks.live'), gasToken: 'MATIC', factoryType: 'Special', tier: 'mainnet', factoryAddress: '0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a' },
-    { name: 'Linea', chainId: 59144, status: t('documentation.networks.live'), gasToken: 'ETH', factoryType: 'Special', tier: 'mainnet', factoryAddress: '0x836ef37aa08F6089B4efEAdc55A864f6caff4a16' },
-    { name: 'HyperEVM', chainId: 999, status: t('documentation.networks.live'), gasToken: 'HYPE', factoryType: 'Special', tier: 'mainnet', factoryAddress: '0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7' },
-    
-    // Testnet Networks
-    { name: 'Monad Testnet', chainId: 10143, status: t('documentation.networks.testnet'), gasToken: 'MON', factoryType: 'Primary', tier: 'testnet' },
-    { name: 'Base Sepolia', chainId: 84532, status: t('documentation.networks.testnet'), gasToken: 'ETH', factoryType: 'Primary', tier: 'testnet' },
-  ]
+      const networkInfo = [
+      {
+        name: 'Ethereum Mainnet',
+        chainId: 1,
+        factoryAddress: '0x8ec242d45E595105aeB5F1A6278c6e5B1Ae9d7c5',
+        factoryType: 'Special',
+        explorer: 'https://etherscan.io',
+        status: 'deployed',
+        gasToken: 'ETH',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Arbitrum One',
+        chainId: 42161,
+        factoryAddress: '0xDF735F5Bc4dC567e4cA5d24c05767d72A93a73a9',
+        factoryType: 'Special',
+        explorer: 'https://arbiscan.io',
+        status: 'deployed',
+        gasToken: 'ETH',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Polygon',
+        chainId: 137,
+        factoryAddress: '0x7a9DEfAfCFf15732860Ed3f598d41bFd392f36EF',
+        factoryType: 'Standard',
+        explorer: 'https://polygonscan.com',
+        status: 'deployed',
+        gasToken: 'MATIC',
+        tier: 'mainnet'
+      },
+      {
+        name: 'BNB Smart Chain',
+        chainId: 56,
+        factoryAddress: '0x836ef37aa08F6089B4efEAdc55A864f6caff4a16',
+        factoryType: 'Standard',
+        explorer: 'https://bscscan.com',
+        status: 'deployed',
+        gasToken: 'BNB',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Base',
+        chainId: 8453,
+        factoryAddress: '0xa1B049789ABC19c50F9D4c056D5F626f4a2fe4d3',
+        factoryType: 'Standard',
+        explorer: 'https://basescan.org',
+        status: 'deployed',
+        gasToken: 'ETH',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Optimism',
+        chainId: 10,
+        factoryAddress: '0x836ef37aa08F6089B4efEAdc55A864f6caff4a16',
+        factoryType: 'Standard',
+        explorer: 'https://optimistic.etherscan.io',
+        status: 'deployed',
+        gasToken: 'ETH',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Avalanche C-Chain',
+        chainId: 43114,
+        factoryAddress: '0x836ef37aa08F6089B4efEAdc55A864f6caff4a16',
+        factoryType: 'Standard',
+        explorer: 'https://snowtrace.io',
+        status: 'deployed',
+        gasToken: 'AVAX',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Celo',
+        chainId: 42220,
+        factoryAddress: '0x836ef37aa08F6089B4efEAdc55A864f6caff4a16',
+        factoryType: 'Standard',
+        explorer: 'https://celoscan.io',
+        status: 'deployed',
+        gasToken: 'CELO',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Linea',
+        chainId: 59144,
+        factoryAddress: '0x7a9DEfAfCFf15732860Ed3f598d41bFd392f36EF',
+        factoryType: 'Standard',
+        explorer: 'https://lineascan.build',
+        status: 'deployed',
+        gasToken: 'ETH',
+        tier: 'mainnet'
+      },
+      {
+        name: 'HyperEVM',
+        chainId: 999,
+        factoryAddress: '0x836ef37aa08F6089B4efEAdc55A864f6caff4a16',
+        factoryType: 'Standard',
+        explorer: 'https://hyperevmscan.io',
+        status: 'deployed',
+        gasToken: 'HYPE',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Scroll',
+        chainId: 534352,
+        factoryAddress: '0x9Ba797D0968bF4b48b639988C7FfedF28d3FEe5a',
+        factoryType: 'Standard',
+        explorer: 'https://scrollscan.com',
+        status: 'deployed',
+        gasToken: 'ETH',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Zora',
+        chainId: 7777777,
+        factoryAddress: '0x836ef37aa08F6089B4efEAdc55A864f6caff4a16',
+        factoryType: 'Standard',
+        explorer: 'https://explorer.zora.energy',
+        status: 'deployed',
+        gasToken: 'ETH',
+        tier: 'mainnet'
+      },
+      {
+        name: 'Monad Testnet',
+        chainId: 10143,
+        factoryAddress: '0x836ef37aa08F6089B4efEAdc55A864f6caff4a16',
+        factoryType: 'Standard',
+        explorer: 'https://explorer.monad.xyz',
+        status: 'deployed',
+        gasToken: 'testMON',
+        tier: 'testnet'
+      },
+      {
+        name: 'Sepolia Testnet',
+        chainId: 11155111,
+        factoryAddress: 'TBD',
+        factoryType: 'Standard',
+        explorer: 'https://sepolia.etherscan.io',
+        status: 'pending',
+        gasToken: 'ETH',
+        tier: 'testnet'
+      },
+    ]
   const apiEndpoints = [
     { method: 'POST', endpoint: '/api/compile', description: t('documentation.api.compileContract') },
     { method: 'POST', endpoint: '/api/deploy', description: t('documentation.api.deployContract') },
@@ -214,7 +334,7 @@ const Documentation = () => {
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <Typography>{t('documentation.overview.supportedNetworks')}:</Typography>
-                      <Chip label="18+" size="small" color="success" />
+                      <Chip label="13" size="small" color="success" />
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <Typography>{t('documentation.overview.platformFee')}:</Typography>
@@ -267,10 +387,10 @@ const Documentation = () => {
                      </Typography>
                    </Box>
 
-                  {/* Main Factory */}
+                  {/* Main Factory - Updated */}
                   <Box sx={{ mb: 2, p: 2, bgcolor: 'success.50', borderRadius: 1, border: '1px solid', borderColor: 'success.200' }}>
                     <Typography variant="subtitle2" fontWeight="bold" color="success.dark" gutterBottom>
-                      🏭 Primary Factory Contract
+                      🏭 UniversalFactoryV2 - Primary Networks (8 Networks)
                     </Typography>
                     <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
                       bgcolor: 'success.100', 
@@ -280,38 +400,71 @@ const Documentation = () => {
                       display: 'block',
                       wordBreak: 'break-all'
                     }}>
-                      0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
+                      0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
                     </Typography>
                     <Typography variant="caption" color="success.dark" sx={{ mt: 0.5, display: 'block' }}>
-                      Used on 10+ networks (Ethereum, Arbitrum, Optimism, BSC, etc.)
+                      Used on BNB Chain, Avalanche, Celo, HyperEVM + 4 others
                     </Typography>
                   </Box>
 
-                  {/* Special Networks */}
-                  <Box sx={{ p: 2, bgcolor: 'warning.50', borderRadius: 1, border: '1px solid', borderColor: 'warning.200' }}>
-                    <Typography variant="subtitle2" fontWeight="bold" color="orange" gutterBottom>
-                      ⚠️ Special Network Addresses
+                  {/* Ethereum Mainnet - Special */}
+                  <Box sx={{ mb: 2, p: 2, bgcolor: 'primary.50', borderRadius: 1, border: '1px solid', borderColor: 'primary.200' }}>
+                    <Typography variant="subtitle2" fontWeight="bold" color="primary.dark" gutterBottom>
+                      👑 Ethereum Mainnet - Special Address
                     </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Box>
-                        <Typography variant="caption" color="text.primary" sx={{ fontWeight: 'medium' }}>Polygon: </Typography>
-                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.200', p: 0.3, borderRadius: 0.3, color: 'grey.800', border: '1px solid', borderColor: 'grey.300' }}>
-                          0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography variant="caption" color="text.primary" sx={{ fontWeight: 'medium' }}>Linea: </Typography>
-                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.200', p: 0.3, borderRadius: 0.3, color: 'grey.800', border: '1px solid', borderColor: 'grey.300' }}>
-                          0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography variant="caption" color="text.primary" sx={{ fontWeight: 'medium' }}>HyperEVM: </Typography>
-                        <Typography component="code" variant="caption" fontFamily="monospace" sx={{ bgcolor: 'grey.200', p: 0.3, borderRadius: 0.3, color: 'grey.800', border: '1px solid', borderColor: 'grey.300' }}>
-                          0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
-                        </Typography>
-                      </Box>
-                    </Box>
+                    <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                      bgcolor: 'primary.100', 
+                      p: 0.5, 
+                      borderRadius: 0.5,
+                      color: 'primary.dark',
+                      display: 'block',
+                      wordBreak: 'break-all'
+                    }}>
+                      0x8ec242d45E595105aeB5F1A6278c6e5B1Ae9d7c5
+                    </Typography>
+                    <Typography variant="caption" color="primary.dark" sx={{ mt: 0.5, display: 'block' }}>
+                      Ethereum Mainnet only - deployed via public mempool
+                    </Typography>
+                  </Box>
+
+                  {/* Linea - Special */}
+                  <Box sx={{ mb: 2, p: 2, bgcolor: 'secondary.50', borderRadius: 1, border: '1px solid', borderColor: 'secondary.200' }}>
+                    <Typography variant="subtitle2" fontWeight="bold" color="secondary.dark" gutterBottom>
+                      ⚡ Linea Network - zkEVM Address
+                    </Typography>
+                    <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                      bgcolor: 'secondary.100', 
+                      p: 0.5, 
+                      borderRadius: 0.5,
+                      color: 'secondary.dark',
+                      display: 'block',
+                      wordBreak: 'break-all'
+                    }}>
+                      0x7a9DEfAfCFf15732860Ed3f598d41bFd392f36EF
+                    </Typography>
+                    <Typography variant="caption" color="secondary.dark" sx={{ mt: 0.5, display: 'block' }}>
+                      Linea & Polygon networks - ultra-low fees
+                    </Typography>
+                  </Box>
+
+                  {/* Arbitrum - Special Address */}
+                  <Box sx={{ p: 2, bgcolor: 'warning.50', borderRadius: 1, border: '1px solid', borderColor: 'warning.200' }}>
+                    <Typography variant="subtitle2" fontWeight="bold" color="warning.dark" gutterBottom>
+                      ⭐ Arbitrum One - First Deployment
+                    </Typography>
+                    <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                      bgcolor: 'warning.100', 
+                      p: 0.5, 
+                      borderRadius: 0.5,
+                      color: 'warning.dark',
+                      display: 'block',
+                      wordBreak: 'break-all'
+                    }}>
+                      0xDF735F5Bc4dC567e4cA5d24c05767d72A93a73a9
+                    </Typography>
+                    <Typography variant="caption" color="warning.dark" sx={{ mt: 0.5, display: 'block' }}>
+                      Arbitrum One only - original deployment address
+                    </Typography>
                   </Box>
                 </CardContent>
               </Card>
@@ -584,22 +737,22 @@ const Documentation = () => {
                </Paper>
              </Box>
 
-            {/* Factory Addresses */}
-            <Box>
+            {/* Primary Factory Address */}
+            <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" fontWeight="bold" color="success.main" gutterBottom>
-                Primary Factory Contract (Most Networks)
+                UniversalFactoryV2 - Primary Address (6 Networks)
               </Typography>
               <Typography variant="body2" color="text.secondary" gutterBottom>
-                Main factory contract deployed on Ethereum, Polygon, Arbitrum, Optimism, BSC, Avalanche, Base, Scroll, Gnosis, Celo, Zora:
+                Main factory contract deployed on BNB Chain, Avalanche, Celo, HyperEVM, Base, and others:
               </Typography>
               <Paper sx={{ p: 2, bgcolor: 'grey.200', display: 'flex', alignItems: 'center', gap: 1, border: '1px solid', borderColor: 'grey.300' }}>
                 <Typography component="code" variant="body2" fontFamily="monospace" sx={{ flex: 1, color: 'grey.800' }}>
-                  0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
+                  0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
                 </Typography>
                 <Tooltip title={copiedCode === 'primary-factory-address' ? 'Copied!' : 'Copy Address'}>
                   <IconButton
                     size="small"
-                    onClick={() => copyToClipboard('0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7', 'primary-factory-address')}
+                    onClick={() => copyToClipboard('0x836ef37aa08F6089B4efEAdc55A864f6caff4a16', 'primary-factory-address')}
                   >
                     <CopyIcon fontSize="small" />
                   </IconButton>
@@ -607,51 +760,69 @@ const Documentation = () => {
               </Paper>
             </Box>
 
-            {/* Special Factory Addresses */}
+            {/* Ethereum Mainnet Special */}
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1" fontWeight="bold" color="primary.main" gutterBottom>
+                Ethereum Mainnet - Special Address
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Ethereum-specific factory deployed via public mempool:
+              </Typography>
+              <Paper sx={{ p: 2, bgcolor: 'grey.200', display: 'flex', alignItems: 'center', gap: 1, border: '1px solid', borderColor: 'grey.300' }}>
+                <Typography component="code" variant="body2" fontFamily="monospace" sx={{ flex: 1, color: 'grey.800' }}>
+                  0x8ec242d45E595105aeB5F1A6278c6e5B1Ae9d7c5
+                </Typography>
+                <Tooltip title={copiedCode === 'ethereum-factory-address' ? 'Copied!' : 'Copy Address'}>
+                  <IconButton
+                    size="small"
+                    onClick={() => copyToClipboard('0x8ec242d45E595105aeB5F1A6278c6e5B1Ae9d7c5', 'ethereum-factory-address')}
+                  >
+                    <CopyIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Paper>
+            </Box>
+
+            {/* Linea & Polygon Special */}
+            <Box>
+              <Typography variant="subtitle1" fontWeight="bold" color="secondary.main" gutterBottom>
+                Linea & Polygon - zkEVM Address
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Shared address for ultra-low fee networks:
+              </Typography>
+              <Paper sx={{ p: 2, bgcolor: 'grey.200', display: 'flex', alignItems: 'center', gap: 1, border: '1px solid', borderColor: 'grey.300' }}>
+                <Typography component="code" variant="body2" fontFamily="monospace" sx={{ flex: 1, color: 'grey.800' }}>
+                  0x7a9DEfAfCFf15732860Ed3f598d41bFd392f36EF
+                </Typography>
+                <Tooltip title={copiedCode === 'linea-factory-address' ? 'Copied!' : 'Copy Address'}>
+                  <IconButton
+                    size="small"
+                    onClick={() => copyToClipboard('0x7a9DEfAfCFf15732860Ed3f598d41bFd392f36EF', 'linea-factory-address')}
+                  >
+                    <CopyIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Paper>
+            </Box>
+
+            {/* Special Arbitrum Address */}
             <Box sx={{ mt: 2 }}>
               <Typography variant="subtitle2" color="warning.main" gutterBottom>
-                Special Network Factory Addresses:
+                Special Address - Arbitrum One Only (First Deployment):
               </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Typography variant="body2" sx={{ minWidth: 120 }}>Polygon:</Typography>
-                  <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                    bgcolor: 'grey.200', 
-                    color: 'grey.800', 
-                    p: 0.5, 
-                    borderRadius: 0.5,
-                    border: '1px solid',
-                    borderColor: 'grey.300' 
-                  }}>
-                    0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Typography variant="body2" sx={{ minWidth: 120 }}>Linea:</Typography>
-                  <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                    bgcolor: 'grey.200', 
-                    color: 'grey.800', 
-                    p: 0.5, 
-                    borderRadius: 0.5,
-                    border: '1px solid',
-                    borderColor: 'grey.300' 
-                  }}>
-                    0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Typography variant="body2" sx={{ minWidth: 120 }}>HyperEVM:</Typography>
-                  <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                    bgcolor: 'grey.200', 
-                    color: 'grey.800', 
-                    p: 0.5, 
-                    borderRadius: 0.5,
-                    border: '1px solid',
-                    borderColor: 'grey.300' 
-                  }}>
-                    0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
-                  </Typography>
-                </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Typography variant="body2" sx={{ minWidth: 120 }}>Arbitrum One:</Typography>
+                <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                  bgcolor: 'warning.100', 
+                  color: 'warning.dark', 
+                  p: 0.5, 
+                  borderRadius: 0.5,
+                  border: '1px solid',
+                  borderColor: 'warning.300' 
+                }}>
+                  0xDF735F5Bc4dC567e4cA5d24c05767d72A93a73a9
+                </Typography>
               </Box>
             </Box>
           </Paper>
@@ -773,20 +944,20 @@ Content-Type: application/json
                             variant="caption" 
                             fontFamily="monospace"
                             sx={{ 
-                              bgcolor: network.factoryType === 'Primary' ? 'success.100' : 'grey.200',
-                              color: network.factoryType === 'Primary' ? 'success.dark' : 'grey.800',
+                              bgcolor: network.chainId === 42161 ? 'primary.100' : 'success.100',
+                              color: network.chainId === 42161 ? 'primary.dark' : 'success.dark',
                               p: 0.5, 
                               borderRadius: 0.5,
                               border: '1px solid',
-                              borderColor: network.factoryType === 'Primary' ? 'success.300' : 'grey.300'
+                              borderColor: network.chainId === 42161 ? 'primary.300' : 'success.300'
                             }}
                           >
-                            {network.factoryAddress || '0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7'}
+                            {network.factoryAddress}
                           </Typography>
                           <Tooltip title={copiedCode === `network-${network.chainId}` ? 'Copied!' : 'Copy Address'}>
                             <IconButton
                               size="small"
-                              onClick={() => copyToClipboard(network.factoryAddress || '0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7', `network-${network.chainId}`)}
+                              onClick={() => copyToClipboard(network.factoryAddress, `network-${network.chainId}`)}
                             >
                               <CopyIcon fontSize="small" />
                             </IconButton>
@@ -852,12 +1023,12 @@ Content-Type: application/json
                               borderColor: 'info.300'
                             }}
                           >
-                            0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
+                            {network.factoryAddress}
                           </Typography>
                           <Tooltip title={copiedCode === `testnet-${network.chainId}` ? 'Copied!' : 'Copy Address'}>
                             <IconButton
                               size="small"
-                              onClick={() => copyToClipboard('0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7', `testnet-${network.chainId}`)}
+                              onClick={() => copyToClipboard(network.factoryAddress, `testnet-${network.chainId}`)}
                             >
                               <CopyIcon fontSize="small" />
                             </IconButton>
@@ -982,10 +1153,10 @@ Content-Type: application/json
                   {/* Primary Factory */}
                   <Box sx={{ mb: 2 }}>
                     <Typography variant="subtitle2" fontWeight="bold" color="success.main" gutterBottom>
-                      Primary Factory (Most Networks)
+                      UniversalFactoryV2 - Primary Address (6 Networks)
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                      Used on Ethereum, Arbitrum, Optimism, BSC, Avalanche, Base, Scroll, Gnosis, Celo, Zora:
+                      Used on BNB Chain, Avalanche, Celo, HyperEVM, Base, and others:
                     </Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                       <Typography
@@ -1004,12 +1175,12 @@ Content-Type: application/json
                           borderColor: 'success.300'
                         }}
                       >
-                        0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
+                        0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
                       </Typography>
                       <Tooltip title={copiedCode === 'primary-factory-deploy-address' ? 'Copied!' : 'Copy Address'}>
                         <IconButton
                           size="small"
-                          onClick={() => copyToClipboard('0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7', 'primary-factory-deploy-address')}
+                          onClick={() => copyToClipboard('0x836ef37aa08F6089B4efEAdc55A864f6caff4a16', 'primary-factory-deploy-address')}
                         >
                           <CopyIcon fontSize="small" />
                         </IconButton>
@@ -1017,55 +1188,67 @@ Content-Type: application/json
                     </Box>
                   </Box>
 
-                  {/* Special Factories */}
+                  {/* Ethereum Mainnet */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle2" fontWeight="bold" color="primary.main" gutterBottom>
+                      Ethereum Mainnet - Special Address
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography variant="caption" color="text.primary" sx={{ minWidth: 80, fontWeight: 'medium' }}>Ethereum:</Typography>
+                      <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                        bgcolor: 'primary.100', 
+                        p: 0.5, 
+                        borderRadius: 0.5,
+                        color: 'primary.dark',
+                        border: '1px solid',
+                        borderColor: 'primary.300',
+                        fontSize: '0.75rem'
+                      }}>
+                        0x8ec242d45E595105aeB5F1A6278c6e5B1Ae9d7c5
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  {/* Linea & Polygon */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle2" fontWeight="bold" color="secondary.main" gutterBottom>
+                      Linea & Polygon - zkEVM Address
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography variant="caption" color="text.primary" sx={{ minWidth: 80, fontWeight: 'medium' }}>Linea/Polygon:</Typography>
+                      <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                        bgcolor: 'secondary.100', 
+                        p: 0.5, 
+                        borderRadius: 0.5,
+                        color: 'secondary.dark',
+                        border: '1px solid',
+                        borderColor: 'secondary.300',
+                        fontSize: '0.75rem'
+                      }}>
+                        0x7a9DEfAfCFf15732860Ed3f598d41bFd392f36EF
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  {/* Special Arbitrum Address */}
                   <Box>
                     <Typography variant="subtitle2" fontWeight="bold" color="warning.main" gutterBottom>
-                      Special Network Factories
+                      Arbitrum One - First Deployment
                     </Typography>
-                                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                         <Typography variant="caption" color="text.primary" sx={{ minWidth: 60, fontWeight: 'medium' }}>Polygon:</Typography>
-                         <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                           bgcolor: 'grey.200', 
-                           p: 0.5, 
-                           borderRadius: 0.5,
-                           color: 'grey.800',
-                           border: '1px solid',
-                           borderColor: 'grey.300',
-                           fontSize: '0.75rem'
-                         }}>
-                           0x9ba797d0968bf4b48b639988c7ffedf28d3fee5a
-                         </Typography>
-                       </Box>
-                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                         <Typography variant="caption" color="text.primary" sx={{ minWidth: 60, fontWeight: 'medium' }}>Linea:</Typography>
-                         <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                           bgcolor: 'grey.200', 
-                           p: 0.5, 
-                           borderRadius: 0.5,
-                           color: 'grey.800',
-                           border: '1px solid',
-                           borderColor: 'grey.300',
-                           fontSize: '0.75rem'
-                         }}>
-                           0x836ef37aa08F6089B4efEAdc55A864f6caff4a16
-                         </Typography>
-                       </Box>
-                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                         <Typography variant="caption" color="text.primary" sx={{ minWidth: 60, fontWeight: 'medium' }}>HyperEVM:</Typography>
-                         <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
-                           bgcolor: 'grey.200', 
-                           p: 0.5, 
-                           borderRadius: 0.5,
-                           color: 'grey.800',
-                           border: '1px solid',
-                           borderColor: 'grey.300',
-                           fontSize: '0.75rem'
-                         }}>
-                           0x2F9258A0024d389eE69BF9F4E44aB9120a359DC7
-                         </Typography>
-                       </Box>
-                     </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography variant="caption" color="text.primary" sx={{ minWidth: 80, fontWeight: 'medium' }}>Arbitrum One:</Typography>
+                      <Typography component="code" variant="caption" fontFamily="monospace" sx={{ 
+                        bgcolor: 'warning.100', 
+                        p: 0.5, 
+                        borderRadius: 0.5,
+                        color: 'warning.dark',
+                        border: '1px solid',
+                        borderColor: 'warning.300',
+                        fontSize: '0.75rem'
+                      }}>
+                        0xDF735F5Bc4dC567e4cA5d24c05767d72A93a73a9
+                      </Typography>
+                    </Box>
                   </Box>
                 </CardContent>
               </Card>

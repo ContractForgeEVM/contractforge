@@ -1,8 +1,10 @@
 import { generateContractCode } from './contractGenerator'
 import type { TemplateType } from '../types'
 
-const API_BASE_URL = 'https://contractforge.io'
-const COMPILER_API_URL = `${API_BASE_URL}/api/web/compile/foundry`
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3004'
+const COMPILER_API_URL = `${API_BASE_URL}/api/web/compile`
+const TEMPLATE_COMPILER_API_URL = `${API_BASE_URL}/api/web/compile/template`
+const FOUNDRY_COMPILER_API_URL = `${API_BASE_URL}/api/web/compile/foundry`
 
 interface CompilationResponse {
   success: boolean
@@ -19,27 +21,116 @@ export async function compileWithBackend(
   premiumFeatures: string[] = []
 ): Promise<{ bytecode: string; abi: any[] }> {
   try {
-    const sourceCode = generateContractCode(templateType, params)
-    const contractName = getContractName(templateType, params)
-    
-    console.log(`🚀 Compiling ${contractName} with Foundry via backend API...`)
+    console.log(`🚀 Compiling ${templateType} with Foundry via backend API...`)
     console.log(`📋 Template: ${templateType}, Features: ${premiumFeatures.length > 0 ? premiumFeatures.join(', ') : 'none'}`)
     
-    const response = await fetch(COMPILER_API_URL, {
+    // 🔍 DEBUG - Vérifier les données d'entrée
+    console.log('🔍 DEBUG - Input validation:')
+    console.log('  templateType:', typeof templateType, templateType)
+    console.log('  params:', typeof params, Object.keys(params))
+    console.log('  premiumFeatures:', typeof premiumFeatures, premiumFeatures)
+    
+    // Déterminer quelle route utiliser selon le template
+    const isNewTemplate = ['token', 'nft', 'dao', 'lock', 'social-token', 'liquidity-pool', 'yield-farming', 'gamefi-token', 'nft-marketplace', 'revenue-sharing', 'loyalty-program', 'dynamic-nft'].includes(templateType)
+    const apiUrl = isNewTemplate ? TEMPLATE_COMPILER_API_URL : FOUNDRY_COMPILER_API_URL
+    
+    console.log(`🔗 Using API route: ${apiUrl}`)
+    console.log(`🔗 Full API Base URL: ${API_BASE_URL}`)
+    console.log(`🔗 Is new template: ${isNewTemplate}`)
+    
+    // 🔍 DEBUG - Préparer les données à envoyer
+    const requestData = {
+      templateType,
+      features: premiumFeatures,
+      params
+    }
+    
+    console.log('📤 Request data being sent:')
+    console.log('  Full payload:', JSON.stringify(requestData, null, 2))
+    console.log('  Payload size:', JSON.stringify(requestData).length, 'characters')
+    
+    // 🔍 DEBUG - Vérifier la connectivité
+    console.log('🔍 Checking API connectivity...')
+    
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer cfk_master_key_contractforge_production_2024_SECURE'
       },
-      body: JSON.stringify({
-        sourceCode: sourceCode,
-        contractName,
-        templateType,
-        features: premiumFeatures,
-        params
-      })
+      body: JSON.stringify(requestData)
     })
     
-    const result: CompilationResponse = await response.json()
+    // 🔍 DEBUG - Analyser la réponse
+    console.log('📥 Response received:')
+    console.log('  Status:', response.status)
+    console.log('  Status text:', response.statusText)
+    console.log('  Headers:', Object.fromEntries(response.headers.entries()))
+    
+    // Lire la réponse raw avant de l'analyser
+    const responseText = await response.text()
+    console.log('📥 Raw response:', responseText.substring(0, 500), responseText.length > 500 ? '...' : '')
+    
+    // Si l'erreur est 400, donner des détails précis
+    if (!response.ok) {
+      console.error('❌ HTTP Error Details:')
+      console.error('  Status:', response.status)
+      console.error('  Status Text:', response.statusText)
+      console.error('  URL:', apiUrl)
+      
+      let errorMessage = `HTTP ${response.status}: ${response.statusText}`
+      let errorDetails = ''
+      
+      try {
+        const errorData = JSON.parse(responseText)
+        console.error('  Error data:', errorData)
+        
+        if (errorData.error) {
+          errorMessage = errorData.error
+        }
+        
+        if (errorData.message) {
+          errorDetails = errorData.message
+        }
+        
+        if (errorData.details) {
+          errorDetails += ' ' + JSON.stringify(errorData.details)
+        }
+        
+      } catch (parseError) {
+        console.error('  Could not parse error response as JSON')
+        errorDetails = responseText
+      }
+      
+      // Messages d'erreur spécifiques selon le code
+      if (response.status === 400) {
+        throw new Error(`❌ Bad Request (400): ${errorMessage}${errorDetails ? '\nDétails: ' + errorDetails : ''}\n\n🔍 Vérifiez:\n- Les paramètres du template\n- Les premium features sélectionnées\n- La connectivité à l'API backend`)
+      } else if (response.status === 401) {
+        throw new Error(`❌ Unauthorized (401): Clé API invalide ou expirée`)
+      } else if (response.status === 404) {
+        throw new Error(`❌ Not Found (404): Route API introuvable: ${apiUrl}`)
+      } else if (response.status === 500) {
+        throw new Error(`❌ Server Error (500): Erreur interne du serveur de compilation`)
+      } else {
+        throw new Error(`❌ HTTP Error ${response.status}: ${errorMessage}`)
+      }
+    }
+    
+    // Analyser la réponse de succès
+    let result: CompilationResponse
+    try {
+      result = JSON.parse(responseText)
+    } catch (parseError) {
+      console.error('❌ Could not parse success response:', parseError)
+      throw new Error('Invalid JSON response from compilation API')
+    }
+    
+    console.log('📥 Parsed response:', {
+      success: result.success,
+      hasBytecode: !!result.bytecode,
+      hasAbi: !!result.abi,
+      warningsCount: result.warnings?.length || 0
+    })
     
     if (!result.success) {
       throw new Error(result.error || 'Compilation failed')
@@ -61,9 +152,23 @@ export async function compileWithBackend(
     }
   } catch (error: any) {
     console.error('❌ Backend compilation error:', error)
+    
+    // Erreurs de connectivité
     if (error.message.includes('fetch failed') || error.message.includes('Failed to fetch')) {
-      throw new Error('Compiler backend is not available. Please check your network connection.')
+      throw new Error('🔌 Compiler backend is not available. Please check your network connection.\n\nPossible solutions:\n- Check if the backend is running\n- Verify your internet connection\n- Try again in a few moments')
     }
+    
+    // Erreurs CORS
+    if (error.message.includes('CORS')) {
+      throw new Error('🔐 CORS error: Backend configuration issue. Please contact support.')
+    }
+    
+    // Erreurs de timeout
+    if (error.name === 'AbortError' || error.message.includes('timeout')) {
+      throw new Error('⏱️ Request timeout: The compilation is taking too long. Please try again.')
+    }
+    
+    // Re-lancer l'erreur avec plus de contexte
     throw error
   }
 }
@@ -83,10 +188,28 @@ function getContractName(templateType: TemplateType, params: Record<string, any>
   }
 }
 
-// Fonctions simplifiées pour la compatibilité - désactivées car nous utilisons Foundry
-export async function getCacheStats(): Promise<{ success: boolean }> {
-  console.log('📊 Cache stats disabled - using Foundry compilation')
-  return { success: true }
+/**
+ * Test de connectivité API
+ */
+export async function testApiConnectivity(): Promise<{ success: boolean; message: string }> {
+  try {
+    console.log('🔍 Testing API connectivity to:', API_BASE_URL)
+    
+    const response = await fetch(`${API_BASE_URL}/health`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    if (response.ok) {
+      return { success: true, message: 'Backend API is accessible' }
+    } else {
+      return { success: false, message: `API returned ${response.status}: ${response.statusText}` }
+    }
+  } catch (error: any) {
+    return { success: false, message: `API connectivity failed: ${error.message}` }
+  }
 }
 
 export async function warmupCache(): Promise<{ success: boolean }> {

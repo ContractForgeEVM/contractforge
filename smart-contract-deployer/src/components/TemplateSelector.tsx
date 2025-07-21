@@ -1,3 +1,4 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Card,
@@ -16,7 +17,8 @@ import {
 } from '@mui/icons-material'
 import type { ContractTemplate } from '../types'
 import { templates } from '../data/templates'
-import SupportedNetworks from './SupportedNetworks'
+import { SupportedNetworksHeader } from './SupportedNetworks'
+
 interface TemplateSelectorProps {
   selectedTemplate: ContractTemplate | null
   onSelectTemplate: (template: ContractTemplate) => void
@@ -34,6 +36,9 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate }: TemplateSelect
   }
   return (
     <Box>
+      {/* Affichage des réseaux supportés en haut */}
+      <SupportedNetworksHeader />
+      
       <Stack spacing={1} alignItems="center" sx={{ mb: 4 }}>
         <Typography
           variant="h2"
@@ -243,7 +248,6 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate }: TemplateSelect
           </CardActionArea>
         </Card>
       </Box>
-      <SupportedNetworks />
     </Box>
   )
 }

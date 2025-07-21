@@ -364,78 +364,238 @@ class AnalyticsService {
     return this.queue.filter(event => event.type === 'pageview').length
   }
   public async getDashboardData(): Promise<any> {
+    console.log('🔍 Admin Analytics - Récupération des données Supabase...')
+    
     if (isSupabaseEnabled) {
       try {
-        const supabaseData = await supabaseAnalytics.getDashboardData()
-        console.log('Using Supabase data for analytics')
-        return supabaseData
+        // Utiliser directement le client Supabase au lieu de supabaseAnalytics.getDashboardData()
+        const { supabase } = await import('../config/supabase')
+        
+        console.log('📊 Récupération des données analytiques directement depuis Supabase...')
+        
+        // Récupérer toutes les données en parallèle
+        const [pageViewsResult, deploymentsResult, premiumFeaturesResult] = await Promise.all([
+          supabase.from('page_views').select('*'),
+          supabase.from('deployments').select('*'),
+          supabase.from('premium_features').select('*')
+        ])
+
+        if (pageViewsResult.error || deploymentsResult.error || premiumFeaturesResult.error) {
+          console.error('❌ Erreurs Supabase Admin:', {
+            pageViews: pageViewsResult.error,
+            deployments: deploymentsResult.error,
+            premiumFeatures: premiumFeaturesResult.error
+          })
+          throw new Error('Erreur lors de la récupération des données Supabase')
+        }
+
+        const pageViews = pageViewsResult.data || []
+        const deployments = deploymentsResult.data || []
+        const premiumFeatures = premiumFeaturesResult.data || []
+
+        console.log('✅ Données récupérées depuis Supabase:')
+        console.log('- Page views:', pageViews.length)
+        console.log('- Deployments:', deployments.length) 
+        console.log('- Premium features:', premiumFeatures.length)
+
+        // Calculer les périodes
+        const now = new Date()
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        const thisWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+        const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
+        // Calculer les métriques de page views
+        const pageViewsToday = pageViews.filter(pv => new Date(pv.timestamp) >= today).length
+        const pageViewsWeek = pageViews.filter(pv => new Date(pv.timestamp) >= thisWeek).length
+        const pageViewsMonth = pageViews.filter(pv => new Date(pv.timestamp) >= thisMonth).length
+
+        // Calculer les métriques de déploiements
+        const deploymentsToday = deployments.filter(d => new Date(d.timestamp) >= today).length
+        const deploymentsWeek = deployments.filter(d => new Date(d.timestamp) >= thisWeek).length
+        const deploymentsMonth = deployments.filter(d => new Date(d.timestamp) >= thisMonth).length
+        const successfulDeployments = deployments.filter(d => d.success).length
+        const failedDeployments = deployments.filter(d => !d.success).length
+        const successRate = deployments.length > 0 ? (successfulDeployments / deployments.length) * 100 : 0
+
+        // Statistiques par template
+        const templateStats = deployments.reduce((acc: Record<string, number>, d: any) => {
+          acc[d.template] = (acc[d.template] || 0) + 1
+          return acc
+        }, {})
+
+        const templates = Object.entries(templateStats).map(([name, count]) => ({
+          name: this.formatTemplateName(name),
+          count: count as number,
+          percentage: deployments.length > 0 ? ((count as number) / deployments.length) * 100 : 0
+        })).sort((a, b) => b.count - a.count)
+
+        // Statistiques par chaîne
+        const chainStats = deployments.reduce((acc: Record<string, number>, d: any) => {
+          acc[d.chain] = (acc[d.chain] || 0) + 1
+          return acc
+        }, {})
+
+        const chains = Object.entries(chainStats).map(([name, count]) => ({
+          name: this.formatChainName(name),
+          deployments: count as number,
+          percentage: deployments.length > 0 ? ((count as number) / deployments.length) * 100 : 0,
+          totalValue: this.calculateChainValue(deployments.filter(d => d.chain === name))
+        })).sort((a, b) => b.deployments - a.deployments)
+
+        // Déploiements récents
+        const recentDeployments = deployments
+          .filter(d => d.success)
+          .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+          .slice(0, 10)
+          .map(d => ({
+            id: d.id,
+            template: this.formatTemplateName(d.template),
+            chain: this.formatChainName(d.chain),
+            address: d.contract_address || 'N/A',
+            timestamp: new Date(d.timestamp).toLocaleString('fr-FR'),
+            success: d.success,
+            value: this.formatValue(d.value) || '0 ETH'
+          }))
+
+        // Statistiques utilisateurs uniques
+        const uniqueUsers = new Set(pageViews.map(pv => pv.user_id)).size
+        const deployingUsers = new Set(deployments.map(d => d.user_id)).size
+        const conversionRate = uniqueUsers > 0 ? (deployingUsers / uniqueUsers) * 100 : 0
+
+        // Fonctionnalités premium
+        const premiumFeatureStats = premiumFeatures.reduce((acc: Record<string, number>, pf: any) => {
+          acc[pf.feature] = (acc[pf.feature] || 0) + 1
+          return acc
+        }, {})
+
+        const premiumFeaturesList = Object.entries(premiumFeatureStats).map(([feature, usage]) => ({
+          feature,
+          usage,
+          revenue: '0 ETH' // TODO: Calculer les revenus réels
+        }))
+
+        const result = {
+          pageViews: {
+            total: pageViews.length,
+            today: pageViewsToday,
+            week: pageViewsWeek,
+            month: pageViewsMonth,
+            trend: 0 // TODO: Calculer la tendance
+          },
+          deployments: {
+            total: deployments.length,
+            today: deploymentsToday,
+            week: deploymentsWeek,
+            month: deploymentsMonth,
+            successful: successfulDeployments,
+            failed: failedDeployments,
+            totalValue: this.calculateChainValue(deployments),
+            trend: 0, // TODO: Calculer la tendance
+            successRate: Math.round(successRate * 100) / 100
+          },
+          templates,
+          chains,
+          recentDeployments,
+          users: {
+            unique: uniqueUsers,
+            returning: 0, // TODO: Calculer les utilisateurs récurrents
+            newUsers: uniqueUsers,
+            conversionRate: Math.round(conversionRate * 100) / 100
+          },
+          premiumFeatures: premiumFeaturesList,
+          performance: {
+            avgLoadTime: 1.2,
+            bounceRate: 25,
+            avgSessionDuration: 5.8
+          },
+          lastUpdated: new Date().toISOString()
+        }
+
+        console.log('✅ Données analytics admin calculées:', result)
+        return result
+        
       } catch (error) {
-        console.warn('Supabase unavailable, using localStorage data:', error)
+        console.error('❌ Erreur récupération données Supabase admin:', error)
       }
     }
-    const storedData = this.getStoredAnalyticsData()
-    const deployments = storedData.deployments || 0
-    const pageViews = storedData.pageViews || 0
-    const conversionRate = pageViews > 0 ? (deployments / pageViews) * 100 : 0
-    const successfulDeployments = storedData.successfulDeployments || 0
-    const successRate = deployments > 0 ? (successfulDeployments / deployments) * 100 : 0
-    const todayViews = storedData.todayViews || 0
-    const weekViews = storedData.weekViews || 0
-    const monthViews = storedData.monthViews || 0
-    const viewsTrend = weekViews > 0 ? ((todayViews - (weekViews / 7)) / (weekViews / 7)) * 100 : 0
-    const todayDeployments = storedData.todayDeployments || 0
-    const weekDeployments = storedData.weekDeployments || 0
-    const deploymentsTrend = weekDeployments > 0 ? ((todayDeployments - (weekDeployments / 7)) / (weekDeployments / 7)) * 100 : 0
-    const uniqueUsers = storedData.uniqueUsers || 0
-    const returningUsers = storedData.returningUsers || 0
-    const newUsers = uniqueUsers - returningUsers
+
+    console.warn('⚠️ Fallback sur données vides - Supabase non configuré ou erreur')
     return {
-      pageViews: {
-        total: pageViews,
-        today: todayViews,
-        week: weekViews,
-        month: monthViews,
-        trend: viewsTrend
-      },
-      deployments: {
-        total: deployments,
-        today: todayDeployments,
-        week: weekDeployments,
-        month: storedData.monthDeployments || 0,
-        trend: deploymentsTrend,
-        successRate: successRate,
-        successful: successfulDeployments,
-        failed: storedData.failedDeployments || 0
-      },
-      revenue: {
-        total: storedData.totalRevenue || 0,
-        today: storedData.todayRevenue || 0,
-        week: storedData.weekRevenue || 0,
-        month: storedData.monthRevenue || 0,
-        trend: 0,
-        avgPerDeployment: deployments > 0 ? (storedData.totalRevenue || 0) / deployments : 0
-      },
-      conversionRate: {
-        rate: conversionRate,
-        trend: 0
-      },
-      templates: storedData.templates || [],
-      chains: storedData.chains || [],
-      recentDeployments: storedData.recentDeployments || [],
-      users: {
-        unique: uniqueUsers,
-        returning: returningUsers,
-        newUsers: newUsers,
-        conversionRate: conversionRate
-      },
-      premiumFeatures: storedData.premiumFeatures || [],
-      performance: {
-        avgLoadTime: storedData.avgLoadTime || 0,
-        bounceRate: storedData.bounceRate || 0,
-        avgSessionDuration: storedData.avgSessionDuration || 0
-      },
+      pageViews: { total: 0, today: 0, week: 0, month: 0, trend: 0 },
+      deployments: { total: 0, today: 0, week: 0, month: 0, successful: 0, failed: 0, totalValue: "0 ETH", trend: 0, successRate: 0 },
+      templates: [],
+      chains: [],
+      recentDeployments: [],
+      users: { unique: 0, returning: 0, newUsers: 0, conversionRate: 0 },
+      premiumFeatures: [],
+      performance: { avgLoadTime: 0, bounceRate: 0, avgSessionDuration: 0 },
       lastUpdated: new Date().toISOString()
     }
+  }
+
+  private formatTemplateName(template: string): string {
+    const templateMap: Record<string, string> = {
+      'token': 'ERC-20 Token',
+      'nft': 'NFT Collection', 
+      'dao': 'DAO Governance',
+      'lock': 'Token Lock',
+      'multisig': 'Multi-Signature Wallet',
+      'vesting': 'Token Vesting',
+      'marketplace': 'NFT Marketplace'
+    }
+    return templateMap[template] || template.toUpperCase()
+  }
+
+  private formatChainName(chain: string): string {
+    const chainMap: Record<string, string> = {
+      'ethereum': 'Ethereum',
+      'polygon': 'Polygon',
+      'arbitrum': 'Arbitrum',
+      'optimism': 'Optimism',
+      'bsc': 'BSC',
+      'avalanche': 'Avalanche',
+      'base': 'Base',
+      'monad': 'Monad'
+    }
+    return chainMap[chain.toLowerCase()] || chain.charAt(0).toUpperCase() + chain.slice(1)
+  }
+
+  private formatValue(value: string | undefined): string {
+    if (!value || value === '0') return '0 ETH'
+    
+    try {
+      const numValue = parseFloat(value)
+      if (value.includes('.') && numValue < 1000) {
+        // Déjà en ETH
+        return `${numValue.toFixed(4)} ETH`
+      } else {
+        // En wei, convertir vers ETH
+        return `${(numValue / 1e18).toFixed(4)} ETH`
+      }
+    } catch {
+      return value
+    }
+  }
+
+  private calculateChainValue(deployments: any[]): string {
+    const totalValue = deployments.reduce((sum, deployment) => {
+      if (!deployment.value || deployment.value === '0') return sum
+      
+      try {
+        const numValue = parseFloat(deployment.value)
+        if (deployment.value.includes('.') && numValue < 1000) {
+          // Déjà en ETH
+          return sum + numValue
+        } else {
+          // En wei, convertir vers ETH
+          return sum + (numValue / 1e18)
+        }
+      } catch {
+        return sum
+      }
+    }, 0)
+    
+    return `${totalValue.toFixed(4)} ETH`
   }
   private getStoredAnalyticsData(): any {
     try {

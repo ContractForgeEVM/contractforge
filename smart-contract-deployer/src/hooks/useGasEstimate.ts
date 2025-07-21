@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAccount, usePublicClient } from 'wagmi'
 import { estimateContractDeployment } from '../utils/gasEstimator'
 import type { ContractTemplate, GasEstimate } from '../types'
-export const useGasEstimate = (template: ContractTemplate | null, params: Record<string, any>) => {
+export const useGasEstimate = (template: ContractTemplate | null, params: Record<string, any>, premiumFeatures: string[] = []) => {
   const { chain } = useAccount()
   const publicClient = usePublicClient()
   const [gasEstimate, setGasEstimate] = useState<GasEstimate | null>(null)
@@ -17,7 +17,7 @@ export const useGasEstimate = (template: ContractTemplate | null, params: Record
       try {
         const estimate = await estimateContractDeployment(
           template,
-          params,
+          { ...params, premiumFeatures },
           publicClient,
           chain.id
         )
@@ -38,6 +38,6 @@ export const useGasEstimate = (template: ContractTemplate | null, params: Record
       }
     }
     fetchGasEstimate()
-  }, [template, params, chain, publicClient])
+  }, [template, params, premiumFeatures, chain, publicClient])
   return { gasEstimate, isLoading }
 }
