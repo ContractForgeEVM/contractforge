@@ -768,24 +768,24 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = t
 
       {/* Version simple sans hero pour page séparée */}
       {!showHomepage && (
-        <Stack spacing={1} alignItems="center" sx={{ mb: 4 }}>
-          <Typography
-            variant="h2"
-            align="center"
-            sx={{
-              fontWeight: 800,
-              background: 'linear-gradient(135deg, #ffffff 0%, #94a3b8 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            {t('selectTemplate')}
-          </Typography>
-          <Typography variant="body1" color="text.secondary" align="center">
-            Choose from our battle-tested smart contract templates
-          </Typography>
-        </Stack>
+      <Stack spacing={1} alignItems="center" sx={{ mb: 4 }}>
+        <Typography
+          variant="h2"
+          align="center"
+          sx={{
+            fontWeight: 800,
+            background: 'linear-gradient(135deg, #ffffff 0%, #94a3b8 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}
+        >
+          {t('selectTemplate')}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" align="center">
+          Choose from our battle-tested smart contract templates
+        </Typography>
+      </Stack>
       )}
       <Box
         sx={{

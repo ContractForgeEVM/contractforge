@@ -5,6 +5,36 @@
 .env.production
 .env.test
 
+# Critical contract generators - kept local only
+**/contractGenerator.ts
+**/contractGenerator.ts.backup
+
+# Debug and test scripts - local development only
+debug-code-manually.js
+debug-contract-generation.js
+debug-frontend-generation.js
+debug-nft-oracle.sol
+debug-token-pausable-whitelist.sol
+debug-token-pausable.sol
+debug-*.sol
+debug-*.js
+quick-test-fixes.js
+test-all-compilations.js
+test-local-generator.js
+test-specific-errors.js
+deploy-production.sh
+
+# Test results and compilation outputs
+local-test-results.json
+compilation-test-results.json
+*-test-results.json
+
+# Deployment scripts - kept local for security
+deploy-backend.sh
+deploy-frontend.sh
+deploy-production.sh
+deploy-*.sh
+
 # Documentation and deployment files
 Docs/
 deploy-production.sh

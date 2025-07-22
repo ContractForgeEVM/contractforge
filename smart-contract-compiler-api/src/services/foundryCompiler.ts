@@ -67,6 +67,11 @@ tab_width = 4
 bracket_spacing = false
 `
     fs.writeFileSync(path.join(tempDir, 'foundry.toml'), foundryConfig)
+    
+    console.log(`🔍 DEBUG: Generated contract (first 1000 chars):`)
+    console.log(sourceCode.substring(0, 1000))
+    console.log(`🔍 DEBUG: Full contract length: ${sourceCode.length} characters`)
+    
     fs.writeFileSync(path.join(tempDir, 'src', 'Contract.sol'), sourceCode)
     if (sourceCode.includes('@openzeppelin')) {
       console.log('📦 Installing OpenZeppelin for Foundry...')
@@ -74,10 +79,14 @@ bracket_spacing = false
         await ensureOpenZeppelinCache()
         const ozTargetPath = path.join(tempDir, 'lib', 'openzeppelin-contracts')
         console.log('⚡ Copying OpenZeppelin from cache...')
+        console.log(`🔍 DEBUG: Source: ${OPENZEPPELIN_CACHE_DIR}`)
+        console.log(`🔍 DEBUG: Target: ${ozTargetPath}`)
         execSync(`cp -r ${OPENZEPPELIN_CACHE_DIR}/. ${ozTargetPath}`, { shell: '/bin/bash' })
         if (!fs.existsSync(ozTargetPath)) {
           throw new Error('OpenZeppelin installation failed')
         }
+        console.log(`🔍 DEBUG: Files copied successfully`)
+        console.log(`🔍 DEBUG: ERC721.sol exists: ${fs.existsSync(path.join(ozTargetPath, 'contracts/token/ERC721/ERC721.sol'))}`)
         console.log('✅ OpenZeppelin installed successfully')
         const remappings = [
           '@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/',
@@ -95,12 +104,55 @@ bracket_spacing = false
     const compileStart = process.hrtime.bigint()
     console.log(`⚡ Starting Foundry compilation...`)
     try {
+      console.log(`🔍 DEBUG: Executing forge build --json...`)
       const compileResult = execSync(`forge build --json`, execOptions)
       const compileEnd = process.hrtime.bigint()
       const compilationTime = Number(compileEnd - compileStart) / 1000000
       console.log(`⚡ Foundry compilation took: ${compilationTime.toFixed(2)}ms`)
+      
+      console.log(`🔍 DEBUG: Forge output length: ${compileResult.length} characters`)
+      console.log(`🔍 DEBUG: Forge output (first 500 chars):`, compileResult.toString().substring(0, 500))
+      
+      // Tenter de parser le JSON pour voir s'il y a des erreurs
+      try {
+        const forgeOutput = JSON.parse(compileResult.toString())
+        console.log(`🔍 DEBUG: Forge JSON parsed successfully`)
+        console.log(`🔍 DEBUG: Forge errors:`, forgeOutput.errors || 'none')
+        console.log(`🔍 DEBUG: Forge contracts keys:`, Object.keys(forgeOutput.contracts || {}))
+      } catch (parseError: any) {
+        console.log(`🔍 DEBUG: Failed to parse forge output as JSON:`, parseError.message)
+      }
+      
+      // DEBUG: Vérifier la structure des fichiers de sortie
+      console.log(`🔍 DEBUG: Checking output structure for contract ${contractName}`)
       const outDir = path.join(tempDir, 'out', 'Contract.sol')
+      console.log(`🔍 DEBUG: Looking in directory: ${outDir}`)
+      
+      if (fs.existsSync(outDir)) {
+        const files = fs.readdirSync(outDir)
+        console.log(`🔍 DEBUG: Files found in output directory:`, files)
+      } else {
+        console.log(`🔍 DEBUG: Output directory does not exist, checking ${tempDir}/out`)
+        if (fs.existsSync(path.join(tempDir, 'out'))) {
+          const outContents = fs.readdirSync(path.join(tempDir, 'out'))
+          console.log(`🔍 DEBUG: Contents of out directory:`, outContents)
+          
+          // Regarder dans chaque sous-dossier
+          outContents.forEach(item => {
+            const itemPath = path.join(tempDir, 'out', item)
+            if (fs.statSync(itemPath).isDirectory()) {
+              console.log(`🔍 DEBUG: Contents of ${item}:`, fs.readdirSync(itemPath))
+            }
+          })
+        } else {
+          console.log(`🔍 DEBUG: NO out directory found at all!`)
+        }
+      }
+      
       const artifactPath = path.join(outDir, `${contractName}.json`)
+      console.log(`🔍 DEBUG: Expected artifact path: ${artifactPath}`)
+      console.log(`🔍 DEBUG: Artifact exists: ${fs.existsSync(artifactPath)}`)
+      
       if (!fs.existsSync(artifactPath)) {
         throw new Error(`Artifact not found for contract ${contractName}`)
       }
