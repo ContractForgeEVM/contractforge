@@ -11,6 +11,8 @@ import { useState } from 'react'
 import LanguageToggle from './LanguageToggle'
 import SubscriptionStatus from './SubscriptionStatus'
 import { useTranslation } from 'react-i18next'
+import { isDevAccount } from '../data/premiumFeatures'
+import { useAccount } from 'wagmi'
 
 interface HeaderProps {
   onNavigateDeploy?: () => void
@@ -23,6 +25,7 @@ interface HeaderProps {
 const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigateAnalytics, currentPage = 'deploy' }: HeaderProps) => {
   const { t } = useTranslation()
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null)
+  const { address } = useAccount() // 🎯 Pour détecter le compte dev
   
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMenuAnchor(event.currentTarget)
@@ -92,6 +95,26 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
               },
             }}
           />
+          
+          {/* 🌟 Indicateur compte développeur */}
+          {isDevAccount(address) && (
+            <Chip
+              label="🎯 DEV MODE"
+              size="small"
+              sx={{
+                backgroundColor: '#ff4081',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '0.75rem',
+                animation: 'pulse 2s ease-in-out infinite',
+                '@keyframes pulse': {
+                  '0%': { opacity: 1 },
+                  '50%': { opacity: 0.7 },
+                  '100%': { opacity: 1 },
+                },
+              }}
+            />
+          )}
         </Box>
 
         {/* Desktop Navigation */}

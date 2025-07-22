@@ -24,7 +24,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-
   Paper,
   Tooltip,
   Divider,
@@ -36,16 +35,48 @@ import {
   Preview,
   Save,
   Check,
-  Error,
+  Error as ErrorIcon,
   Palette,
   Link as LinkIcon,
   ContentCopy,
   OpenInNew,
   Close,
-  Refresh
+  Refresh,
+  Warning
 } from '@mui/icons-material'
 import { useAccount } from 'wagmi'
 import { useTranslation } from 'react-i18next'
+
+// 🎯 Détection de l'environnement de développement
+const isLocalDevelopment = () => {
+  return window.location.hostname === 'localhost' || 
+         window.location.hostname === '127.0.0.1' ||
+         window.location.port !== '' ||
+         import.meta.env.DEV
+}
+
+const getBaseUrl = () => {
+  if (isLocalDevelopment()) {
+    return 'http://localhost:3004' // Port du smart-contract-compiler-api
+  }
+  return 'https://contractforge.io'
+}
+
+const getMintPagesApiUrl = () => {
+  if (isLocalDevelopment()) {
+    return 'http://localhost:3004/api/mint-pages' // API réelle des pages de mint
+  }
+  return import.meta.env.VITE_API_URL + '/api/mint-pages' || 'https://contractforge.io/api/mint-pages'
+}
+
+// Nouvelle fonction pour obtenir l'URL de la page de mint générée
+const getMintPageUrl = (subdomain: string) => {
+  if (isLocalDevelopment()) {
+    // Utiliser la page de mint complète avec design moderne, hero, wallet, footer
+    return `http://localhost:3004/api/mint-pages/preview/${subdomain}`
+  }
+  return `https://${subdomain}.contractforge.io`
+}
 
 interface MintPageConfig {
   contractAddress: string
@@ -54,6 +85,7 @@ interface MintPageConfig {
   description: string
   primaryColor: string
   backgroundColor: string
+  heroImage?: string
   price: string
   maxSupply: string
   maxPerWallet: string
@@ -84,6 +116,7 @@ const MintPageGenerator: React.FC = () => {
     description: '',
     primaryColor: '#6366f1',
     backgroundColor: '#1a202c',
+    heroImage: '',
     price: '0.01',
     maxSupply: '10000',
     maxPerWallet: '5',
@@ -98,9 +131,56 @@ const MintPageGenerator: React.FC = () => {
   const [creating, setCreating] = useState(false)
   const [created, setCreated] = useState(false)
   const [createdPageUrl, setCreatedPageUrl] = useState('')
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const [heroImagePreview, setHeroImagePreview] = useState<string | null>(null)
   
   const { address } = useAccount()
   const { t } = useTranslation()
+
+  // Détection de l'environnement au chargement
+  const isDev = isLocalDevelopment()
+
+  // Fonction pour gérer l'upload d'image hero
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validation du format et de la taille
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      alert('Format non supporté. Utilisez JPG, PNG ou WebP.')
+      return
+    }
+
+    if (file.size > 2 * 1024 * 1024) { // 2MB max
+      alert('Image trop grande. Maximum 2MB.')
+      return
+    }
+
+    setUploadingImage(true)
+    
+    try {
+      // Créer un preview local
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const result = e.target?.result as string
+        setHeroImagePreview(result)
+        setConfig({ ...config, heroImage: result })
+      }
+      reader.readAsDataURL(file)
+    } catch (error) {
+      console.error('❌ Erreur upload image:', error)
+      alert('Erreur lors de l\'upload de l\'image')
+    } finally {
+      setUploadingImage(false)
+    }
+  }
+
+  // Fonction pour supprimer l'image hero
+  const removeHeroImage = () => {
+    setHeroImagePreview(null)
+    setConfig({ ...config, heroImage: '' })
+  }
 
   useEffect(() => {
     if (address) {
@@ -167,9 +247,11 @@ const MintPageGenerator: React.FC = () => {
     
     setCheckingSubdomain(true)
     try {
-      // Utiliser votre API pour vérifier la disponibilité
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://contractforge.io'
-      const response = await fetch(`${apiUrl}/api/mint-pages/check-subdomain`, {
+      // En développement et production, utiliser l'API réelle
+      console.log(`🔍 Vérification sous-domaine: ${subdomain}`)
+      
+      const apiUrl = getMintPagesApiUrl()
+      const response = await fetch(`${apiUrl}/check-subdomain`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -225,9 +307,11 @@ const MintPageGenerator: React.FC = () => {
   const handleCreatePage = async () => {
     setCreating(true)
     try {
-      // Utiliser votre API pour créer la page
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://contractforge.io'
-      const response = await fetch(`${apiUrl}/api/mint-pages/create`, {
+      // 🎯 Utiliser l'API réelle des pages de mint (dev et prod)
+      console.log(`🎯 Création page via smart-contract-compiler-api: ${config.subdomain}`)
+      
+      const apiUrl = getMintPagesApiUrl()
+      const response = await fetch(`${apiUrl}/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -240,7 +324,8 @@ const MintPageGenerator: React.FC = () => {
           description: config.description,
           primary_color: config.primaryColor,
           background_color: config.backgroundColor,
-          mint_price: config.price,
+          hero_image: config.heroImage,
+          mint_price: parseFloat(config.price),
           max_supply: parseInt(config.maxSupply),
           max_per_wallet: parseInt(config.maxPerWallet),
           show_remaining_supply: config.showRemainingSupply,
@@ -251,22 +336,29 @@ const MintPageGenerator: React.FC = () => {
       
       if (response.ok) {
         const result = await response.json()
-        setCreatedPageUrl(result.url)
+        // 🌟 Créer l'URL avec le template simplifié pour éviter les erreurs JS
+        const pageUrl = getMintPageUrl(config.subdomain)
+        
+        setCreatedPageUrl(pageUrl)
         setCreated(true)
+        console.log(`✅ Page créée avec succès: ${pageUrl}`)
       } else {
-        console.warn('API non disponible, mode simulation...')
-        // Fallback simulation
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        setCreatedPageUrl(`https://${config.subdomain}.contractforge.io`)
-        setCreated(true)
+        const errorData = await response.json().catch(() => ({}))
+        if (response.status === 400 && errorData.error === 'Subdomain already taken') {
+          throw new Error('Ce sous-domaine est déjà utilisé. Choisissez-en un autre.')
+        }
+        throw new Error(`Erreur serveur: ${errorData.error || response.statusText}`)
       }
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Erreur création page de mint:', error)
-      // Fallback simulation en cas d'erreur
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      setCreatedPageUrl(`https://${config.subdomain}.contractforge.io`)
-      setCreated(true)
+      
+      if (isDev && error.message.includes('Failed to fetch')) {
+        // Le smart-contract-compiler-api n'est pas lancé
+        alert('⚠️ Le smart-contract-compiler-api ne semble pas être lancé.\n\nVérifiez que l\'API tourne sur le port 3004.')
+      }
+      
+      throw error // Propager l'erreur pour le debugging
     } finally {
       setCreating(false)
     }
@@ -320,12 +412,22 @@ const MintPageGenerator: React.FC = () => {
           <Typography variant="body2" color="text.secondary" mb={2}>
             Choisissez un sous-domaine unique pour votre page de mint
           </Typography>
+          
+          {/* 🎯 Alerte de développement local */}
+          {isDev && (
+            <Alert severity="info" sx={{ mb: 2 }} icon={<Warning />}>
+              <Typography variant="body2">
+                <strong>Mode développement :</strong> Utilisation du vrai système de mint pages avec Web3 et badges ContractForge.io x OpenZeppelin.
+              </Typography>
+            </Alert>
+          )}
+          
           <TextField
             fullWidth
             label="Sous-domaine"
             value={config.subdomain}
             onChange={(e) => handleSubdomainChange(e.target.value)}
-            helperText={`https://${config.subdomain || 'votre-nom'}.contractforge.io`}
+            helperText={`Preview: ${getMintPageUrl(config.subdomain || 'votre-nom')}`}
             InputProps={{
               endAdornment: checkingSubdomain ? (
                 <InputAdornment position="end">
@@ -336,7 +438,7 @@ const MintPageGenerator: React.FC = () => {
                   {subdomainAvailable ? (
                     <Check color="success" />
                   ) : (
-                    <Error color="error" />
+                    <ErrorIcon color="error" />
                   )}
                 </InputAdornment>
               ) : null
@@ -350,7 +452,7 @@ const MintPageGenerator: React.FC = () => {
           )}
           {subdomainAvailable && (
             <Alert severity="success" sx={{ mt: 1 }}>
-              Sous-domaine disponible !
+              {isDev ? 'Sous-domaine valide pour la simulation !' : 'Sous-domaine disponible !'}
             </Alert>
           )}
         </Box>
@@ -376,6 +478,96 @@ const MintPageGenerator: React.FC = () => {
             onChange={(e) => setConfig({ ...config, description: e.target.value })}
                             placeholder={t('mintPage.descriptionPlaceholder')}
           />
+          
+          {/* Hero Image Upload */}
+          <Box>
+            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              🖼️ Image Hero (Optionnelle)
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Ajoutez une image d'arrière-plan personnalisée pour votre hero section. 
+              Formats supportés : JPG, PNG, WebP. Taille max : 2MB. 
+              Résolution recommandée : 1920x800px.
+            </Typography>
+            
+            {heroImagePreview ? (
+              <Box sx={{ position: 'relative', mb: 2 }}>
+                <Card sx={{ overflow: 'hidden', maxHeight: 200 }}>
+                  <Box
+                    component="img"
+                    src={heroImagePreview}
+                    alt="Hero preview"
+                    sx={{
+                      width: '100%',
+                      height: 200,
+                      objectFit: 'cover',
+                      display: 'block'
+                    }}
+                  />
+                </Card>
+                <IconButton
+                  onClick={removeHeroImage}
+                  sx={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    bgcolor: 'rgba(0,0,0,0.7)',
+                    color: 'white',
+                    '&:hover': { bgcolor: 'rgba(0,0,0,0.8)' }
+                  }}
+                  size="small"
+                >
+                  <Close />
+                </IconButton>
+              </Box>
+            ) : (
+              <Paper
+                variant="outlined"
+                sx={{
+                  p: 3,
+                  textAlign: 'center',
+                  border: '2px dashed',
+                  borderColor: 'divider',
+                  borderRadius: 2,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                    bgcolor: 'action.hover'
+                  }
+                }}
+                onClick={() => document.getElementById('hero-image-upload')?.click()}
+              >
+                {uploadingImage ? (
+                  <Stack alignItems="center" spacing={2}>
+                    <CircularProgress />
+                    <Typography>Téléchargement...</Typography>
+                  </Stack>
+                ) : (
+                  <Stack alignItems="center" spacing={2}>
+                    <Avatar sx={{ bgcolor: 'primary.main', width: 56, height: 56 }}>
+                      <Add />
+                    </Avatar>
+                    <div>
+                      <Typography variant="h6">Cliquez pour ajouter une image</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        ou glissez-déposez votre image ici
+                      </Typography>
+                    </div>
+                  </Stack>
+                )}
+              </Paper>
+            )}
+            
+            <input
+              id="hero-image-upload"
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+              onChange={handleImageUpload}
+              style={{ display: 'none' }}
+            />
+          </Box>
+
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
               fullWidth
@@ -591,27 +783,46 @@ const MintPageGenerator: React.FC = () => {
         <CardContent sx={{ textAlign: 'center', py: 4 }}>
           <Check sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
           <Typography variant="h5" gutterBottom>
-            {t('mintPage.success.title')}
+            {isDev ? '🎯 Page de mint créée avec Web3 !' : t('mintPage.success.title')}
           </Typography>
           <Typography variant="body1" color="text.secondary" mb={3}>
-            {t('mintPage.success.description')}
+            {isDev 
+              ? 'Page de mint fonctionnelle créée avec Web3, MetaMask, et badges ContractForge.io x OpenZeppelin.'
+              : t('mintPage.success.description')
+            }
           </Typography>
+          
+          {/* 🎯 Alerte spécifique au développement local */}
+          {isDev && (
+            <Alert severity="success" sx={{ mb: 3 }} icon={<Check />}>
+              <Typography variant="body2">
+                <strong>✅ Système complet :</strong> Web3, Smart Contracts, RainbowKit, Badges officiels.
+              </Typography>
+            </Alert>
+          )}
           
           <Paper sx={{ p: 2, mb: 3, backgroundColor: 'action.hover' }}>
             <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
               <LinkIcon />
-              <Typography variant="body1" fontFamily="monospace">
+              <Typography 
+                variant="body1" 
+                fontFamily="monospace"
+                color={isDev ? "text.secondary" : "text.primary"}
+                sx={isDev ? { fontStyle: 'italic' } : {}}
+              >
                 {createdPageUrl}
               </Typography>
-              <Tooltip title="Copier le lien">
+              <Tooltip title={isDev ? "Copier le lien de la page de mint" : "Copier le lien"}>
                 <IconButton
                   size="small"
                   onClick={() => navigator.clipboard.writeText(createdPageUrl)}
+                  disabled={false}
+                  sx={{}}
                 >
                   <ContentCopy fontSize="small" />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Ouvrir la page">
+              <Tooltip title={isDev ? "Ouvrir la page de mint" : "Ouvrir la page"}>
                 <IconButton
                   size="small"
                   onClick={() => window.open(createdPageUrl, '_blank')}
@@ -627,7 +838,7 @@ const MintPageGenerator: React.FC = () => {
               variant="contained"
               onClick={() => window.open(createdPageUrl, '_blank')}
             >
-              Voir la page
+              {isDev ? 'Voir la page de mint' : 'Voir la page'}
             </Button>
             <Button
               variant="outlined"
@@ -660,6 +871,17 @@ const MintPageGenerator: React.FC = () => {
 
   return (
     <Box>
+      {/* 🎯 Alerte globale de développement local */}
+      {isDev && (
+        <Alert severity="info" sx={{ mb: 3 }} icon={<Warning />}>
+          <Typography variant="body2">
+            <strong>Mode développement détecté :</strong> Le générateur utilise le smart-contract-compiler-api local (port 3004).
+            <br />
+            💡 <strong>Fonctionnalités disponibles :</strong> Pages de mint avec Web3, badges ContractForge.io x OpenZeppelin, styles RainbowKit
+          </Typography>
+        </Alert>
+      )}
+      
       <Alert severity="info" sx={{ mb: 3 }}>
         <Typography variant="body2">
           {t('mintPage.info')}
@@ -712,8 +934,13 @@ const MintPageGenerator: React.FC = () => {
               <Typography variant="subtitle2" color="text.secondary">
                 URL de la page
               </Typography>
-              <Typography variant="body1" fontFamily="monospace">
-                https://{config.subdomain}.contractforge.io
+              <Typography 
+                variant="body1" 
+                fontFamily="monospace"
+                color="text.primary"
+                sx={{}}
+              >
+                {getMintPageUrl(config.subdomain)}
               </Typography>
             </Box>
             <Box>
@@ -744,7 +971,10 @@ const MintPageGenerator: React.FC = () => {
               onClick={handleCreatePage}
               disabled={creating}
             >
-              {creating ? t('mintPage.creating') : t('mintPage.createPage')}
+              {creating 
+                ? (isDev ? 'Création Web3...' : t('mintPage.creating'))
+                : (isDev ? 'Créer page Web3' : t('mintPage.createPage'))
+              }
             </Button>
             <Button
               variant="outlined"
@@ -768,6 +998,7 @@ const MintPageGenerator: React.FC = () => {
         onClose={() => setShowPreview(false)}
         config={config}
         contract={selectedContract}
+        isDev={isDev}
       />
     </Box>
   )
@@ -779,31 +1010,62 @@ interface MintPagePreviewProps {
   onClose: () => void
   config: MintPageConfig
   contract?: NFTContract
+  isDev: boolean
 }
 
-const MintPagePreview: React.FC<MintPagePreviewProps> = ({ open, onClose, config, contract }) => {
+const MintPagePreview: React.FC<MintPagePreviewProps> = ({ open, onClose, config, contract, isDev }) => {
   const { t } = useTranslation()
   
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h6">{t('mintPage.previewTitle')}</Typography>
+          <Typography variant="h6">
+            {isDev ? '🎯 Aperçu local de la page de mint' : t('mintPage.previewTitle')}
+          </Typography>
           <IconButton onClick={onClose}>
             <Close />
           </IconButton>
         </Box>
       </DialogTitle>
       <DialogContent>
+        {/* 🎯 Alerte mode dev dans l'aperçu */}
+        {isDev && (
+          <Alert severity="success" sx={{ mb: 3 }} icon={<Check />}>
+            <Typography variant="body2">
+              <strong>Aperçu du système complet :</strong> Cette page utilisera Web3, MetaMask, et les badges ContractForge.io x OpenZeppelin.
+              La fonctionnalité de mint sera entièrement opérationnelle.
+            </Typography>
+          </Alert>
+        )}
+        
         <Box 
           sx={{ 
             bgcolor: config.backgroundColor,
             color: config.backgroundColor === '#1a202c' ? 'white' : 'black',
             p: 3,
             borderRadius: 2,
-            minHeight: 400
+            minHeight: 400,
+            position: 'relative'
           }}
         >
+          {/* Badge mode dev dans l'aperçu */}
+          {isDev && (
+            <Chip
+              label="🎯 MODE DEV"
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: 10,
+                right: 10,
+                backgroundColor: '#ff4081',
+                color: 'white',
+                fontWeight: 'bold',
+                zIndex: 1
+              }}
+            />
+          )}
+          
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography variant="h3" sx={{ color: config.primaryColor, mb: 2 }}>
               {config.title || 'Titre de votre NFT'}
@@ -846,9 +1108,16 @@ const MintPagePreview: React.FC<MintPagePreviewProps> = ({ open, onClose, config
                 bgcolor: config.primaryColor,
                 '&:hover': { bgcolor: config.primaryColor }
               }}
+              disabled={false} // Plus désactivé en mode dev
             >
-              Mint maintenant
+              {isDev ? 'Mint NFT (Web3 actif)' : 'Mint maintenant'}
             </Button>
+
+            {isDev && (
+              <Typography variant="caption" color="success.main" display="block" textAlign="center" mt={1}>
+                ✅ Bouton de mint fonctionnel avec Web3
+              </Typography>
+            )}
 
             {(config.socialLinks.twitter || config.socialLinks.discord || config.socialLinks.website) && (
               <Box sx={{ mt: 2, textAlign: 'center' }}>

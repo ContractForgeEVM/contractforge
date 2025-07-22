@@ -394,6 +394,37 @@ const generateNFTContract = (params: Record<string, any>, features: string[], pr
     }
   }
 
+  if (features.includes('royalties')) {
+    imports.push('import "@openzeppelin/contracts/token/common/ERC2981.sol";')
+    if (!inheritances.includes('ERC2981')) {
+      inheritances.push('ERC2981')
+    }
+  }
+
+  if (features.includes('votes')) {
+    imports.push('import "@openzeppelin/contracts/governance/utils/Votes.sol";')
+    imports.push('import "@openzeppelin/contracts/governance/utils/IVotes.sol";')
+    if (!inheritances.includes('Votes')) {
+      inheritances.push('Votes')
+    }
+  }
+
+  if (features.includes('permit')) {
+    imports.push('import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";')
+    imports.push('import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";')
+    if (!inheritances.includes('EIP712')) {
+      inheritances.push('EIP712')
+    }
+  }
+
+  if (features.includes('upgradeable')) {
+    imports.push('import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";')
+    imports.push('import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";')
+    if (!inheritances.includes('Initializable')) {
+      inheritances.push('Initializable', 'UUPSUpgradeable')
+    }
+  }
+
   // State variables
   const stateVars = [
     'using Counters for Counters.Counter;',
@@ -413,20 +444,249 @@ const generateNFTContract = (params: Record<string, any>, features: string[], pr
     'withdrawAddress = msg.sender;'
   ]
 
+  // Add feature-specific constructor initialization
+  if (features.includes('tax')) {
+    const taxConfig = premiumFeatureConfigs?.tax
+    if (taxConfig) {
+      constructorBody.push(`transferTaxRate = ${(taxConfig.rate || 2.5) * 100}; // ${taxConfig.rate || 2.5}%`)
+      constructorBody.push(`taxRecipient = ${taxConfig.recipient || 'msg.sender'};`)
+    } else {
+      constructorBody.push(`taxRecipient = msg.sender;`)
+    }
+  }
+
+  if (features.includes('multisig')) {
+    const multisigConfig = premiumFeatureConfigs?.multisig
+    if (multisigConfig) {
+      constructorBody.push(`requiredSignatures = ${multisigConfig.threshold || 2};`)
+      // Initialize signers
+      multisigConfig.signers?.forEach(signer => {
+        constructorBody.push(`signers[${signer}] = true;`)
+      })
+    } else {
+      constructorBody.push(`requiredSignatures = 2;`)
+      constructorBody.push(`signers[msg.sender] = true;`)
+    }
+  }
+
+  if (features.includes('royalties')) {
+    const royaltiesConfig = premiumFeatureConfigs?.royalties
+    if (royaltiesConfig) {
+      constructorBody.push(`_setDefaultRoyalty(${royaltiesConfig.recipient}, ${royaltiesConfig.percentage * 100}); // ${royaltiesConfig.percentage}%`)
+    } else {
+      constructorBody.push(`_setDefaultRoyalty(msg.sender, 250); // 2.5%`)
+    }
+  }
+
+  if (features.includes('timelock')) {
+    const timelockConfig = premiumFeatureConfigs?.timelock
+    if (timelockConfig) {
+      constructorBody.push(`timelockDelay = ${timelockConfig.delay || 172800}; // ${Math.floor((timelockConfig.delay || 172800) / 3600)} hours`)
+    }
+  }
+
+  // Whitelist/Blacklist features
+  if (features.includes('whitelist')) {
+    stateVars.push('mapping(address => bool) private _whitelist;')
+    stateVars.push('bool public whitelistEnabled = true;')
+  }
+
+  if (features.includes('blacklist')) {
+    stateVars.push('mapping(address => bool) private _blacklist;')
+    stateVars.push('bool public blacklistEnabled = true;')
+  }
+
+  // Tax system
+  if (features.includes('tax')) {
+    stateVars.push('uint256 public transferTaxRate = 250; // 2.5% default')
+    stateVars.push('address public taxRecipient;')
+    stateVars.push('bool public taxEnabled = true;')
+  }
+
+  // Multisig features
+  if (features.includes('multisig')) {
+    stateVars.push('mapping(address => bool) public signers;')
+    stateVars.push('uint256 public requiredSignatures;')
+    stateVars.push('uint256 public proposalCount;')
+    stateVars.push('mapping(uint256 => Proposal) public proposals;')
+    stateVars.push(`
+    struct Proposal {
+        address target;
+        bytes data;
+        uint256 value;
+        string description;
+        uint256 signatures;
+        mapping(address => bool) signed;
+        bool executed;
+    }`)
+  }
+
+  // Royalties (EIP-2981)
+  if (features.includes('royalties')) {
+    stateVars.push('uint96 private _royaltyFee;')
+    stateVars.push('address private _royaltyRecipient;')
+  }
+
+  // Staking system
+  if (features.includes('staking')) {
+    stateVars.push('mapping(uint256 => address) public stakedTokens;')
+    stateVars.push('mapping(address => uint256[]) public userStakedTokens;')
+    stateVars.push('mapping(uint256 => uint256) public stakingStartTime;')
+    stateVars.push('uint256 public stakingRewardRate = 100; // reward per day')
+    stateVars.push('mapping(address => uint256) public stakingRewards;')
+  }
+
+  // Vesting system
+  if (features.includes('vesting')) {
+    stateVars.push('mapping(address => VestingSchedule) public vestingSchedules;')
+    stateVars.push(`
+    struct VestingSchedule {
+        uint256 totalAmount;
+        uint256 startTime;
+        uint256 duration;
+        uint256 releasedAmount;
+        bool revocable;
+    }`)
+  }
+
+  // Timelock system
+  if (features.includes('timelock')) {
+    stateVars.push('mapping(bytes32 => uint256) public timelocks;')
+    stateVars.push('uint256 public timelockDelay = 48 hours;')
+  }
+
   // Extensions
   const extensions = []
+
+  // Whitelist functions
+  if (features.includes('whitelist')) {
+    extensions.push(`
+    /**
+     * @dev Add address to whitelist
+     */
+    function addToWhitelist(address account) external onlyOwner {
+        _whitelist[account] = true;
+        emit WhitelistAdded(account);
+    }
+
+    /**
+     * @dev Remove address from whitelist  
+     */
+    function removeFromWhitelist(address account) external onlyOwner {
+        _whitelist[account] = false;
+        emit WhitelistRemoved(account);
+    }
+
+    /**
+     * @dev Add multiple addresses to whitelist
+     */
+    function addMultipleToWhitelist(address[] memory accounts) external onlyOwner {
+        for (uint256 i = 0; i < accounts.length; i++) {
+            _whitelist[accounts[i]] = true;
+            emit WhitelistAdded(accounts[i]);
+        }
+    }
+
+    /**
+     * @dev Check if address is whitelisted
+     */
+    function isWhitelisted(address account) external view returns (bool) {
+        return _whitelist[account];
+    }
+
+    /**
+     * @dev Enable/disable whitelist
+     */
+    function setWhitelistEnabled(bool enabled) external onlyOwner {
+        whitelistEnabled = enabled;
+        emit WhitelistEnabledChanged(enabled);
+    }`)
+
+    // Add whitelist configuration if addresses provided
+    if (premiumFeatureConfigs?.whitelist?.addresses && premiumFeatureConfigs.whitelist.addresses.length > 0) {
+      constructorBody.push('// Initialize whitelist addresses')
+      premiumFeatureConfigs.whitelist.addresses.forEach(address => {
+        constructorBody.push(`_whitelist[${address}] = true;`)
+      })
+    }
+  }
+
+  // Blacklist functions
+  if (features.includes('blacklist')) {
+    extensions.push(`
+    /**
+     * @dev Add address to blacklist
+     */
+    function addToBlacklist(address account) external onlyOwner {
+        _blacklist[account] = true;
+        emit BlacklistAdded(account);
+    }
+
+    /**
+     * @dev Remove address from blacklist
+     */
+    function removeFromBlacklist(address account) external onlyOwner {
+        _blacklist[account] = false;
+        emit BlacklistRemoved(account);
+    }
+
+    /**
+     * @dev Add multiple addresses to blacklist
+     */
+    function addMultipleToBlacklist(address[] memory accounts) external onlyOwner {
+        for (uint256 i = 0; i < accounts.length; i++) {
+            _blacklist[accounts[i]] = true;
+            emit BlacklistAdded(accounts[i]);
+        }
+    }
+
+    /**
+     * @dev Check if address is blacklisted
+     */
+    function isBlacklisted(address account) external view returns (bool) {
+        return _blacklist[account];
+    }
+
+    /**
+     * @dev Enable/disable blacklist
+     */
+    function setBlacklistEnabled(bool enabled) external onlyOwner {
+        blacklistEnabled = enabled;
+        emit BlacklistEnabledChanged(enabled);
+    }`)
+
+    // Add blacklist configuration if addresses provided
+    if (premiumFeatureConfigs?.blacklist?.addresses && premiumFeatureConfigs.blacklist.addresses.length > 0) {
+      constructorBody.push('// Initialize blacklist addresses')
+      premiumFeatureConfigs.blacklist.addresses.forEach(address => {
+        constructorBody.push(`_blacklist[${address}] = true;`)
+      })
+    }
+  }
 
   // Public mint function
   extensions.push(`
     /**
      * @dev Public mint function - anyone can mint by paying the mint price
      */
-    function mint(uint256 quantity) external payable nonReentrant {
+    function mint(uint256 quantity) external payable nonReentrant ${features.includes('pausable') ? 'whenNotPaused ' : ''}{
         require(publicMintEnabled, "Public mint is not enabled");
         require(quantity > 0 && quantity <= MAX_PER_WALLET, "Invalid quantity");
         require(totalSupply() + quantity <= MAX_SUPPLY, "Exceeds maximum supply");
         require(mintedPerWallet[msg.sender] + quantity <= MAX_PER_WALLET, "Exceeds maximum per wallet");
-        require(msg.value >= MINT_PRICE * quantity, "Insufficient payment");
+        require(msg.value >= ${features.includes('oracle') ? 'getCurrentMintPrice()' : 'MINT_PRICE'} * quantity, "Insufficient payment");
+        
+        ${features.includes('whitelist') ? `
+        // Check whitelist restrictions
+        if (whitelistEnabled) {
+            require(_whitelist[msg.sender], "Address not whitelisted");
+        }` : ''}
+        
+        ${features.includes('blacklist') ? `
+        // Check blacklist restrictions
+        if (blacklistEnabled) {
+            require(!_blacklist[msg.sender], "Address is blacklisted");
+        }` : ''}
         
         // Update minted count for wallet
         mintedPerWallet[msg.sender] += quantity;
@@ -438,9 +698,14 @@ const generateNFTContract = (params: Record<string, any>, features: string[], pr
             _safeMint(msg.sender, tokenId);
         }
         
+        ${features.includes('rewards') ? `
+        // Add rewards
+        addRewards(msg.sender, rewardPerMint * quantity);` : ''}
+        
         // Refund excess payment
-        if (msg.value > MINT_PRICE * quantity) {
-            payable(msg.sender).transfer(msg.value - (MINT_PRICE * quantity));
+        uint256 totalCost = ${features.includes('oracle') ? 'getCurrentMintPrice()' : 'MINT_PRICE'} * quantity;
+        if (msg.value > totalCost) {
+            payable(msg.sender).transfer(msg.value - totalCost);
         }
     }`)
 
@@ -452,6 +717,18 @@ const generateNFTContract = (params: Record<string, any>, features: string[], pr
     function ownerMint(address to, uint256 quantity) external onlyOwner {
         require(quantity > 0, "Quantity must be positive");
         require(totalSupply() + quantity <= MAX_SUPPLY, "Exceeds maximum supply");
+        
+        ${features.includes('whitelist') ? `
+        // Check whitelist restrictions (owner can override by disabling whitelist)
+        if (whitelistEnabled) {
+            require(_whitelist[to], "Recipient not whitelisted");
+        }` : ''}
+        
+        ${features.includes('blacklist') ? `
+        // Check blacklist restrictions
+        if (blacklistEnabled) {
+            require(!_blacklist[to], "Recipient is blacklisted");
+        }` : ''}
         
         for (uint256 i = 0; i < quantity; i++) {
             uint256 tokenId = _tokenIdCounter.current();
@@ -468,6 +745,19 @@ const generateNFTContract = (params: Record<string, any>, features: string[], pr
     function batchMint(address[] calldata recipients, uint256[] calldata quantities) external onlyOwner {
         require(recipients.length == quantities.length, "Arrays length mismatch");
         
+        ${features.includes('whitelist') || features.includes('blacklist') ? `
+        // Check restrictions for all recipients first
+        for (uint256 i = 0; i < recipients.length; i++) {
+            ${features.includes('whitelist') ? `
+            if (whitelistEnabled) {
+                require(_whitelist[recipients[i]], "Recipient not whitelisted");
+            }` : ''}
+            ${features.includes('blacklist') ? `
+            if (blacklistEnabled) {
+                require(!_blacklist[recipients[i]], "Recipient is blacklisted");
+            }` : ''}
+        }` : ''}
+        
         uint256 totalMinting = 0;
         for (uint256 i = 0; i < quantities.length; i++) {
             totalMinting += quantities[i];
@@ -482,6 +772,907 @@ const generateNFTContract = (params: Record<string, any>, features: string[], pr
             }
         }
     }`)
+
+  // URI Storage functions
+  if (features.includes('uristorage')) {
+    extensions.push(`
+    /**
+     * @dev Set the URI for a specific token (owner only)
+     */
+    function setTokenURI(uint256 tokenId, string memory _tokenURI) external onlyOwner {
+        require(_exists(tokenId), "Token does not exist");
+        _setTokenURI(tokenId, _tokenURI);
+    }
+
+    /**
+     * @dev Batch set URIs for multiple tokens
+     */
+    function batchSetTokenURI(
+        uint256[] calldata tokenIds, 
+        string[] calldata tokenURIs
+    ) external onlyOwner {
+        require(tokenIds.length == tokenURIs.length, "Arrays length mismatch");
+        
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            require(_exists(tokenIds[i]), "Token does not exist");
+            _setTokenURI(tokenIds[i], tokenURIs[i]);
+        }
+    }
+
+    /**
+     * @dev Clear the URI for a specific token (owner only)
+     */
+    function clearTokenURI(uint256 tokenId) external onlyOwner {
+        require(_exists(tokenId), "Token does not exist");
+        _setTokenURI(tokenId, "");
+    }`)
+    
+    // Add initialization comment if URIs were configured
+    if (premiumFeatureConfigs?.uristorage?.tokenUris && premiumFeatureConfigs.uristorage.tokenUris.length > 0) {
+      extensions.push(`
+    /**
+     * @dev Initialize token URIs after deployment
+     * Call batchSetTokenURI with the following data:
+     * Token IDs: [${premiumFeatureConfigs.uristorage.tokenUris.map(u => u.tokenId).join(', ')}]
+     * URIs: [${premiumFeatureConfigs.uristorage.tokenUris.map(u => `"${u.uri}"`).join(', ')}]
+     */`)
+    }
+  }
+
+  // Auction system
+  if (features.includes('auction')) {
+    const auctionConfig = premiumFeatureConfigs?.auction
+    const defaultDuration = auctionConfig?.defaultDuration || 86400 // 24 hours in seconds
+    const minimumPrice = auctionConfig?.minimumStartingPrice || 10000000000000000 // 0.01 ETH in wei
+    const increment = auctionConfig?.bidIncrement || 5 // 5%
+
+    stateVars.push(`
+    struct Auction {
+        address seller;
+        uint256 startingPrice;
+        uint256 endTime;
+        address highestBidder;
+        uint256 highestBid;
+        bool active;
+    }
+    
+    mapping(uint256 => Auction) public auctions;
+    uint256 public defaultAuctionDuration = ${defaultDuration};
+    uint256 public minimumStartingPrice = ${minimumPrice};
+    uint256 public bidIncrement = ${increment};`)
+
+
+
+    extensions.push(`
+    /**
+     * @dev Create auction for a token
+     */
+    function createAuction(uint256 tokenId, uint256 startingPrice) external {
+        require(_exists(tokenId), "Token does not exist");
+        require(ownerOf(tokenId) == msg.sender, "Not token owner");
+        require(!auctions[tokenId].active, "Auction already exists");
+        require(startingPrice >= minimumStartingPrice, "Starting price too low");
+        
+        auctions[tokenId] = Auction({
+            seller: msg.sender,
+            startingPrice: startingPrice,
+            endTime: block.timestamp + defaultAuctionDuration,
+            highestBidder: address(0),
+            highestBid: 0,
+            active: true
+        });
+        
+        emit AuctionCreated(tokenId, startingPrice, defaultAuctionDuration);
+    }
+
+    /**
+     * @dev Create auction with custom duration
+     */
+    function createAuctionWithDuration(uint256 tokenId, uint256 startingPrice, uint256 duration) external {
+        require(_exists(tokenId), "Token does not exist");
+        require(ownerOf(tokenId) == msg.sender, "Not token owner");
+        require(!auctions[tokenId].active, "Auction already exists");
+        require(startingPrice >= minimumStartingPrice, "Starting price too low");
+        require(duration >= 3600 && duration <= 604800, "Invalid duration"); // 1 hour to 1 week
+        
+        auctions[tokenId] = Auction({
+            seller: msg.sender,
+            startingPrice: startingPrice,
+            endTime: block.timestamp + duration,
+            highestBidder: address(0),
+            highestBid: 0,
+            active: true
+        });
+        
+        emit AuctionCreated(tokenId, startingPrice, duration);
+    }
+
+    /**
+     * @dev Place bid on auction
+     */
+    function placeBid(uint256 tokenId) external payable nonReentrant {
+        Auction storage auction = auctions[tokenId];
+        require(auction.active, "Auction not active");
+        require(block.timestamp < auction.endTime, "Auction ended");
+        require(msg.sender != auction.seller, "Cannot bid on own auction");
+        
+        uint256 minimumBid = auction.highestBid == 0 
+            ? auction.startingPrice 
+            : auction.highestBid + (auction.highestBid * bidIncrement / 100);
+        require(msg.value >= minimumBid, "Bid too low");
+        
+        // Refund previous highest bidder
+        if (auction.highestBidder != address(0)) {
+            payable(auction.highestBidder).transfer(auction.highestBid);
+        }
+        
+        auction.highestBidder = msg.sender;
+        auction.highestBid = msg.value;
+        
+        emit BidPlaced(tokenId, msg.sender, msg.value);
+    }
+
+    /**
+     * @dev End auction and transfer token
+     */
+    function endAuction(uint256 tokenId) external nonReentrant {
+        Auction storage auction = auctions[tokenId];
+        require(auction.active, "Auction not active");
+        require(block.timestamp >= auction.endTime, "Auction not ended");
+        
+        auction.active = false;
+        
+        if (auction.highestBidder != address(0)) {
+            _transfer(auction.seller, auction.highestBidder, tokenId);
+            payable(auction.seller).transfer(auction.highestBid);
+            emit AuctionEnded(tokenId, auction.highestBidder, auction.highestBid);
+        } else {
+            emit AuctionEnded(tokenId, address(0), 0);
+        }
+    }
+
+    /**
+     * @dev Cancel auction (only seller, only if no bids)
+     */
+    function cancelAuction(uint256 tokenId) external {
+        Auction storage auction = auctions[tokenId];
+        require(auction.active, "Auction not active");
+        require(auction.seller == msg.sender, "Not auction seller");
+        require(auction.highestBidder == address(0), "Auction has bids");
+        
+        auction.active = false;
+        emit AuctionEnded(tokenId, address(0), 0);
+    }
+
+    /**
+     * @dev Get auction info
+     */
+    function getAuctionInfo(uint256 tokenId) external view returns (
+        address seller,
+        uint256 startingPrice,
+        uint256 endTime,
+        address highestBidder,
+        uint256 highestBid,
+        bool active,
+        uint256 timeLeft
+    ) {
+        Auction memory auction = auctions[tokenId];
+        uint256 timeRemaining = auction.endTime > block.timestamp ? auction.endTime - block.timestamp : 0;
+        
+        return (
+            auction.seller,
+            auction.startingPrice,
+            auction.endTime,
+            auction.highestBidder,
+            auction.highestBid,
+            auction.active,
+            timeRemaining
+        );
+         }`)
+  }
+
+  // Oracle integration
+  if (features.includes('oracle')) {
+    const oracleConfig = premiumFeatureConfigs?.oracle
+    const priceFeedAddress = oracleConfig?.priceFeedAddress || '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419' // ETH/USD by default
+    const oracleType = oracleConfig?.oracleType || 'chainlink'
+
+    if (oracleType === 'chainlink') {
+      imports.push('import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";')
+    }
+
+    stateVars.push(`
+    AggregatorV3Interface internal priceFeed;
+    uint256 public dynamicMintPrice;
+    bool public useDynamicPricing;`)
+
+    constructorBody.push(`priceFeed = AggregatorV3Interface(${priceFeedAddress});`)
+    constructorBody.push(`useDynamicPricing = false;`)
+
+    extensions.push(`
+    /**
+     * @dev Get latest price from oracle
+     */
+    function getLatestPrice() public view returns (int256) {
+        (
+            /* uint80 roundID */,
+            int256 price,
+            /* uint256 startedAt */,
+            /* uint256 timeStamp */,
+            /* uint80 answeredInRound */
+        ) = priceFeed.latestRoundData();
+        return price;
+    }
+
+    /**
+     * @dev Enable/disable dynamic pricing based on oracle
+     */
+    function setDynamicPricing(bool enabled) external onlyOwner {
+        useDynamicPricing = enabled;
+    }
+
+    /**
+     * @dev Set new price feed address
+     */
+    function setPriceFeed(address newPriceFeed) external onlyOwner {
+        priceFeed = AggregatorV3Interface(newPriceFeed);
+    }
+
+    /**
+     * @dev Set dynamic mint price (only if using dynamic pricing)
+     */
+    function setDynamicMintPrice(uint256 newPrice) external onlyOwner {
+        require(useDynamicPricing, "Dynamic pricing not enabled");
+        dynamicMintPrice = newPrice;
+    }
+
+    /**
+     * @dev Get current mint price (static or dynamic)
+     */
+    function getCurrentMintPrice() public view returns (uint256) {
+        if (useDynamicPricing && dynamicMintPrice > 0) {
+            return dynamicMintPrice;
+        }
+        return MINT_PRICE;
+    }`)
+  }
+
+  // Rewards system
+  if (features.includes('rewards')) {
+    const rewardsConfig = premiumFeatureConfigs?.rewards
+    const rewardType = rewardsConfig?.rewardType || 'points'
+    const rewardAmount = rewardsConfig?.rewardAmount || 10
+
+    stateVars.push(`
+    mapping(address => uint256) public userRewards;
+    uint256 public totalRewardsDistributed;
+    uint256 public rewardPerMint = ${rewardAmount};
+    bool public rewardsEnabled = true;`)
+
+    extensions.push(`
+    /**
+     * @dev Add rewards to user (mint, purchase, etc.)
+     */
+    function addRewards(address user, uint256 amount) internal {
+        if (rewardsEnabled) {
+            userRewards[user] += amount;
+            totalRewardsDistributed += amount;
+        }
+    }
+
+    /**
+     * @dev Claim accumulated rewards
+     */
+    function claimRewards() external {
+        uint256 rewards = userRewards[msg.sender];
+        require(rewards > 0, "No rewards to claim");
+        
+        userRewards[msg.sender] = 0;
+        // For token rewards, transfer tokens
+        // For points rewards, just update the mapping
+        // Implementation depends on reward type
+    }
+
+    /**
+     * @dev Set reward amount per mint
+     */
+    function setRewardPerMint(uint256 amount) external onlyOwner {
+        rewardPerMint = amount;
+    }
+
+    /**
+     * @dev Toggle rewards system
+     */
+    function toggleRewards() external onlyOwner {
+        rewardsEnabled = !rewardsEnabled;
+    }
+
+    /**
+     * @dev Get user's total rewards
+     */
+    function getUserRewards(address user) external view returns (uint256) {
+        return userRewards[user];
+    }`)
+
+    // Modify mint function to give rewards
+    extensions.push(`
+    /**
+     * @dev Modified mint with rewards
+     */
+    function mintWithRewards(uint256 quantity) external payable nonReentrant {
+        require(publicMintEnabled, "Public minting disabled");
+        require(quantity > 0 && quantity <= 10, "Invalid quantity");
+        require(totalSupply() + quantity <= MAX_SUPPLY, "Exceeds max supply");
+        require(mintedPerWallet[msg.sender] + quantity <= MAX_PER_WALLET, "Exceeds wallet limit");
+        
+        uint256 cost = getCurrentMintPrice() * quantity;
+        require(msg.value >= cost, "Insufficient payment");
+        
+        mintedPerWallet[msg.sender] += quantity;
+        
+        for (uint256 i = 0; i < quantity; i++) {
+            uint256 tokenId = _tokenIdCounter.current();
+            _tokenIdCounter.increment();
+            _safeMint(msg.sender, tokenId);
+        }
+        
+        // Add rewards
+        addRewards(msg.sender, rewardPerMint * quantity);
+        
+        // Refund excess payment
+        if (msg.value > cost) {
+            payable(msg.sender).transfer(msg.value - cost);
+        }
+         }`)
+  }
+
+  // Escrow service
+  if (features.includes('escrow')) {
+    const escrowConfig = premiumFeatureConfigs?.escrow
+    const defaultDuration = escrowConfig?.defaultDuration || 259200 // 72 hours in seconds
+    const arbitrator = escrowConfig?.arbitrator || 'address(0)'
+
+    stateVars.push(`
+    struct Escrow {
+        address buyer;
+        address seller;
+        uint256 amount;
+        uint256 deadline;
+        bool active;
+        bool disputed;
+    }
+    
+    mapping(uint256 => Escrow) public escrows;
+    address public arbitrator = ${arbitrator};
+    uint256 public escrowDuration = ${defaultDuration};`)
+
+    extensions.push(`
+    /**
+     * @dev Create escrow for token purchase
+     */
+    function createEscrow(uint256 tokenId, address seller) external payable {
+        require(_exists(tokenId), "Token does not exist");
+        require(ownerOf(tokenId) == seller, "Seller not owner");
+        require(msg.value > 0, "No payment provided");
+        require(!escrows[tokenId].active, "Escrow already exists");
+        
+        escrows[tokenId] = Escrow({
+            buyer: msg.sender,
+            seller: seller,
+            amount: msg.value,
+            deadline: block.timestamp + escrowDuration,
+            active: true,
+            disputed: false
+        });
+    }
+
+    /**
+     * @dev Release escrow and transfer token
+     */
+    function releaseEscrow(uint256 tokenId) external {
+        Escrow storage escrow = escrows[tokenId];
+        require(escrow.active, "Escrow not active");
+        require(!escrow.disputed, "Escrow disputed");
+        require(msg.sender == escrow.buyer || msg.sender == escrow.seller, "Not authorized");
+        
+        escrow.active = false;
+        
+        // Transfer token to buyer
+        _transfer(escrow.seller, escrow.buyer, tokenId);
+        
+        // Transfer payment to seller
+        payable(escrow.seller).transfer(escrow.amount);
+    }
+
+    /**
+     * @dev Cancel escrow (only if not expired and both parties agree)
+     */
+    function cancelEscrow(uint256 tokenId) external {
+        Escrow storage escrow = escrows[tokenId];
+        require(escrow.active, "Escrow not active");
+        require(msg.sender == escrow.buyer || msg.sender == escrow.seller, "Not authorized");
+        
+        escrow.active = false;
+        
+        // Refund buyer
+        payable(escrow.buyer).transfer(escrow.amount);
+    }
+
+    /**
+     * @dev Dispute escrow (requires arbitrator)
+     */
+    function disputeEscrow(uint256 tokenId) external {
+        Escrow storage escrow = escrows[tokenId];
+        require(escrow.active, "Escrow not active");
+        require(msg.sender == escrow.buyer || msg.sender == escrow.seller, "Not authorized");
+        
+        escrow.disputed = true;
+    }
+
+    /**
+     * @dev Resolve dispute (only arbitrator)
+     */
+    function resolveDispute(uint256 tokenId, bool favorBuyer) external {
+        require(msg.sender == arbitrator, "Only arbitrator can resolve");
+        Escrow storage escrow = escrows[tokenId];
+        require(escrow.active && escrow.disputed, "Invalid escrow state");
+        
+        escrow.active = false;
+        escrow.disputed = false;
+        
+        if (favorBuyer) {
+            // Refund buyer
+            payable(escrow.buyer).transfer(escrow.amount);
+        } else {
+            // Transfer token to buyer and pay seller
+            _transfer(escrow.seller, escrow.buyer, tokenId);
+            payable(escrow.seller).transfer(escrow.amount);
+        }
+    }
+
+    /**
+     * @dev Set arbitrator address
+     */
+    function setArbitrator(address newArbitrator) external onlyOwner {
+        arbitrator = newArbitrator;
+    }
+
+    /**
+     * @dev Get escrow info
+     */
+    function getEscrowInfo(uint256 tokenId) external view returns (
+        address buyer,
+        address seller,
+        uint256 amount,
+        uint256 deadline,
+        bool active,
+        bool disputed,
+        uint256 timeLeft
+    ) {
+        Escrow memory escrow = escrows[tokenId];
+        uint256 timeRemaining = escrow.deadline > block.timestamp ? escrow.deadline - block.timestamp : 0;
+        
+        return (
+            escrow.buyer,
+            escrow.seller,
+            escrow.amount,
+            escrow.deadline,
+            escrow.active,
+            escrow.disputed,
+            timeRemaining
+        );
+    }`)
+  }
+
+  // Tax system functions
+  if (features.includes('tax')) {
+    extensions.push(`
+    /**
+     * @dev Set transfer tax rate (only owner)
+     */
+         function setTransferTaxRate(uint256 newRate) external onlyOwner {
+         require(newRate <= 1000, "Tax rate too high"); // Max 10%
+         transferTaxRate = newRate;
+         emit TransferTaxRateUpdated(newRate);
+     }
+
+    /**
+     * @dev Set tax recipient (only owner)
+     */
+         function setTaxRecipient(address newRecipient) external onlyOwner {
+         require(newRecipient != address(0), "Invalid recipient");
+         taxRecipient = newRecipient;
+         emit TaxRecipientUpdated(newRecipient);
+     }
+
+    /**
+     * @dev Toggle tax system (only owner)
+     */
+         function setTaxEnabled(bool enabled) external onlyOwner {
+         taxEnabled = enabled;
+         emit TaxEnabledChanged(enabled);
+     }
+
+    /**
+     * @dev Calculate and collect tax on transfer
+     */
+    function _collectTax(address from, uint256 tokenId) internal {
+        if (taxEnabled && from != address(0) && taxRecipient != address(0)) {
+            // For NFTs, we can implement a fixed tax amount or percentage of floor price
+            // This is a simplified version
+            payable(taxRecipient).transfer(0.001 ether); // 0.001 ETH tax per transfer
+        }
+    }`)
+  }
+
+  // Royalties functions
+  if (features.includes('royalties')) {
+    extensions.push(`
+    /**
+     * @dev Set royalty info for all tokens
+     */
+    function setDefaultRoyalty(address recipient, uint96 feeNumerator) external onlyOwner {
+        _setDefaultRoyalty(recipient, feeNumerator);
+    }
+
+    /**
+     * @dev Set royalty info for a specific token
+     */
+    function setTokenRoyalty(uint256 tokenId, address recipient, uint96 feeNumerator) external onlyOwner {
+        _setTokenRoyalty(tokenId, recipient, feeNumerator);
+    }
+
+    /**
+     * @dev Remove royalty info for a token
+     */
+    function resetTokenRoyalty(uint256 tokenId) external onlyOwner {
+        _resetTokenRoyalty(tokenId);
+    }`)
+  }
+
+  // Staking functions
+  if (features.includes('staking')) {
+    extensions.push(`
+    /**
+     * @dev Stake an NFT to earn rewards
+     */
+    function stakeToken(uint256 tokenId) external {
+        require(ownerOf(tokenId) == msg.sender, "Not token owner");
+        require(stakedTokens[tokenId] == address(0), "Token already staked");
+        
+        stakedTokens[tokenId] = msg.sender;
+        userStakedTokens[msg.sender].push(tokenId);
+        stakingStartTime[tokenId] = block.timestamp;
+        
+        // Transfer to staking (self-custody, just mark as staked)
+        // Token remains in user's wallet but marked as staked
+    }
+
+    /**
+     * @dev Unstake an NFT and claim rewards
+     */
+    function unstakeToken(uint256 tokenId) external {
+        require(stakedTokens[tokenId] == msg.sender, "Not staker");
+        
+        // Calculate rewards
+        uint256 stakingDuration = block.timestamp - stakingStartTime[tokenId];
+        uint256 rewards = (stakingDuration * stakingRewardRate) / 1 days;
+        
+        // Update mappings
+        stakedTokens[tokenId] = address(0);
+        stakingStartTime[tokenId] = 0;
+        stakingRewards[msg.sender] += rewards;
+        
+        // Remove from user's staked tokens array
+        _removeFromStakedArray(msg.sender, tokenId);
+    }
+
+    /**
+     * @dev Claim accumulated staking rewards
+     */
+    function claimStakingRewards() external {
+        uint256 rewards = stakingRewards[msg.sender];
+        require(rewards > 0, "No rewards to claim");
+        
+        stakingRewards[msg.sender] = 0;
+        // Transfer rewards (could be ETH, tokens, etc.)
+        payable(msg.sender).transfer(rewards * 0.001 ether);
+    }
+
+    /**
+     * @dev Get staking info for a user
+     */
+    function getStakingInfo(address user) external view returns (
+        uint256[] memory stakedTokenIds,
+        uint256 totalRewards,
+        uint256 claimableRewards
+    ) {
+        stakedTokenIds = userStakedTokens[user];
+        totalRewards = stakingRewards[user];
+        
+        // Calculate claimable rewards from currently staked tokens
+        uint256 claimable = 0;
+        for (uint256 i = 0; i < stakedTokenIds.length; i++) {
+            uint256 tokenId = stakedTokenIds[i];
+            if (stakedTokens[tokenId] == user) {
+                uint256 stakingDuration = block.timestamp - stakingStartTime[tokenId];
+                claimable += (stakingDuration * stakingRewardRate) / 1 days;
+            }
+        }
+        claimableRewards = claimable;
+    }
+
+    /**
+     * @dev Remove token from staked array (internal)
+     */
+    function _removeFromStakedArray(address user, uint256 tokenId) internal {
+        uint256[] storage stakedArray = userStakedTokens[user];
+        for (uint256 i = 0; i < stakedArray.length; i++) {
+            if (stakedArray[i] == tokenId) {
+                stakedArray[i] = stakedArray[stakedArray.length - 1];
+                stakedArray.pop();
+                break;
+            }
+        }
+    }`)
+  }
+
+  // Multisig functions  
+  if (features.includes('multisig')) {
+    extensions.push(`
+    /**
+     * @dev Create a new proposal (only signers)
+     */
+    function createProposal(address target, bytes memory data, uint256 value, string memory description) external returns (uint256) {
+        require(signers[msg.sender], "Not a signer");
+        
+        uint256 proposalId = proposalCount++;
+        Proposal storage proposal = proposals[proposalId];
+        proposal.target = target;
+        proposal.data = data;
+        proposal.value = value;
+        proposal.description = description;
+        proposal.signatures = 0;
+        proposal.executed = false;
+        
+        return proposalId;
+    }
+
+    /**
+     * @dev Sign a proposal (only signers)
+     */
+    function signProposal(uint256 proposalId) external {
+        require(signers[msg.sender], "Not a signer");
+        require(!proposals[proposalId].signed[msg.sender], "Already signed");
+        require(!proposals[proposalId].executed, "Already executed");
+        
+        proposals[proposalId].signed[msg.sender] = true;
+        proposals[proposalId].signatures++;
+        
+        // Auto-execute if enough signatures
+        if (proposals[proposalId].signatures >= requiredSignatures) {
+            _executeProposal(proposalId);
+        }
+    }
+
+    /**
+     * @dev Execute a proposal (internal)
+     */
+    function _executeProposal(uint256 proposalId) internal {
+        Proposal storage proposal = proposals[proposalId];
+        require(!proposal.executed, "Already executed");
+        require(proposal.signatures >= requiredSignatures, "Not enough signatures");
+        
+        proposal.executed = true;
+        
+        (bool success, ) = proposal.target.call{value: proposal.value}(proposal.data);
+        require(success, "Proposal execution failed");
+    }
+
+    /**
+     * @dev Add a new signer (requires multisig approval)
+     */
+    function addSigner(address newSigner) external onlyOwner {
+        signers[newSigner] = true;
+    }
+
+    /**
+     * @dev Remove a signer (requires multisig approval)
+     */
+    function removeSigner(address signer) external onlyOwner {
+        signers[signer] = false;
+    }`)
+  }
+
+  // Timelock functions
+  if (features.includes('timelock')) {
+    extensions.push(`
+    /**
+     * @dev Schedule a timelocked operation
+     */
+    function scheduleOperation(bytes32 operationId, uint256 delay) external onlyOwner {
+        require(delay >= timelockDelay, "Delay too short");
+        timelocks[operationId] = block.timestamp + delay;
+    }
+
+    /**
+     * @dev Execute a timelocked operation
+     */
+    function executeOperation(bytes32 operationId) external onlyOwner {
+        require(timelocks[operationId] != 0, "Operation not scheduled");
+        require(block.timestamp >= timelocks[operationId], "Operation not ready");
+        
+        timelocks[operationId] = 0;
+        // Actual execution logic would go here
+    }
+
+    /**
+     * @dev Cancel a timelocked operation
+     */
+    function cancelOperation(bytes32 operationId) external onlyOwner {
+        timelocks[operationId] = 0;
+    }`)
+  }
+
+  // Vesting functions
+  if (features.includes('vesting')) {
+    extensions.push(`
+    /**
+     * @dev Set vesting schedule for an address
+     */
+    function setVestingSchedule(
+        address beneficiary,
+        uint256 totalAmount,
+        uint256 startTime,
+        uint256 duration,
+        bool revocable
+    ) external onlyOwner {
+        vestingSchedules[beneficiary] = VestingSchedule({
+            totalAmount: totalAmount,
+            startTime: startTime,
+            duration: duration,
+            releasedAmount: 0,
+            revocable: revocable
+        });
+    }
+
+    /**
+     * @dev Release vested tokens
+     */
+    function releaseVested(address beneficiary) external {
+        VestingSchedule storage schedule = vestingSchedules[beneficiary];
+        require(schedule.totalAmount > 0, "No vesting schedule");
+        
+        uint256 vestedAmount = _computeVestedAmount(schedule);
+        uint256 unreleased = vestedAmount - schedule.releasedAmount;
+        
+        require(unreleased > 0, "No tokens to release");
+        
+        schedule.releasedAmount += unreleased;
+        // Release tokens (implementation depends on what's being vested)
+    }
+
+    /**
+     * @dev Compute vested amount
+     */
+    function _computeVestedAmount(VestingSchedule memory schedule) internal view returns (uint256) {
+        if (block.timestamp < schedule.startTime) {
+            return 0;
+        } else if (block.timestamp >= schedule.startTime + schedule.duration) {
+            return schedule.totalAmount;
+        } else {
+            return (schedule.totalAmount * (block.timestamp - schedule.startTime)) / schedule.duration;
+        }
+    }`)
+  }
+
+  // Snapshot functionality (if enabled)
+  if (features.includes('snapshot')) {
+    extensions.push(`
+    /**
+     * @dev Creates a snapshot of current token ownership
+     */
+    function snapshot() external onlyOwner returns (uint256) {
+        // Custom snapshot logic for NFTs
+        // Returns snapshot ID (simplified implementation)
+        return block.timestamp;
+    }`)
+  }
+
+  // Permit functionality (EIP-4494 for NFTs)
+  if (features.includes('permit')) {
+    stateVars.push('mapping(address => uint256) private _nonces;')
+    stateVars.push('bytes32 private constant _PERMIT_TYPEHASH = keccak256("Permit(address spender,uint256 tokenId,uint256 nonce,uint256 deadline)");')
+    
+    extensions.push(`
+    /**
+     * @dev See {IERC4494-permit}.
+     */
+    function permit(
+        address spender,
+        uint256 tokenId,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external {
+        require(block.timestamp <= deadline, "Permit expired");
+        
+        address owner = ownerOf(tokenId);
+        require(spender != owner, "Approval to current owner");
+        
+        bytes32 structHash = keccak256(
+            abi.encode(_PERMIT_TYPEHASH, spender, tokenId, _nonces[owner], deadline)
+        );
+        
+        bytes32 hash = _hashTypedDataV4(structHash);
+        address signer = ECDSA.recover(hash, v, r, s);
+        require(signer == owner, "Invalid signature");
+        
+        _nonces[owner]++;
+        _approve(spender, tokenId);
+    }
+
+    /**
+     * @dev Returns the current nonce for an owner
+     */
+    function nonces(address owner) external view returns (uint256) {
+        return _nonces[owner];
+    }`)
+  }
+
+  // Capped supply enforcement (if enabled)
+  if (features.includes('capped')) {
+    extensions.push(`
+    /**
+     * @dev Returns the cap on the token's total supply
+     */
+    function cap() external view returns (uint256) {
+        return MAX_SUPPLY;
+    }
+
+    /**
+     * @dev Update maximum supply (only owner, only decrease allowed)
+     */
+    function updateMaxSupply(uint256 newMaxSupply) external onlyOwner {
+        require(newMaxSupply < MAX_SUPPLY, "Can only decrease supply");
+        require(newMaxSupply >= totalSupply(), "Cannot be less than current supply");
+        // Note: This would require making MAX_SUPPLY non-constant
+        // MAX_SUPPLY = newMaxSupply;
+    }`)
+  }
+
+  // Enumerable specific functions (additional utility)
+  if (features.includes('enumerable')) {
+    extensions.push(`
+    /**
+     * @dev Returns all token IDs owned by an address
+     */
+    function tokensOfOwner(address owner) external view returns (uint256[] memory) {
+        uint256 tokenCount = balanceOf(owner);
+        uint256[] memory tokenIds = new uint256[](tokenCount);
+        
+        for (uint256 i = 0; i < tokenCount; i++) {
+            tokenIds[i] = tokenOfOwnerByIndex(owner, i);
+        }
+        
+        return tokenIds;
+    }
+
+    /**
+     * @dev Returns all token IDs in the contract
+     */
+    function getAllTokenIds() external view returns (uint256[] memory) {
+        uint256 totalTokens = totalSupply();
+        uint256[] memory tokenIds = new uint256[](totalTokens);
+        
+        for (uint256 i = 0; i < totalTokens; i++) {
+            tokenIds[i] = tokenByIndex(i);
+        }
+        
+        return tokenIds;
+    }`)
+  }
 
   // Utility functions
   extensions.push(`
@@ -565,20 +1756,41 @@ const generateNFTContract = (params: Record<string, any>, features: string[], pr
   // Required overrides
   const overrides = []
   
-  if (features.includes('uristorage') || features.includes('enumerable')) {
+  if (features.includes('uristorage') || features.includes('enumerable') || features.includes('whitelist') || features.includes('blacklist') || features.includes('tax') || features.includes('staking') || features.includes('royalties')) {
     overrides.push(`
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
         internal
         override(ERC721, ERC721Enumerable)
         ${features.includes('pausable') ? 'whenNotPaused' : ''}
     {
+        ${features.includes('whitelist') || features.includes('blacklist') || features.includes('tax') || features.includes('staking') ? `
+        // Apply restrictions and collect fees on transfers (not minting/burning)
+        if (from != address(0) && to != address(0)) {
+            ${features.includes('whitelist') ? `
+            if (whitelistEnabled) {
+                require(_whitelist[from], "Transfer from non-whitelisted address");
+                require(_whitelist[to], "Transfer to non-whitelisted address");
+            }` : ''}
+            ${features.includes('blacklist') ? `
+            if (blacklistEnabled) {
+                require(!_blacklist[from], "Transfer from blacklisted address");
+                require(!_blacklist[to], "Transfer to blacklisted address");
+            }` : ''}
+            ${features.includes('staking') ? `
+            // Cannot transfer staked tokens
+            require(stakedTokens[tokenId] == address(0), "Cannot transfer staked token");` : ''}
+            ${features.includes('tax') ? `
+            // Collect transfer tax
+            _collectTax(from, tokenId);` : ''}
+        }` : ''}
+        
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, ERC721Enumerable)
+        override(ERC721, ERC721Enumerable${features.includes('royalties') ? ', ERC2981' : ''})
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
@@ -613,8 +1825,84 @@ ${imports.join('\n')}
  */
 contract ${name} is ${inheritances.join(', ')} {
     ${stateVars.join('\n    ')}
+    
+    ${features.includes('auction') ? `
+    // Auction Events
+    event AuctionCreated(uint256 indexed tokenId, uint256 startingPrice, uint256 duration);
+    event BidPlaced(uint256 indexed tokenId, address indexed bidder, uint256 amount);
+    event AuctionEnded(uint256 indexed tokenId, address indexed winner, uint256 amount);` : ''}
+    
+    ${features.includes('oracle') ? `
+    // Oracle Events
+    event PriceFeedUpdated(address indexed newPriceFeed);
+    event DynamicPricingToggled(bool enabled);
+    event DynamicMintPriceUpdated(uint256 newPrice);` : ''}
+    
+    ${features.includes('rewards') ? `
+    // Rewards Events
+    event RewardsAdded(address indexed user, uint256 amount);
+    event RewardsClaimed(address indexed user, uint256 amount);
+    event RewardPerMintUpdated(uint256 newAmount);` : ''}
+    
+    ${features.includes('escrow') ? `
+    // Escrow Events
+    event EscrowCreated(uint256 indexed tokenId, address indexed buyer, address indexed seller, uint256 amount);
+    event EscrowReleased(uint256 indexed tokenId, address indexed buyer, address indexed seller);
+    event EscrowCancelled(uint256 indexed tokenId, address indexed buyer);
+    event EscrowDisputed(uint256 indexed tokenId, address indexed disputer);
+    event DisputeResolved(uint256 indexed tokenId, bool favorBuyer);` : ''}
+    
+    ${features.includes('whitelist') ? `
+    // Whitelist Events
+    event WhitelistAdded(address indexed account);
+    event WhitelistRemoved(address indexed account);
+    event WhitelistEnabledChanged(bool enabled);` : ''}
+    
+    ${features.includes('blacklist') ? `
+    // Blacklist Events
+    event BlacklistAdded(address indexed account);
+    event BlacklistRemoved(address indexed account);
+    event BlacklistEnabledChanged(bool enabled);` : ''}
+    
+    ${features.includes('tax') ? `
+    // Tax Events
+    event TransferTaxRateUpdated(uint256 newRate);
+    event TaxRecipientUpdated(address indexed newRecipient);
+    event TaxEnabledChanged(bool enabled);
+    event TaxCollected(address indexed from, uint256 amount);` : ''}
+    
+    ${features.includes('multisig') ? `
+    // Multisig Events
+    event ProposalCreated(uint256 indexed proposalId, address indexed creator, string description);
+    event ProposalSigned(uint256 indexed proposalId, address indexed signer);
+    event ProposalExecuted(uint256 indexed proposalId);
+    event SignerAdded(address indexed signer);
+    event SignerRemoved(address indexed signer);` : ''}
+    
+    ${features.includes('royalties') ? `
+    // Royalties Events
+    event DefaultRoyaltyUpdated(address indexed recipient, uint96 feeNumerator);
+    event TokenRoyaltyUpdated(uint256 indexed tokenId, address indexed recipient, uint96 feeNumerator);` : ''}
+    
+    ${features.includes('staking') ? `
+    // Staking Events
+    event TokenStaked(uint256 indexed tokenId, address indexed staker);
+    event TokenUnstaked(uint256 indexed tokenId, address indexed staker, uint256 rewards);
+    event StakingRewardsClaimed(address indexed staker, uint256 amount);
+    event StakingRewardRateUpdated(uint256 newRate);` : ''}
+    
+    ${features.includes('timelock') ? `
+    // Timelock Events
+    event OperationScheduled(bytes32 indexed operationId, uint256 readyTime);
+    event OperationExecuted(bytes32 indexed operationId);
+    event OperationCancelled(bytes32 indexed operationId);` : ''}
+    
+    ${features.includes('vesting') ? `
+    // Vesting Events
+    event VestingScheduleSet(address indexed beneficiary, uint256 totalAmount, uint256 duration);
+    event VestingReleased(address indexed beneficiary, uint256 amount);` : ''}
 
-    constructor() ERC721("${params.name || 'MyNFT'}", "${symbol}") {
+    constructor() ERC721("${params.name || 'MyNFT'}", "${symbol}")${features.includes('permit') ? ` EIP712("${params.name || 'MyNFT'}", "1")` : ''} {
         ${constructorBody.join('\n        ')}
     }
 

@@ -67,7 +67,8 @@ function App() {
   useEffect(() => {
     if (selectedTemplate && contractParams && isConnected && publicClient) {
       setEstimatingGas(true)
-      estimateGas(chainId, selectedTemplate.id, selectedFeatures)
+      // 🌟 Passer l'adresse wallet pour les prix premium dev
+      estimateGas(chainId, selectedTemplate.id, selectedFeatures, address)
         .then(setGasEstimate)
         .catch(error => {
           console.error('Gas estimation failed:', error)
@@ -75,7 +76,7 @@ function App() {
         })
         .finally(() => setEstimatingGas(false))
     }
-  }, [selectedTemplate, contractParams, selectedFeatures, chainId, isConnected, publicClient])
+  }, [selectedTemplate, contractParams, selectedFeatures, chainId, isConnected, publicClient, address])
 
   const handleTemplateSelect = (template: ContractTemplate) => {
     setSelectedTemplate(template)

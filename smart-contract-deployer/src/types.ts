@@ -90,6 +90,66 @@ export type PremiumFeatureConfig = {
     proposers?: string[]
     executors?: string[]
   }
+  uristorage?: {
+    tokenUris: {
+      tokenId: string
+      uri: string
+    }[]
+    totalTokens?: number
+  }
+  royalties?: {
+    percentage: number
+    recipient: string
+  }
+  staking?: {
+    rewardRate: number
+    duration: number
+    rewardToken?: string
+  }
+  auction?: {
+    defaultDuration: number // in seconds
+    minimumStartingPrice: number // in wei
+    bidIncrement?: number // minimum bid increment percentage
+  }
+  oracle?: {
+    priceFeedAddress: string
+    oracleType: 'chainlink' | 'custom'
+  }
+  escrow?: {
+    defaultDuration: number // in seconds
+    conditions: string[]
+    arbitrator?: string
+  }
+  tiered?: {
+    tiers: {
+      name: string
+      minAmount: number // minimum amount to reach this tier
+      benefits: string[]
+      discount?: number // percentage discount
+    }[]
+  }
+  governance?: {
+    votingDelay: number // in blocks
+    votingPeriod: number // in blocks
+    quorumPercentage: number // percentage needed for quorum
+    proposalThreshold: number // tokens needed to create proposal
+  }
+  insurance?: {
+    poolAddress?: string
+    coveragePercentage: number // percentage of transaction covered
+    premiumRate: number // percentage charged as premium
+  }
+  crosschain?: {
+    supportedChains: string[]
+    bridgeAddress?: string
+    gasLimit: number
+  }
+  rewards?: {
+    rewardType: 'points' | 'tokens' | 'nft'
+    rewardAmount: number
+    conditions: string[]
+    rewardToken?: string // if reward type is tokens
+  }
 }
 export type DeploymentParams = {
   template: TemplateType

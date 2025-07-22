@@ -1,4 +1,13 @@
 import type { PremiumFeature } from '../types'
+
+// 🎯 DEV LOCAL : Compte avec toutes les options
+const DEV_PREMIUM_ADDRESS = '0xA3Cb5B568529b27e93AE726C7d8aEF18Cd551621'.toLowerCase()
+
+// Utilitaire pour vérifier si une adresse est le compte dev
+export const isDevAccount = (address?: string): boolean => {
+  return address?.toLowerCase() === DEV_PREMIUM_ADDRESS
+}
+
 export const premiumFeatures: PremiumFeature[] = [
   {
     id: 'pausable',
@@ -346,12 +355,24 @@ export const premiumFeatures: PremiumFeature[] = [
     icon: '👁️',
   }
 ]
-export const getFeaturePrice = (featureId: string): number => {
+export const getFeaturePrice = (featureId: string, walletAddress?: string): number => {
+  // 🌟 COMPTE DEV PREMIUM : Prix gratuits pour toutes les fonctionnalités
+  if (isDevAccount(walletAddress)) {
+    console.log(`🎯 Dev account - Feature ${featureId} is FREE`)
+    return 0
+  }
+  
   const feature = premiumFeatures.find(f => f.id === featureId)
   return feature?.price || 0
 }
-export const getTotalPremiumPrice = (featureIds: string[]): number => {
-  return featureIds.reduce((total, id) => total + getFeaturePrice(id), 0)
+export const getTotalPremiumPrice = (featureIds: string[], walletAddress?: string): number => {
+  // 🌟 COMPTE DEV PREMIUM : Total gratuit
+  if (isDevAccount(walletAddress)) {
+    console.log(`🎯 Dev account - All ${featureIds.length} premium features are FREE`)
+    return 0
+  }
+  
+  return featureIds.reduce((total, id) => total + getFeaturePrice(id, walletAddress), 0)
 }
 export const getCompatibleFeatures = (
   templateType: string,

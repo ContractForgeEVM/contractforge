@@ -273,7 +273,7 @@ export async function deployContractWithFactory(
 
     // 2. Compiler le contrat
     console.log('⚙️ Compiling contract...')
-    const { bytecode, abi } = await compileWithBackend(templateType, params, premiumFeatures)
+    const { bytecode, abi } = await compileWithBackend(templateType, params, premiumFeatures, featureConfigs)
     
     if (!bytecode || !abi) {
       throw new Error('Failed to compile contract')

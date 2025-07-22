@@ -4,7 +4,100 @@ Ce guide explique comment configurer les fonctionnalités premium configurables 
 
 ## Fonctionnalités Configurables
 
-### 1. Whitelist/Blacklist
+### 1. URI Storage (NFT uniquement)
+
+**Description :** Stockage des URIs de métadonnées on-chain pour chaque token NFT individuel.
+
+**Configuration :**
+- **Prix** : 0.01 ETH
+- **Formats supportés** : JSON
+- **Stockage** : localStorage (éphémère)
+- **Compatibilité** : Uniquement pour les contrats NFT
+
+**Exemples de fichiers JSON :**
+
+**Format Objet (recommandé) :**
+```json
+{
+  "1": "https://api.example.com/nft/metadata/1.json",
+  "2": "https://api.example.com/nft/metadata/2.json", 
+  "3": "ipfs://QmHash123/token3.json",
+  "4": "https://gateway.pinata.cloud/ipfs/QmHash456/token4.json"
+}
+```
+
+**Format Array :**
+```json
+[
+  {"tokenId": "1", "uri": "https://api.example.com/nft/metadata/1.json"},
+  {"tokenId": "2", "uri": "https://api.example.com/nft/metadata/2.json"},
+  {"tokenId": "3", "uri": "ipfs://QmHash123/token3.json"}
+]
+```
+
+**Format Array Simple :**
+```json
+[
+  "https://api.example.com/nft/metadata/1.json",
+  "https://api.example.com/nft/metadata/2.json",
+  "https://api.example.com/nft/metadata/3.json"
+]
+```
+
+**Fonctions générées dans le contrat :**
+- `setTokenURI(tokenId, uri)` - Définir l'URI d'un token spécifique
+- `batchSetTokenURI(tokenIds[], uris[])` - Définir les URIs de plusieurs tokens
+- `clearTokenURI(tokenId)` - Supprimer l'URI d'un token
+
+**Utilisation après déploiement :**
+1. Déployez votre contrat NFT avec URI Storage activé
+2. Appelez `batchSetTokenURI` avec vos token IDs et URIs
+3. Chaque token aura son URI de métadonnées unique
+4. Les URIs peuvent être modifiées plus tard par le propriétaire
+
+### 2. Royalties (NFT uniquement)
+
+**Description :** Configuration des royalties EIP-2981 pour les ventes secondaires.
+
+**Configuration :**
+- **Prix** : 0.015 ETH
+- **Pourcentage** : 0.1% à 50% (recommandé: 2.5%-10%)
+- **Destinataire** : Adresse Ethereum qui recevra les royalties
+
+**Exemple :**
+- Pourcentage : 5%
+- Destinataire : 0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6
+
+**Fonctions générées :**
+- `royaltyInfo(tokenId, salePrice)` - Calcule les royalties
+- `setDefaultRoyalty(recipient, feeNumerator)` - Modifier les royalties
+
+### 3. Staking Rewards (Token uniquement)
+
+**Description :** Système de staking avec récompenses automatiques.
+
+**Configuration :**
+- **Prix** : 0.04 ETH
+- **Taux de récompense** : APY en pourcentage (ex: 10% par an)
+- **Durée** : Période de staking en jours (1-3650)
+- **Token de récompense** : Optionnel, sinon utilise le même token
+
+**Exemple :**
+```json
+{
+  "rewardRate": 10,
+  "duration": 365,
+  "rewardToken": "0x..." 
+}
+```
+
+**Fonctions générées :**
+- `stake(amount)` - Staker des tokens
+- `unstake(amount)` - Récupérer les tokens
+- `claimRewards()` - Réclamer les récompenses
+- `getRewards(address)` - Voir les récompenses
+
+### 4. Whitelist/Blacklist
 
 **Description :** Restreindre les transferts à des adresses spécifiques ou bloquer certaines adresses.
 
@@ -27,7 +120,7 @@ address
 0x8ba1f109551bD432803012645Hac136c772c3c7c
 ```
 
-### 2. Transfer Tax
+### 3. Transfer Tax
 
 **Description :** Taxe automatique sur les transferts de jetons.
 
@@ -40,7 +133,7 @@ address
 - Taux : 2.5% (250 en base 100)
 - Destinataire : 0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6
 
-### 3. Capped Supply
+### 4. Capped Supply
 
 **Description :** Limiter l'approvisionnement maximum de jetons.
 
@@ -51,7 +144,7 @@ address
 **Exemple :**
 - Approvisionnement maximum : 1,000,000 jetons
 
-### 4. Vesting Schedule
+### 5. Vesting Schedule
 
 **Description :** Planification d'acquisition de jetons avec cliff et durée.
 
@@ -73,7 +166,7 @@ address
 }
 ```
 
-### 5. Multi-Signature
+### 6. Multi-Signature
 
 **Description :** Exiger plusieurs signatures pour les actions du propriétaire.
 
@@ -94,7 +187,7 @@ address
 }
 ```
 
-### 6. Batch Airdrop
+### 7. Batch Airdrop
 
 **Description :** Distribution efficace de jetons à plusieurs adresses.
 
@@ -117,7 +210,7 @@ address
 ]
 ```
 
-### 7. Timelock Controller
+### 8. Timelock Controller
 
 **Description :** Délai pour les fonctions critiques.
 
@@ -186,6 +279,48 @@ Les fonctionnalités configurables ont des coûts de gaz variables :
 4. **Utilisez des adresses de confiance** pour les fonctionnalités critiques
 5. **Planifiez les coûts** de gaz pour les grandes configurations
 6. **Sauvegardez vos fichiers** de configuration
+
+## 📋 Nouvelles Fonctionnalités Configurables
+
+### Auction (NFT)
+- **Prix** : 0.025 ETH
+- **Paramètres** : Durée par défaut, prix minimum, incrément d'enchère
+- **Fonctions** : `createAuction()`, `placeBid()`, `endAuction()`
+
+### Oracle Integration
+- **Prix** : 0.02 ETH  
+- **Paramètres** : Type d'oracle (Chainlink/Custom), adresse du price feed
+- **Fonctions** : `getLatestPrice()`, `updatePriceFeed()`
+
+### Escrow Service
+- **Prix** : 0.03 ETH
+- **Paramètres** : Durée de rétention, adresse arbitre optionnelle
+- **Fonctions** : `createEscrow()`, `releaseEscrow()`, `disputeEscrow()`
+
+### Tiered System
+- **Prix** : 0.035 ETH
+- **Paramètres** : Définition des niveaux et avantages
+- **Interface** : Configuration avancée à venir
+
+### Governance (DAO)
+- **Prix** : 0.05 ETH
+- **Paramètres** : Délai de vote, période de vote, quorum
+- **Compatible** : Contrats Token DAO uniquement
+
+### Insurance Pool
+- **Prix** : 0.03 ETH
+- **Paramètres** : Pourcentage de couverture, taux de prime
+- **Fonctions** : Protection automatique des transactions
+
+### Cross-Chain Bridge
+- **Prix** : 0.1 ETH
+- **Paramètres** : Chaînes supportées, adresse bridge
+- **Interface** : Configuration complète à venir
+
+### Rewards System
+- **Prix** : 0.025 ETH
+- **Paramètres** : Type de récompense (Points/Tokens/NFT), montant, conditions
+- **Fonctions** : Distribution automatique des récompenses
 
 ## Support
 

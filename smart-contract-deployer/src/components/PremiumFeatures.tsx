@@ -24,6 +24,10 @@ import {
   ListItem,
   ListItemText,
   InputAdornment,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from '@mui/material'
 import {
   Star as StarIcon,
@@ -69,8 +73,60 @@ const PremiumFeatures = ({ template, selectedFeatures, onFeaturesChange, feature
   const [vestingStartTime, setVestingStartTime] = useState('');
   const [vestingDuration, setVestingDuration] = useState('');
   const [vestingCliff, setVestingCliff] = useState('');
+  const [uriStorageFile, setUriStorageFile] = useState<File | null>(null)
+  const [uriStorageError, setUriStorageError] = useState('')
+
   const compatibleFeatures = getCompatibleFeatures(template.id, selectedFeatures)
   const totalPrice = getTotalPremiumPrice(selectedFeatures)
+  
+  // Load URI Storage config from localStorage on mount
+  useEffect(() => {
+    if (selectedFeatures.includes('uristorage')) {
+      const savedConfig = localStorage.getItem('uriStorageConfig')
+      if (savedConfig) {
+        try {
+          const parsed = JSON.parse(savedConfig)
+          if (parsed.tokenUris && Array.isArray(parsed.tokenUris)) {
+            const updatedConfig = { 
+              ...featureConfig, 
+              uristorage: parsed 
+            }
+            setFeatureConfig(updatedConfig)
+            onFeatureConfigChange?.(updatedConfig)
+          }
+        } catch (e) {
+          console.log('Failed to load URI storage config from localStorage')
+        }
+      }
+    }
+  }, [selectedFeatures])
+
+  // Save URI Storage config to localStorage when it changes
+  useEffect(() => {
+    if (featureConfig.uristorage) {
+      localStorage.setItem('uriStorageConfig', JSON.stringify(featureConfig.uristorage))
+    } else {
+      localStorage.removeItem('uriStorageConfig')
+    }
+  }, [featureConfig.uristorage])
+
+  const downloadExampleURIFile = () => {
+    const example = {
+      "1": "https://example.com/metadata/token1.json", 
+      "2": "https://example.com/metadata/token2.json",
+      "3": "ipfs://QmHash123/token3.json",
+      "4": "https://gateway.pinata.cloud/ipfs/QmHash456/token4.json"
+    }
+    const blob = new Blob([JSON.stringify(example, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'uri-storage-example.json'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
   const handleFeatureToggle = (featureId: string) => {
     const newSelectedFeatures = selectedFeatures.includes(featureId)
       ? selectedFeatures.filter(id => id !== featureId)
@@ -94,6 +150,30 @@ const PremiumFeatures = ({ template, selectedFeatures, onFeaturesChange, feature
         delete newConfig.airdrop
       } else if (featureId === 'timelock') {
         delete newConfig.timelock
+      } else if (featureId === 'uristorage') {
+        delete newConfig.uristorage
+      } else if (featureId === 'royalties') {
+        delete newConfig.royalties
+      } else if (featureId === 'staking') {
+        delete newConfig.staking
+      } else if (featureId === 'auction') {
+        delete newConfig.auction
+      } else if (featureId === 'oracle') {
+        delete newConfig.oracle
+      } else if (featureId === 'auction') {
+        delete newConfig.auction
+      } else if (featureId === 'escrow') {
+        delete newConfig.escrow
+      } else if (featureId === 'tiered') {
+        delete newConfig.tiered
+      } else if (featureId === 'governance') {
+        delete newConfig.governance
+      } else if (featureId === 'insurance') {
+        delete newConfig.insurance
+      } else if (featureId === 'crosschain') {
+        delete newConfig.crosschain
+      } else if (featureId === 'rewards') {
+        delete newConfig.rewards
       }
       setFeatureConfig(newConfig)
       onFeatureConfigChange?.(newConfig)
@@ -265,7 +345,10 @@ const PremiumFeatures = ({ template, selectedFeatures, onFeaturesChange, feature
     event.target.value = ''
   }
   const isConfigurableFeature = (featureId: string): boolean => {
-    return ['whitelist', 'blacklist', 'tax', 'capped', 'vesting', 'multisig', 'airdrop', 'timelock'].includes(featureId)
+    return [
+      'whitelist', 'blacklist', 'tax', 'capped', 'vesting', 'multisig', 'airdrop', 'timelock', 'uristorage',
+      'royalties', 'staking', 'auction', 'oracle', 'escrow', 'tiered', 'governance', 'insurance', 'crosschain', 'rewards'
+    ].includes(featureId)
   }
   return (
     <Paper
@@ -612,6 +695,532 @@ const PremiumFeatures = ({ template, selectedFeatures, onFeaturesChange, feature
           </DialogActions>
         </Dialog>
       ))}
+      
+      {/* Royalties Configuration */}
+      <Dialog
+        open={openDialog === 'royalties'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure NFT Royalties</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up EIP-2981 royalties for secondary sales
+          </DialogContentText>
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              label="Royalty Percentage (%)"
+              type="number"
+              value={featureConfig.royalties?.percentage || ''}
+              onChange={(e) => {
+                const percentage = parseFloat(e.target.value) || 0
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  royalties: { 
+                    percentage, 
+                    recipient: featureConfig.royalties?.recipient || '' 
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              placeholder="5"
+              helperText="Typical range: 2.5% - 10%"
+              inputProps={{ min: 0, max: 50, step: 0.1 }}
+            />
+            <TextField
+              fullWidth
+              label="Royalty Recipient Address"
+              value={featureConfig.royalties?.recipient || ''}
+              onChange={(e) => {
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  royalties: { 
+                    percentage: featureConfig.royalties?.percentage || 0, 
+                    recipient: e.target.value 
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              placeholder="0x..."
+              helperText="Address that will receive royalties from secondary sales"
+              error={!!(featureConfig.royalties?.recipient && !validateAddress(featureConfig.royalties.recipient))}
+            />
+            {featureConfig.royalties?.percentage && featureConfig.royalties?.recipient && (
+              <Alert severity="info">
+                Royalties: {featureConfig.royalties.percentage}% to {featureConfig.royalties.recipient.slice(0, 6)}...{featureConfig.royalties.recipient.slice(-4)}
+              </Alert>
+            )}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button
+            onClick={handleCloseConfig}
+            disabled={!featureConfig.royalties?.recipient || !validateAddress(featureConfig.royalties.recipient)}
+          >
+            Save Configuration
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Staking Configuration */}
+      <Dialog
+        open={openDialog === 'staking'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure Staking Rewards</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up staking mechanism with rewards
+          </DialogContentText>
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              label="Reward Rate (% per year)"
+              type="number"
+              value={featureConfig.staking?.rewardRate || ''}
+              onChange={(e) => {
+                const rewardRate = parseFloat(e.target.value) || 0
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  staking: { 
+                    ...featureConfig.staking,
+                    rewardRate,
+                    duration: featureConfig.staking?.duration || 365
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              placeholder="10"
+              helperText="Annual percentage yield (APY)"
+              inputProps={{ min: 0, max: 1000, step: 0.1 }}
+            />
+            <TextField
+              fullWidth
+              label="Staking Duration (days)"
+              type="number"
+              value={featureConfig.staking?.duration || ''}
+              onChange={(e) => {
+                const duration = parseInt(e.target.value) || 365
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  staking: { 
+                    ...featureConfig.staking,
+                    rewardRate: featureConfig.staking?.rewardRate || 0,
+                    duration
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              placeholder="365"
+              helperText="How long users must stake to earn rewards"
+              inputProps={{ min: 1, max: 3650 }}
+            />
+            <TextField
+              fullWidth
+              label="Reward Token Address (Optional)"
+              value={featureConfig.staking?.rewardToken || ''}
+              onChange={(e) => {
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  staking: { 
+                    ...featureConfig.staking,
+                    rewardRate: featureConfig.staking?.rewardRate || 0,
+                    duration: featureConfig.staking?.duration || 365,
+                    rewardToken: e.target.value
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              placeholder="0x... (leave empty to use same token)"
+              helperText="Different token for rewards, or leave empty to use the same token"
+              error={!!(featureConfig.staking?.rewardToken && !validateAddress(featureConfig.staking.rewardToken))}
+            />
+            {featureConfig.staking?.rewardRate && featureConfig.staking?.duration && (
+              <Alert severity="info">
+                Staking: {featureConfig.staking.rewardRate}% APY for {featureConfig.staking.duration} days
+                {featureConfig.staking.rewardToken && ` with custom reward token`}
+              </Alert>
+            )}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button
+            onClick={handleCloseConfig}
+            disabled={!featureConfig.staking?.rewardRate || !featureConfig.staking?.duration}
+          >
+            Save Configuration
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Auction Configuration */}
+      <Dialog
+        open={openDialog === 'auction'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure NFT Auctions</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up auction parameters for NFT sales
+          </DialogContentText>
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              label="Default Duration (hours)"
+              type="number"
+              value={featureConfig.auction?.defaultDuration ? Math.floor(featureConfig.auction.defaultDuration / 3600) : ''}
+              onChange={(e) => {
+                const hours = parseFloat(e.target.value) || 24
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  auction: { 
+                    defaultDuration: hours * 3600,
+                    minimumStartingPrice: featureConfig.auction?.minimumStartingPrice || 0,
+                    bidIncrement: featureConfig.auction?.bidIncrement || 5
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              helperText="Duration of auctions in hours (e.g., 24, 72, 168)"
+              inputProps={{ min: 1, max: 720 }}
+            />
+            <TextField
+              fullWidth
+              label="Minimum Starting Price (ETH)"
+              type="number"
+              value={featureConfig.auction?.minimumStartingPrice ? parseFloat(featureConfig.auction.minimumStartingPrice.toString()) / 1e18 : ''}
+              onChange={(e) => {
+                const eth = parseFloat(e.target.value) || 0
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  auction: { 
+                    defaultDuration: featureConfig.auction?.defaultDuration || 86400, // 24h default
+                    minimumStartingPrice: Math.floor(eth * 1e18),
+                    bidIncrement: featureConfig.auction?.bidIncrement || 5
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              helperText="Minimum price to start an auction"
+              inputProps={{ min: 0, step: 0.001 }}
+            />
+            <TextField
+              fullWidth
+              label="Bid Increment (%)"
+              type="number"
+              value={featureConfig.auction?.bidIncrement || ''}
+              onChange={(e) => {
+                const increment = parseFloat(e.target.value) || 5
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  auction: { 
+                    defaultDuration: featureConfig.auction?.defaultDuration || 86400, // 24h default
+                    minimumStartingPrice: featureConfig.auction?.minimumStartingPrice || 0,
+                    bidIncrement: increment
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              helperText="Minimum percentage increase for each bid (default: 5%)"
+              inputProps={{ min: 1, max: 50 }}
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button variant="contained" onClick={handleCloseConfig}>Save</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Oracle Configuration */}
+      <Dialog
+        open={openDialog === 'oracle'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure Price Oracle</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up price feed oracle for dynamic pricing
+          </DialogContentText>
+          <Stack spacing={2}>
+            <FormControl fullWidth>
+              <InputLabel>Oracle Type</InputLabel>
+              <Select
+                value={featureConfig.oracle?.oracleType || 'chainlink'}
+                onChange={(e) => {
+                  const updatedConfig = { 
+                    ...featureConfig, 
+                    oracle: { 
+                      ...featureConfig.oracle,
+                      priceFeedAddress: featureConfig.oracle?.priceFeedAddress || '',
+                      oracleType: e.target.value as 'chainlink' | 'custom'
+                    } 
+                  }
+                  setFeatureConfig(updatedConfig)
+                  onFeatureConfigChange?.(updatedConfig)
+                }}
+              >
+                <MenuItem value="chainlink">Chainlink</MenuItem>
+                <MenuItem value="custom">Custom Oracle</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              label="Price Feed Address"
+              value={featureConfig.oracle?.priceFeedAddress || ''}
+              onChange={(e) => {
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  oracle: { 
+                    ...featureConfig.oracle,
+                    priceFeedAddress: e.target.value,
+                    oracleType: featureConfig.oracle?.oracleType || 'chainlink'
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              placeholder="0x..."
+              helperText="Contract address of the price feed oracle"
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button variant="contained" onClick={handleCloseConfig}>Save</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Escrow Configuration */}
+      <Dialog
+        open={openDialog === 'escrow'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure Escrow Service</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up escrow parameters for secure transactions
+          </DialogContentText>
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              label="Default Duration (hours)"
+              type="number"
+              value={featureConfig.escrow?.defaultDuration ? Math.floor(featureConfig.escrow.defaultDuration / 3600) : ''}
+              onChange={(e) => {
+                const hours = parseFloat(e.target.value) || 0
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  escrow: { 
+                    ...featureConfig.escrow,
+                    defaultDuration: hours * 3600,
+                    conditions: featureConfig.escrow?.conditions || []
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              helperText="How long funds are held in escrow (hours)"
+            />
+            <TextField
+              fullWidth
+              label="Arbitrator Address (optional)"
+              value={featureConfig.escrow?.arbitrator || ''}
+              onChange={(e) => {
+                const updatedConfig = { 
+                  ...featureConfig, 
+                  escrow: { 
+                    ...featureConfig.escrow,
+                    defaultDuration: featureConfig.escrow?.defaultDuration || 72 * 3600,
+                    conditions: featureConfig.escrow?.conditions || [],
+                    arbitrator: e.target.value
+                  } 
+                }
+                setFeatureConfig(updatedConfig)
+                onFeatureConfigChange?.(updatedConfig)
+              }}
+              placeholder="0x..."
+              helperText="Address of neutral party to resolve disputes"
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button variant="contained" onClick={handleCloseConfig}>Save</Button>
+        </DialogActions>
+              </Dialog>
+
+      {/* Tiered System Configuration */}
+      <Dialog
+        open={openDialog === 'tiered'}
+        onClose={handleCloseConfig}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>Configure Tiered System</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up different tiers with benefits and requirements
+          </DialogContentText>
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Configuration interface coming soon. This will allow you to define tiers like Bronze, Silver, Gold with different benefits.
+          </Alert>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button variant="contained" onClick={handleCloseConfig}>Save</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Governance Configuration */}
+      <Dialog
+        open={openDialog === 'governance'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure Governance</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up DAO governance parameters
+          </DialogContentText>
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              label="Voting Delay (blocks)"
+              type="number"
+              helperText="Number of blocks before voting starts after proposal creation"
+            />
+            <TextField
+              fullWidth
+              label="Voting Period (blocks)"
+              type="number"
+              helperText="Number of blocks voting remains open"
+            />
+            <TextField
+              fullWidth
+              label="Quorum Percentage"
+              type="number"
+              helperText="Percentage of total supply needed for valid vote"
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button variant="contained" onClick={handleCloseConfig}>Save</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Insurance Configuration */}
+      <Dialog
+        open={openDialog === 'insurance'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure Insurance Pool</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up insurance coverage parameters
+          </DialogContentText>
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              label="Coverage Percentage"
+              type="number"
+              helperText="Percentage of transaction value covered by insurance"
+            />
+            <TextField
+              fullWidth
+              label="Premium Rate (%)"
+              type="number"
+              helperText="Percentage charged as insurance premium"
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button variant="contained" onClick={handleCloseConfig}>Save</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Cross-Chain Configuration */}
+      <Dialog
+        open={openDialog === 'crosschain'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure Cross-Chain</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up multi-chain deployment parameters
+          </DialogContentText>
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Select target chains and bridge configuration. Full interface coming soon.
+          </Alert>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button variant="contained" onClick={handleCloseConfig}>Save</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Rewards Configuration */}
+      <Dialog
+        open={openDialog === 'rewards'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure Reward System</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set up rewards for user actions
+          </DialogContentText>
+          <Stack spacing={2}>
+            <FormControl fullWidth>
+              <InputLabel>Reward Type</InputLabel>
+              <Select value="points">
+                <MenuItem value="points">Points</MenuItem>
+                <MenuItem value="tokens">Tokens</MenuItem>
+                <MenuItem value="nft">NFT</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              label="Reward Amount"
+              type="number"
+              helperText="Amount of reward per qualifying action"
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button variant="contained" onClick={handleCloseConfig}>Save</Button>
+        </DialogActions>
+      </Dialog>
+
       {}
       <Dialog
         open={openDialog === 'tax'}
@@ -803,6 +1412,178 @@ const PremiumFeatures = ({ template, selectedFeatures, onFeaturesChange, feature
               }
             }}
             disabled={!newTimelockDelay || parseInt(newTimelockDelay) <= 0}
+          >
+            Save Configuration
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {}
+      <Dialog
+        open={openDialog === 'uristorage'}
+        onClose={handleCloseConfig}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Configure URI Storage</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 3 }}>
+            Set the URI for the token's metadata.
+          </DialogContentText>
+          <Stack spacing={2}>
+            <Box sx={{ mb: 1 }}>
+              <input
+                type="file"
+                accept=".json"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  try {
+                    const content = await file.text()
+                    const parsed = JSON.parse(content)
+                    let tokenUris: { tokenId: string; uri: string }[] = []
+                    
+                    if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+                      // Handle object format: {"1": "uri1", "2": "uri2"}
+                      tokenUris = Object.entries(parsed).map(([tokenId, uri]) => ({
+                        tokenId,
+                        uri: String(uri)
+                      }))
+                    } else if (Array.isArray(parsed)) {
+                      // Handle array format: [{"tokenId": "1", "uri": "uri1"}, ...]
+                      tokenUris = parsed.map((item, index) => {
+                        if (typeof item === 'object' && item.tokenId && item.uri) {
+                          return { tokenId: String(item.tokenId), uri: String(item.uri) }
+                        } else {
+                          return { tokenId: String(index + 1), uri: String(item) }
+                        }
+                      })
+                    } else {
+                      throw new Error('Invalid format. Expected object or array.')
+                    }
+                    
+                    const updatedConfig = { 
+                      ...featureConfig, 
+                      uristorage: { 
+                        tokenUris,
+                        totalTokens: tokenUris.length
+                      } 
+                    }
+                    setFeatureConfig(updatedConfig)
+                    onFeatureConfigChange?.(updatedConfig)
+                    setUriStorageError('')
+                    alert(`Successfully imported ${tokenUris.length} token URIs`)
+                  } catch (err) {
+                    const errorMsg = err instanceof Error ? err.message : 'Failed to parse file'
+                    setUriStorageError(errorMsg)
+                  }
+                  e.target.value = ''
+                }}
+                style={{ display: 'none' }}
+                id="uristorage-file-upload"
+              />
+              <label htmlFor="uristorage-file-upload">
+                <Button
+                  component="span"
+                  variant="outlined"
+                  startIcon={<CloudUploadIcon />}
+                  fullWidth
+                  sx={{ mb: 1 }}
+                >
+                  Upload URI File
+                </Button>
+              </label>
+                             <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                 Supported formats:
+                 <br />
+                 • Object: {`{"1": "uri1", "2": "uri2"}`}
+                 <br />
+                 • Array: {`[{"tokenId": "1", "uri": "uri1"}, {"tokenId": "2", "uri": "uri2"}]`}
+                 <br />
+                 • Simple Array: {`["https://example.com/token1.json", "https://example.com/token2.json"]`}
+               </Typography>
+               <Button
+                 variant="text"
+                 size="small"
+                 onClick={downloadExampleURIFile}
+                 sx={{ mt: 1, textTransform: 'none' }}
+               >
+                 📥 Download Example JSON
+               </Button>
+            </Box>
+                         {uriStorageError && (
+               <Alert severity="error" sx={{ mb: 2 }}>
+                 {uriStorageError}
+               </Alert>
+             )}
+             
+             {featureConfig.uristorage?.tokenUris && featureConfig.uristorage.tokenUris.length > 0 ? (
+               <Box>
+                 <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                   Configured Token URIs ({featureConfig.uristorage.tokenUris.length})
+                 </Typography>
+                 <Box sx={{ 
+                   maxHeight: 200, 
+                   overflowY: 'auto',
+                   border: 1,
+                   borderColor: 'divider',
+                   borderRadius: 1,
+                   p: 1 
+                 }}>
+                   <List dense>
+                     {featureConfig.uristorage.tokenUris.map((item, index) => (
+                       <ListItem key={index}>
+                         <ListItemText
+                           primary={`Token ${item.tokenId}`}
+                           secondary={
+                             <Typography variant="body2" sx={{ 
+                               fontFamily: 'monospace', 
+                               fontSize: '0.75rem',
+                               wordBreak: 'break-all'
+                             }}>
+                               {item.uri}
+                             </Typography>
+                           }
+                         />
+                       </ListItem>
+                     ))}
+                   </List>
+                 </Box>
+                                   <Alert severity="success" sx={{ mt: 2 }}>
+                    {featureConfig.uristorage.tokenUris.length} token URI(s) configured successfully
+                  </Alert>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    onClick={() => {
+                      const updatedConfig = { ...featureConfig }
+                      delete updatedConfig.uristorage
+                      setFeatureConfig(updatedConfig)
+                      onFeatureConfigChange?.(updatedConfig)
+                      localStorage.removeItem('uriStorageConfig')
+                    }}
+                    sx={{ mt: 1 }}
+                  >
+                    Clear Configuration
+                  </Button>
+                </Box>
+             ) : (
+               <Alert severity="info">
+                 Upload a JSON file to configure token URIs. Example formats:
+                 <br />
+                 • Object: {`{"1": "https://example.com/token1.json", "2": "https://example.com/token2.json"}`}
+                 <br />
+                 • Array: {`[{"tokenId": "1", "uri": "https://example.com/token1.json"}]`}
+               </Alert>
+             )}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfig}>Cancel</Button>
+          <Button
+            onClick={() => {
+              handleCloseConfig();
+            }}
           >
             Save Configuration
           </Button>

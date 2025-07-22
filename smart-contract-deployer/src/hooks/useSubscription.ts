@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAccount } from 'wagmi'
+
+// 🎯 DEV LOCAL : Compte avec toutes les options
+const DEV_PREMIUM_ADDRESS = '0xA3Cb5B568529b27e93AE726C7d8aEF18Cd551621'.toLowerCase()
+
 interface SubscriptionPlan {
   id: string
   name: string
@@ -51,7 +55,7 @@ export const useSubscription = (): UseSubscriptionReturn => {
   const [usage, setUsage] = useState<UsageData[]>([])
   const [usageLoading, setUsageLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
   const API_BASE = process.env.REACT_APP_API_URL || 'https://contractforge.io'
   const apiCall = useCallback(async (endpoint: string, options: RequestInit = {}) => {
     const apiKey = localStorage.getItem('contractforge_api_key')
@@ -195,9 +199,22 @@ export const useSubscription = (): UseSubscriptionReturn => {
       const freeFeatures = ['basic_templates', 'testnet_deployment', 'community_support', 'random_subdomain']
       return freeFeatures.includes(feature)
     }
+
+    // 🌟 COMPTE DEV PREMIUM : Accès à toutes les fonctionnalités
+    if (address?.toLowerCase() === DEV_PREMIUM_ADDRESS) {
+      console.log(`🎯 Dev account - Feature access granted: ${feature}`)
+      return true // Accès complet à toutes les fonctionnalités
+    }
+
     return subscription?.features?.[feature] === true
-  }, [isConnected, subscription])
+  }, [isConnected, subscription, address])
   const canUseResource = useCallback((resourceType: string, quantity: number = 1): boolean => {
+    // 🌟 COMPTE DEV PREMIUM : Pas de limites de ressources
+    if (address?.toLowerCase() === DEV_PREMIUM_ADDRESS) {
+      console.log(`🎯 Dev account - Resource access unlimited: ${resourceType}`)
+      return true // Pas de limites pour le compte dev
+    }
+
     if (!subscription) {
       const freeLimits: Record<string, number> = {
         deployments: 5,
@@ -215,7 +232,7 @@ export const useSubscription = (): UseSubscriptionReturn => {
       return true
     }
     return currentUsage + quantity <= limit
-  }, [subscription, usage])
+  }, [subscription, usage, address])
   useEffect(() => {
     fetchPlans()
   }, [fetchPlans])

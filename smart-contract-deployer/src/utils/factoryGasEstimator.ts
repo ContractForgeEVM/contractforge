@@ -103,7 +103,8 @@ function getChainConfig(chainId: number) {
 export async function estimateFactoryGas(
   chainId: number,
   templateType: TemplateType,
-  premiumFeatures: string[] = []
+  premiumFeatures: string[] = [],
+  walletAddress?: string // 🎯 Nouvelle paramètre pour le compte dev
 ): Promise<GasEstimate> {
   try {
     console.log(`🔍 Estimating gas for ${templateType} on chain ${chainId}...`)
@@ -162,7 +163,7 @@ export async function estimateFactoryGas(
     
     if (!contractCode || contractCode === '0x') {
       console.warn(`⚠️ No contract deployed at ${factoryAddress} on chain ${chainId}`)
-      return await getFallbackEstimation(chainId, templateType, premiumFeatures)
+      return await getFallbackEstimation(chainId, templateType, premiumFeatures, walletAddress)
     }
 
     console.log(`✅ UniversalFactoryV2 contract found at ${factoryAddress}`)
@@ -180,13 +181,25 @@ export async function estimateFactoryGas(
     // Calculer les composants séparément pour l'affichage et la logique
     const deploymentCost = 1000000000000000n // BASE_DEPLOYMENT_COST (0.001 ETH)
     const platformFee = (deploymentCost * 2n) / 100n // PLATFORM_FEE_PERCENTAGE = 2%
-    const premiumFee = totalCost - deploymentCost - platformFee
+    
+    // 🌟 Pour le compte dev, utiliser les prix gratuits depuis premiumFeatures
+    let premiumFee = totalCost - deploymentCost - platformFee
+    
+    // Import et utilisation de getTotalPremiumPrice pour cohérence avec le dev account
+    const { getTotalPremiumPrice } = await import('../data/premiumFeatures')
+    const calculatedPremiumFee = getTotalPremiumPrice(premiumFeatures, walletAddress)
+    
+    if (calculatedPremiumFee === 0) {
+      // Le compte dev a des features gratuites
+      premiumFee = 0n
+      console.log('🎯 Dev account detected - Premium features are FREE')
+    }
 
     console.log('💰 Factory estimation (V2 - valeur unique):')
     console.log(`  - Deployment cost: ${deploymentCost.toString()} wei (calculé)`)
     console.log(`  - Platform fee: ${platformFee.toString()} wei (calculé)`)
     console.log(`  - Premium fee: ${premiumFee.toString()} wei (calculé)`)
-    console.log(`  - Total cost: ${totalCost.toString()} wei (depuis contrat)`)
+    console.log(`  - Total cost: ${(deploymentCost + platformFee + premiumFee).toString()} wei`)
 
     // 6. Obtenir le prix du gas actuel
     const gasPrice = await getGasPrice(chainId)
@@ -222,13 +235,15 @@ export async function estimateFactoryGas(
 
     console.log(`⛽ Estimated gas limit: ${gasLimit.toString()}`)
 
+    const recalculatedTotalCost = deploymentCost + platformFee + premiumFee
+
     return {
       gasLimit,
       gasPrice,
-      deploymentCost: totalCost, // Utiliser le coût total de la factory
+      deploymentCost: recalculatedTotalCost, // Utiliser le coût total recalculé
       platformFee,
       premiumFee,
-      totalCost: totalCost + (gasLimit * gasPrice) // Ajouter les frais de gas
+      totalCost: recalculatedTotalCost + (gasLimit * gasPrice) // Ajouter les frais de gas
     }
 
   } catch (error: any) {
@@ -236,7 +251,7 @@ export async function estimateFactoryGas(
     
     // Si erreur dans l'estimation via contrat, utiliser le fallback
     console.warn('⚠️ Contract estimation failed, falling back to static estimation...')
-    return await getFallbackEstimation(chainId, templateType, premiumFeatures)
+    return await getFallbackEstimation(chainId, templateType, premiumFeatures, walletAddress)
   }
 }
 
@@ -248,7 +263,8 @@ export async function estimateFactoryGas(
 async function getFallbackEstimation(
   chainId: number,
   templateType: TemplateType,
-  premiumFeatures: string[]
+  premiumFeatures: string[],
+  walletAddress?: string // 🎯 Nouvelle paramètre pour le compte dev
 ): Promise<GasEstimate> {
   try {
     const gasPrice = await getGasPrice(chainId)
@@ -270,9 +286,14 @@ async function getFallbackEstimation(
     }
 
     const baseCost = templateCosts[templateType] || 1500000000000000n
-    const premiumFee = BigInt(premiumFeatures.length * 10) * 1000000000000000n // 0.01 ETH par feature
     const platformFee = (baseCost * 2n) / 100n // 2%
     const deploymentCost = baseCost
+    
+    // 🌟 Utiliser getTotalPremiumPrice pour les prix dev
+    const { getTotalPremiumPrice } = await import('../data/premiumFeatures')
+    const premiumPriceETH = getTotalPremiumPrice(premiumFeatures, walletAddress)
+    const premiumFee = BigInt(Math.floor(premiumPriceETH * 1e18)) // Convertir en wei
+    
     const totalCost = deploymentCost + platformFee + premiumFee
 
     const gasLimit = 1000000n

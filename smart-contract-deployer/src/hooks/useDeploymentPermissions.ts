@@ -15,6 +15,10 @@ interface DeploymentPermissionsResult {
   error: string | null
   refetch: () => Promise<void>
 }
+
+// 🎯 DEV LOCAL : Compte avec toutes les options
+const DEV_PREMIUM_ADDRESS = '0xA3Cb5B568529b27e93AE726C7d8aEF18Cd551621'.toLowerCase()
+
 export const useDeploymentPermissions = (): DeploymentPermissionsResult => {
   const [permissions, setPermissions] = useState<DeploymentPermissions | null>(null)
   const [loading, setLoading] = useState(true)
@@ -35,7 +39,23 @@ export const useDeploymentPermissions = (): DeploymentPermissionsResult => {
         })
         return
       }
-              // 🔗 Vérifier si le backend de subscription est disponible
+
+      // 🌟 COMPTE DEV PREMIUM : Accès complet pour l'adresse spécifiée
+      if (address.toLowerCase() === DEV_PREMIUM_ADDRESS) {
+        console.log('🎯 Compte développeur détecté - Accès premium complet activé')
+        setPermissions({
+          canDeploy: true,
+          platformFeeRate: 0.5, // Frais réduits au minimum
+          plan: 'enterprise',
+          subscriptionStatus: 'active',
+          payAsYouGo: false,
+          hasSubscriptionLimits: false, // Pas de limites
+          reason: 'Developer account - Full premium access enabled'
+        })
+        return
+      }
+      
+      // 🔗 Vérifier si le backend de subscription est disponible
       const backendUrl = import.meta.env.VITE_API_URL || 'https://contractforge.io'
       
       try {

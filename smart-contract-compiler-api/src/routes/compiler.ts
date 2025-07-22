@@ -10,12 +10,13 @@ interface CompileRequest {
   templateType?: 'token' | 'nft' | 'dao' | 'lock' | 'liquidity-pool' | 'yield-farming' | 'gamefi-token' | 'nft-marketplace' | 'revenue-sharing' | 'loyalty-program' | 'dynamic-nft' | 'social-token'
   features?: string[]
   params?: Record<string, any>
+  featureConfigs?: Record<string, any>
 }
 
 // Nouvelle route pour la compilation basée sur les templates
 router.post('/compile/template', async (req, res) => {
   try {
-    const { templateType, features, params }: CompileRequest = req.body
+    const { templateType, features, params, featureConfigs }: CompileRequest = req.body
     
     if (!templateType) {
       return res.status(400).json({
@@ -26,9 +27,10 @@ router.post('/compile/template', async (req, res) => {
 
     console.log(`🚀 Template compilation request for: ${templateType}`)
     console.log(`📋 Features: ${features?.length || 0}, Params: ${Object.keys(params || {}).length}`)
+    console.log(`⚙️  Feature Configs: ${Object.keys(featureConfigs || {}).length}`)
     
-    // Générer le code du contrat à partir du template
-    const sourceCode = generateContractCode(templateType, params || {}, features || [])
+    // Générer le code du contrat à partir du template avec les configurations
+    const sourceCode = generateContractCode(templateType, params || {}, features || [], featureConfigs)
     
     // Extraire le nom du contrat depuis le code généré
     const contractMatch = sourceCode.match(/contract\s+(\w+)\s+is/)

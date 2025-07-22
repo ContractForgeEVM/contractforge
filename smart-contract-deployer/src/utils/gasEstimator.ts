@@ -12,7 +12,8 @@ interface GasPrice {
 export const estimateGas = async (
   chainId: number,
   premiumFeatures: string[] = [],
-  templateType?: string
+  templateType?: string,
+  walletAddress?: string // 🎯 Nouvelle paramètre pour le compte dev
 ): Promise<GasEstimate> => {
   try {
     const gasPrice = await getGasPrice(chainId)
@@ -33,7 +34,8 @@ export const estimateGas = async (
     const gasLimit = (baseGasLimit * margin) / 100n
     const deploymentCost = gasLimit * gasPrice.fast
     const platformFee = (deploymentCost * 2n) / 100n
-    const premiumPriceETH = getTotalPremiumPrice(premiumFeatures)
+    // 🌟 Passer l'adresse wallet pour les prix premium
+    const premiumPriceETH = getTotalPremiumPrice(premiumFeatures, walletAddress)
     const premiumFee = parseUnits(premiumPriceETH.toString(), 18)
     const totalCost = deploymentCost + platformFee + premiumFee
     return {
@@ -50,7 +52,8 @@ export const estimateGas = async (
     const gasLimit = 1000000n
     const deploymentCost = gasLimit * defaultGasPrice
     const platformFee = (deploymentCost * 2n) / 100n
-    const premiumFee = parseUnits(getTotalPremiumPrice(premiumFeatures).toString(), 18)
+    // 🌟 Passer l'adresse wallet même dans le fallback
+    const premiumFee = parseUnits(getTotalPremiumPrice(premiumFeatures, walletAddress).toString(), 18)
     return {
       gasLimit,
       gasPrice: defaultGasPrice,

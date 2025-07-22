@@ -1,5 +1,5 @@
 import { generateContractCode } from './contractGenerator'
-import type { TemplateType } from '../types'
+import type { TemplateType, PremiumFeatureConfig } from '../types'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3004'
 const COMPILER_API_URL = `${API_BASE_URL}/api/web/compile`
@@ -18,7 +18,8 @@ interface CompilationResponse {
 export async function compileWithBackend(
   templateType: TemplateType,
   params: Record<string, any>,
-  premiumFeatures: string[] = []
+  premiumFeatures: string[] = [],
+  featureConfigs?: PremiumFeatureConfig
 ): Promise<{ bytecode: string; abi: any[] }> {
   try {
     console.log(`🚀 Compiling ${templateType} with Foundry via backend API...`)
@@ -29,6 +30,7 @@ export async function compileWithBackend(
     console.log('  templateType:', typeof templateType, templateType)
     console.log('  params:', typeof params, Object.keys(params))
     console.log('  premiumFeatures:', typeof premiumFeatures, premiumFeatures)
+    console.log('  featureConfigs:', featureConfigs ? 'provided' : 'none')
     
     // Déterminer quelle route utiliser selon le template
     const isNewTemplate = ['token', 'nft', 'dao', 'lock', 'social-token', 'liquidity-pool', 'yield-farming', 'gamefi-token', 'nft-marketplace', 'revenue-sharing', 'loyalty-program', 'dynamic-nft'].includes(templateType)
@@ -42,7 +44,8 @@ export async function compileWithBackend(
     const requestData = {
       templateType,
       features: premiumFeatures,
-      params
+      params,
+      featureConfigs: featureConfigs || {}
     }
     
     console.log('📤 Request data being sent:')
