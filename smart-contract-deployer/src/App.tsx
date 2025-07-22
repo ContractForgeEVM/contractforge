@@ -33,6 +33,7 @@ function App() {
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
   const [featureConfigs, setFeatureConfigs] = useState<PremiumFeatureConfig>({})
   const [isDeploying, setIsDeploying] = useState(false)
+  const [showHomepage, setShowHomepage] = useState(true)
   const [deploymentResult, setDeploymentResult] = useState<{
     address?: string
     hash?: string
@@ -84,7 +85,22 @@ function App() {
     setSelectedFeatures([])
     setFeatureConfigs({})
     setDeploymentResult(null)
+    setShowHomepage(false)
     trackTemplateSelection(template.id)
+  }
+
+  const handleShowTemplates = () => {
+    setShowHomepage(false)
+    setSelectedTemplate(null)
+  }
+
+  const handleBackToHomepage = () => {
+    setShowHomepage(true)
+    setSelectedTemplate(null)
+    setContractParams({})
+    setSelectedFeatures([])
+    setFeatureConfigs({})
+    setDeploymentResult(null)
   }
 
   const handleParamsChange = (params: Record<string, any>) => {
@@ -181,6 +197,14 @@ function App() {
 
   const handleNavigateToDeploy = () => {
     setCurrentPage('deploy')
+    // Si on est déjà sur la page deploy, basculer entre homepage et templates
+    if (currentPage === 'deploy') {
+      if (selectedTemplate) {
+        handleBackToHomepage()
+      } else if (!showHomepage) {
+        setShowHomepage(true)
+      }
+    }
   }
 
   const handleNavigateToDocs = () => {
@@ -217,6 +241,8 @@ function App() {
               <TemplateSelector
                 selectedTemplate={selectedTemplate}
                 onSelectTemplate={handleTemplateSelect}
+                showHomepage={showHomepage}
+                onShowTemplates={handleShowTemplates}
               />
             ) : (
               <Box sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
@@ -226,7 +252,7 @@ function App() {
                     <ContractForm
                       template={selectedTemplate}
                       onChange={handleParamsChange}
-                      onBack={() => setSelectedTemplate(null)}
+                      onBack={handleBackToHomepage}
                       onDeploy={handleDeploy}
                       isDeploying={isDeploying}
                     />

@@ -8,12 +8,32 @@ import {
   Box,
   Chip,
   Stack,
+  Grid,
+  Container,
+  LinearProgress,
+  Avatar,
+  Paper,
+  Button
 } from '@mui/material'
 import {
   TrendingUp as TrendingIcon,
   Verified as VerifiedIcon,
   Construction as ConstructionIcon,
   GitHub as GitHubIcon,
+  Speed as SpeedIcon,
+  Security as SecurityIcon,
+  AccountBalance as BankIcon,
+  Code as CodeIcon,
+  Bolt as BoltIcon,
+  Public as PublicIcon,
+  Analytics as AnalyticsIcon,
+  AutoAwesome as AutoAwesomeIcon,
+  Palette as PaletteIcon,
+  IntegrationInstructions as IntegrationIcon,
+  Shield as ShieldIcon,
+  CloudDone as CloudDoneIcon,
+  Rocket as RocketIcon,
+  Star as StarIcon,
 } from '@mui/icons-material'
 import type { ContractTemplate } from '../types'
 import { templates } from '../data/templates'
@@ -22,9 +42,652 @@ import { SupportedNetworksHeader } from './SupportedNetworks'
 interface TemplateSelectorProps {
   selectedTemplate: ContractTemplate | null
   onSelectTemplate: (template: ContractTemplate) => void
+  showHomepage?: boolean
+  onShowTemplates?: () => void
 }
-const TemplateSelector = ({ selectedTemplate, onSelectTemplate }: TemplateSelectorProps) => {
+
+// Composant Hero Section avec avantages
+const HeroSection: React.FC = () => {
   const { t } = useTranslation()
+  
+  const platformStats = [
+    { icon: <RocketIcon />, value: '12+', label: 'Smart Contract Templates' },
+    { icon: <AutoAwesomeIcon />, value: '44+', label: 'Premium Features' },
+    { icon: <PublicIcon />, value: '15+', label: 'Supported Networks' },
+    { icon: <ShieldIcon />, value: '100%', label: 'Security Audited' }
+  ]
+
+  const keyFeatures = [
+    {
+      icon: <SpeedIcon />,
+      title: 'Deploy in Minutes',
+      description: 'No-code smart contract deployment with real-time code preview'
+    },
+    {
+      icon: <PaletteIcon />,
+      title: 'Custom Mint Pages',
+      description: 'Automatic subdomain pages for your NFT collections'
+    },
+    {
+      icon: <AnalyticsIcon />,
+      title: 'Advanced Analytics',
+      description: 'Real-time deployment tracking and performance metrics'
+    },
+    {
+      icon: <IntegrationIcon />,
+      title: 'Full Web3 Integration',
+      description: 'MetaMask, WalletConnect, and multi-chain support'
+    }
+  ]
+
+  const premiumHighlights = [
+    'Auction Systems', 'Price Oracles', 'Staking Rewards', 'DAO Governance',
+    'Multi-sig Security', 'Royalties (EIP-2981)', 'Whitelist Control', 'Dynamic NFTs'
+  ]
+
+  return (
+    <Box sx={{ mb: 6 }}>
+      {/* Hero Header */}
+      <Container maxWidth="lg" sx={{ textAlign: 'center', mb: 6 }}>
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: { xs: '2.5rem', md: '4rem' },
+            fontWeight: 900,
+            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            mb: 2,
+          }}
+        >
+          Deploy Smart Contracts
+          <br />
+          <Box component="span" sx={{ color: '#10b981' }}>Without Code</Box>
+        </Typography>
+        
+                 <Typography 
+           variant="h5" 
+           color="text.secondary" 
+           sx={{ mb: 4, maxWidth: '600px', mx: 'auto', lineHeight: 1.4 }}
+         >
+           Professional no-code platform with 44+ premium features, 
+           multi-chain support, and automatic mint page generation
+         </Typography>
+
+         {/* Hero CTA Button */}
+         <Box sx={{ mb: 4 }}>
+           <Button
+             variant="contained"
+             size="large"
+             startIcon={<RocketIcon />}
+             onClick={() => {
+               const templatesSection = document.getElementById('templates-section')
+               if (templatesSection) {
+                 templatesSection.scrollIntoView({ behavior: 'smooth' })
+               }
+             }}
+             sx={{
+               background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
+               px: 6,
+               py: 2,
+               fontSize: '1.3rem',
+               fontWeight: 700,
+               borderRadius: 3,
+               boxShadow: '0 8px 24px rgba(236, 72, 153, 0.4)',
+               '&:hover': {
+                 background: 'linear-gradient(135deg, #db2777 0%, #7c3aed 100%)',
+                 transform: 'translateY(-4px) scale(1.05)',
+                 boxShadow: '0 12px 32px rgba(236, 72, 153, 0.6)',
+               },
+               transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+               animation: 'pulse 2s infinite',
+               '@keyframes pulse': {
+                 '0%, 100%': {
+                   boxShadow: '0 8px 24px rgba(236, 72, 153, 0.4)',
+                 },
+                 '50%': {
+                   boxShadow: '0 8px 24px rgba(236, 72, 153, 0.8)',
+                 },
+               },
+             }}
+           >
+             🚀 Start Building Now
+           </Button>
+         </Box>
+
+        {/* Stats Row */}
+        <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center', flexWrap: 'wrap', mb: 4 }}>
+          {platformStats.map((stat, index) => (
+            <Box key={index} sx={{ flex: '1 1 250px', maxWidth: '300px' }}>
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  textAlign: 'center',
+                  background: 'rgba(26, 26, 46, 0.6)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 12px 24px rgba(99, 102, 241, 0.2)',
+                  }
+                }}
+              >
+                <Avatar
+                  sx={{
+                    bgcolor: 'primary.main',
+                    width: 48,
+                    height: 48,
+                    mx: 'auto',
+                    mb: 1,
+                  }}
+                >
+                  {stat.icon}
+                </Avatar>
+                <Typography variant="h4" fontWeight={700} color="primary">
+                  {stat.value}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {stat.label}
+                </Typography>
+              </Paper>
+            </Box>
+          ))}
+        </Box>
+      </Container>
+
+      {/* Key Features Grid */}
+      <Container maxWidth="lg" sx={{ mb: 5 }}>
+        <Typography variant="h3" align="center" fontWeight={700} sx={{ mb: 4 }}>
+          Why Choose ContractForge? 🚀
+        </Typography>
+        
+        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {keyFeatures.map((feature, index) => (
+            <Box key={index} sx={{ flex: '1 1 250px', maxWidth: '300px' }}>
+              <Card
+                sx={{
+                  height: '100%',
+                  background: 'rgba(26, 26, 46, 0.4)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 16px 32px rgba(99, 102, 241, 0.3)',
+                  }
+                }}
+              >
+                <CardContent sx={{ textAlign: 'center', p: 3 }}>
+                  <Avatar
+                    sx={{
+                      bgcolor: 'primary.main',
+                      width: 56,
+                      height: 56,
+                      mx: 'auto',
+                      mb: 2,
+                    }}
+                  >
+                    {feature.icon}
+                  </Avatar>
+                  <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+          ))}
+        </Box>
+      </Container>
+
+      {/* Premium Features Showcase */}
+      <Container maxWidth="lg" sx={{ mb: 5 }}>
+        <Paper
+          sx={{
+            p: 4,
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+            border: '1px solid rgba(99, 102, 241, 0.2)',
+            borderRadius: 3,
+          }}
+        >
+          <Box sx={{ textAlign: 'center', mb: 3 }}>
+            <StarIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+            <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
+              44+ Premium Features
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Advanced smart contract functionality at your fingertips
+            </Typography>
+          </Box>
+          
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
+            {premiumHighlights.map((feature, index) => (
+              <Chip
+                key={index}
+                label={feature}
+                variant="outlined"
+                sx={{
+                  borderColor: 'primary.main',
+                  color: 'primary.main',
+                  '&:hover': {
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                  }
+                }}
+              />
+            ))}
+          </Box>
+        </Paper>
+      </Container>
+
+      {/* Multi-Chain Support Visual */}
+      <Container maxWidth="lg" sx={{ mb: 5 }}>
+        <Box sx={{ textAlign: 'center', mb: 3 }}>
+          <PublicIcon sx={{ fontSize: 48, color: 'success.main', mb: 1 }} />
+          <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
+            Multi-Chain Deployment
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            Deploy on 15+ EVM-compatible networks with optimized gas estimation
+          </Typography>
+        </Box>
+        
+        <SupportedNetworksHeader />
+      </Container>
+
+      {/* CTA Section */}
+      <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+        <Paper
+          sx={{
+            p: 4,
+            background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
+            border: '2px solid',
+            borderColor: 'primary.main',
+            borderRadius: 3,
+          }}
+        >
+          <Typography variant="h4" fontWeight={700} sx={{ mb: 2 }}>
+            Ready to Deploy? 🚀
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            Join thousands of developers using ContractForge for professional smart contract deployment
+          </Typography>
+          
+                     <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+             <Button
+               variant="contained"
+               size="large"
+               startIcon={<RocketIcon />}
+               onClick={() => {
+                 const templatesSection = document.getElementById('templates-section')
+                 if (templatesSection) {
+                   templatesSection.scrollIntoView({ behavior: 'smooth' })
+                 }
+               }}
+               sx={{
+                 background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                 px: 4,
+                 py: 1.5,
+                 fontSize: '1.1rem',
+                 '&:hover': {
+                   background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                   transform: 'translateY(-2px)',
+                 },
+                 transition: 'all 0.3s ease',
+               }}
+             >
+               Choose Template
+             </Button>
+             <Button
+               variant="outlined"
+               size="large"
+               startIcon={<CodeIcon />}
+               onClick={() => window.open('/docs', '_blank')}
+               sx={{ 
+                 px: 4, 
+                 py: 1.5, 
+                 fontSize: '1.1rem',
+                 '&:hover': {
+                   transform: 'translateY(-2px)',
+                 },
+                 transition: 'all 0.3s ease',
+               }}
+             >
+               View Documentation
+             </Button>
+           </Box>
+        </Paper>
+      </Container>
+    </Box>
+  )
+}
+
+// Nouveau composant Homepage séparé
+export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemplates }) => {
+  const { t } = useTranslation()
+  
+  const platformStats = [
+    { icon: <RocketIcon />, value: '12+', label: 'Smart Contract Templates' },
+    { icon: <AutoAwesomeIcon />, value: '44+', label: 'Premium Features' },
+    { icon: <PublicIcon />, value: '15+', label: 'Supported Networks' },
+    { icon: <ShieldIcon />, value: '100%', label: 'Security Audited' }
+  ]
+
+  const keyFeatures = [
+    {
+      icon: <SpeedIcon />,
+      title: 'Deploy in Minutes',
+      description: 'No-code smart contract deployment with real-time code preview'
+    },
+    {
+      icon: <PaletteIcon />,
+      title: 'Custom Mint Pages',
+      description: 'Automatic subdomain pages for your NFT collections'
+    },
+    {
+      icon: <AnalyticsIcon />,
+      title: 'Advanced Analytics',
+      description: 'Real-time deployment tracking and performance metrics'
+    },
+    {
+      icon: <IntegrationIcon />,
+      title: 'Full Web3 Integration',
+      description: 'MetaMask, WalletConnect, and multi-chain support'
+    }
+  ]
+
+  const premiumHighlights = [
+    'Auction Systems', 'Price Oracles', 'Staking Rewards', 'DAO Governance',
+    'Multi-sig Security', 'Royalties (EIP-2981)', 'Whitelist Control', 'Dynamic NFTs'
+  ]
+
+  return (
+    <Box sx={{ mb: 6 }}>
+      {/* Hero Header */}
+      <Container maxWidth="lg" sx={{ textAlign: 'center', mb: 6 }}>
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: { xs: '2.5rem', md: '4rem' },
+            fontWeight: 900,
+            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            mb: 2,
+          }}
+        >
+          Deploy Smart Contracts
+          <br />
+          <Box component="span" sx={{ color: '#10b981' }}>Without Code</Box>
+        </Typography>
+        
+        <Typography 
+          variant="h5" 
+          color="text.secondary" 
+          sx={{ mb: 4, maxWidth: '600px', mx: 'auto', lineHeight: 1.4 }}
+        >
+          Professional no-code platform with 44+ premium features, 
+          multi-chain support, and automatic mint page generation
+        </Typography>
+
+        {/* Hero CTA Button */}
+        <Box sx={{ mb: 4 }}>
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<RocketIcon />}
+            onClick={onShowTemplates}
+            sx={{
+              background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
+              px: 6,
+              py: 2,
+              fontSize: '1.3rem',
+              fontWeight: 700,
+              borderRadius: 3,
+              boxShadow: '0 8px 24px rgba(236, 72, 153, 0.4)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #db2777 0%, #7c3aed 100%)',
+                transform: 'translateY(-4px) scale(1.05)',
+                boxShadow: '0 12px 32px rgba(236, 72, 153, 0.6)',
+              },
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+              animation: 'pulse 2s infinite',
+              '@keyframes pulse': {
+                '0%, 100%': {
+                  boxShadow: '0 8px 24px rgba(236, 72, 153, 0.4)',
+                },
+                '50%': {
+                  boxShadow: '0 8px 24px rgba(236, 72, 153, 0.8)',
+                },
+              },
+            }}
+          >
+            🚀 Start Building Now
+          </Button>
+        </Box>
+
+        {/* Stats Row */}
+        <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center', flexWrap: 'wrap', mb: 4 }}>
+          {platformStats.map((stat, index) => (
+            <Box key={index} sx={{ flex: '1 1 250px', maxWidth: '300px' }}>
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  textAlign: 'center',
+                  background: 'rgba(26, 26, 46, 0.6)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 12px 24px rgba(99, 102, 241, 0.2)',
+                  }
+                }}
+              >
+                <Avatar
+                  sx={{
+                    bgcolor: 'primary.main',
+                    width: 48,
+                    height: 48,
+                    mx: 'auto',
+                    mb: 1,
+                  }}
+                >
+                  {stat.icon}
+                </Avatar>
+                <Typography variant="h4" fontWeight={700} color="primary">
+                  {stat.value}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {stat.label}
+                </Typography>
+              </Paper>
+            </Box>
+          ))}
+        </Box>
+      </Container>
+
+      {/* Key Features Grid */}
+      <Container maxWidth="lg" sx={{ mb: 5 }}>
+        <Typography variant="h3" align="center" fontWeight={700} sx={{ mb: 4 }}>
+          Why Choose ContractForge? 🚀
+        </Typography>
+        
+        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {keyFeatures.map((feature, index) => (
+            <Box key={index} sx={{ flex: '1 1 250px', maxWidth: '300px' }}>
+              <Card
+                sx={{
+                  height: '100%',
+                  background: 'rgba(26, 26, 46, 0.4)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 16px 32px rgba(99, 102, 241, 0.3)',
+                  }
+                }}
+              >
+                <CardContent sx={{ textAlign: 'center', p: 3 }}>
+                  <Avatar
+                    sx={{
+                      bgcolor: 'primary.main',
+                      width: 56,
+                      height: 56,
+                      mx: 'auto',
+                      mb: 2,
+                    }}
+                  >
+                    {feature.icon}
+                  </Avatar>
+                  <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+          ))}
+        </Box>
+      </Container>
+
+      {/* Premium Features Showcase */}
+      <Container maxWidth="lg" sx={{ mb: 5 }}>
+        <Paper
+          sx={{
+            p: 4,
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+            border: '1px solid rgba(99, 102, 241, 0.2)',
+            borderRadius: 3,
+          }}
+        >
+          <Box sx={{ textAlign: 'center', mb: 3 }}>
+            <StarIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+            <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
+              44+ Premium Features
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Advanced smart contract functionality at your fingertips
+            </Typography>
+          </Box>
+          
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
+            {premiumHighlights.map((feature, index) => (
+              <Chip
+                key={index}
+                label={feature}
+                variant="outlined"
+                sx={{
+                  borderColor: 'primary.main',
+                  color: 'primary.main',
+                  '&:hover': {
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                  }
+                }}
+              />
+            ))}
+          </Box>
+        </Paper>
+      </Container>
+
+      {/* Multi-Chain Support Visual */}
+      <Container maxWidth="lg" sx={{ mb: 5 }}>
+        <Box sx={{ textAlign: 'center', mb: 3 }}>
+          <PublicIcon sx={{ fontSize: 48, color: 'success.main', mb: 1 }} />
+          <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
+            Multi-Chain Deployment
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            Deploy on 15+ EVM-compatible networks with optimized gas estimation
+          </Typography>
+        </Box>
+        
+        <SupportedNetworksHeader />
+      </Container>
+
+      {/* CTA Section */}
+      <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+        <Paper
+          sx={{
+            p: 4,
+            background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
+            border: '2px solid',
+            borderColor: 'primary.main',
+            borderRadius: 3,
+          }}
+        >
+          <Typography variant="h4" fontWeight={700} sx={{ mb: 2 }}>
+            Ready to Deploy? 🚀
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            Join thousands of developers using ContractForge for professional smart contract deployment
+          </Typography>
+          
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<RocketIcon />}
+              onClick={onShowTemplates}
+              sx={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                px: 4,
+                py: 1.5,
+                fontSize: '1.1rem',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                  transform: 'translateY(-2px)',
+                },
+                transition: 'all 0.3s ease',
+              }}
+            >
+              Choose Template
+            </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              startIcon={<CodeIcon />}
+              onClick={() => window.open('/docs', '_blank')}
+              sx={{ 
+                px: 4, 
+                py: 1.5, 
+                fontSize: '1.1rem',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                },
+                transition: 'all 0.3s ease',
+              }}
+            >
+              View Documentation
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
+    </Box>
+  )
+}
+
+const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = true, onShowTemplates }: TemplateSelectorProps) => {
+  const { t } = useTranslation()
+  
+  // Si on doit afficher la homepage
+  if (showHomepage && onShowTemplates) {
+    return <Homepage onShowTemplates={onShowTemplates} />
+  }
+  
   const getPopularityBadge = (templateId: string) => {
     const popularity: Record<string, string> = {
       token: 'Most Popular',
@@ -34,29 +697,58 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate }: TemplateSelect
     }
     return popularity[templateId]
   }
+  
   return (
     <Box>
-      {/* Affichage des réseaux supportés en haut */}
-      <SupportedNetworksHeader />
-      
-      <Stack spacing={1} alignItems="center" sx={{ mb: 4 }}>
-        <Typography
-          variant="h2"
-          align="center"
-          sx={{
-            fontWeight: 800,
-            background: 'linear-gradient(135deg, #ffffff 0%, #94a3b8 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}
-        >
-          {t('selectTemplate')}
-        </Typography>
-        <Typography variant="body1" color="text.secondary" align="center">
-          Choose from our battle-tested smart contract templates
-        </Typography>
-      </Stack>
+      {/* Version avec Hero intégré et smooth scroll */}
+      {showHomepage && (
+        <>
+          <HeroSection />
+          
+          <Box id="templates-section" sx={{ scrollMarginTop: '100px' }}>
+            <Stack spacing={1} alignItems="center" sx={{ mb: 4 }}>
+              <Typography
+                variant="h2"
+                align="center"
+                sx={{
+                  fontWeight: 800,
+                  background: 'linear-gradient(135deg, #ffffff 0%, #94a3b8 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                {t('selectTemplate')}
+              </Typography>
+              <Typography variant="body1" color="text.secondary" align="center">
+                Choose from our battle-tested smart contract templates
+              </Typography>
+            </Stack>
+          </Box>
+        </>
+      )}
+
+      {/* Version simple sans hero pour page séparée */}
+      {!showHomepage && (
+        <Stack spacing={1} alignItems="center" sx={{ mb: 4 }}>
+          <Typography
+            variant="h2"
+            align="center"
+            sx={{
+              fontWeight: 800,
+              background: 'linear-gradient(135deg, #ffffff 0%, #94a3b8 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            {t('selectTemplate')}
+          </Typography>
+          <Typography variant="body1" color="text.secondary" align="center">
+            Choose from our battle-tested smart contract templates
+          </Typography>
+        </Stack>
+      )}
       <Box
         sx={{
           display: 'grid',
