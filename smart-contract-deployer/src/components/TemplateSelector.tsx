@@ -246,7 +246,7 @@ const HeroSection: React.FC = () => {
         </Box>
       </Container>
 
-      {/* Premium Features Showcase */}
+      {/* Premium Features & Multi-Chain Showcase */}
       <Container maxWidth="lg" sx={{ mb: 5 }}>
         <Paper
           sx={{
@@ -256,17 +256,18 @@ const HeroSection: React.FC = () => {
             borderRadius: 3,
           }}
         >
-          <Box sx={{ textAlign: 'center', mb: 3 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
             <StarIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
             <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
-              44+ Premium Features
+              44+ Premium Features & Multi-Chain Support
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Advanced smart contract functionality at your fingertips
+              Advanced smart contract functionality with seamless multi-chain deployment
             </Typography>
           </Box>
           
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
+          {/* Premium Features Chips */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mb: 4 }}>
             {premiumHighlights.map((feature, index) => (
               <Chip
                 key={index}
@@ -282,23 +283,41 @@ const HeroSection: React.FC = () => {
                 }}
               />
             ))}
+            {/* Multi-Chain Feature Chip */}
+            <Chip
+              label="15+ EVM Networks"
+              variant="outlined"
+              icon={<PublicIcon />}
+              sx={{
+                borderColor: 'success.main',
+                color: 'success.main',
+                '&:hover': {
+                  backgroundColor: 'success.main',
+                  color: 'white',
+                }
+              }}
+            />
+          </Box>
+
+          {/* Multi-Chain Networks Display */}
+          <Box sx={{ 
+            background: 'rgba(0, 0, 0, 0.2)', 
+            borderRadius: 2, 
+            p: 3,
+            border: '1px solid rgba(255, 255, 255, 0.1)' 
+          }}>
+            <Box sx={{ textAlign: 'center', mb: 3 }}>
+              <PublicIcon sx={{ fontSize: 32, color: 'success.main', mb: 1 }} />
+              <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
+                🌍 Deploy Anywhere, Anytime
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Your contracts work seamlessly across all EVM-compatible networks
+              </Typography>
+            </Box>
+            <SupportedNetworksHeader />
           </Box>
         </Paper>
-      </Container>
-
-      {/* Multi-Chain Support Visual */}
-      <Container maxWidth="lg" sx={{ mb: 5 }}>
-        <Box sx={{ textAlign: 'center', mb: 3 }}>
-          <PublicIcon sx={{ fontSize: 48, color: 'success.main', mb: 1 }} />
-          <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
-            Multi-Chain Deployment
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            Deploy on 15+ EVM-compatible networks with optimized gas estimation
-          </Typography>
-        </Box>
-        
-        <SupportedNetworksHeader />
       </Container>
 
       {/* CTA Section */}
@@ -563,7 +582,7 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
         </Box>
       </Container>
 
-      {/* Premium Features Showcase */}
+      {/* Premium Features & Multi-Chain Showcase */}
       <Container maxWidth="lg" sx={{ mb: 5 }}>
         <Paper
           sx={{
@@ -573,17 +592,18 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
             borderRadius: 3,
           }}
         >
-          <Box sx={{ textAlign: 'center', mb: 3 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
             <StarIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
             <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
-              44+ Premium Features
+              44+ Premium Features & Multi-Chain Support
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Advanced smart contract functionality at your fingertips
+              Advanced smart contract functionality with seamless multi-chain deployment
             </Typography>
           </Box>
           
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
+          {/* Premium Features Chips */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mb: 4 }}>
             {premiumHighlights.map((feature, index) => (
               <Chip
                 key={index}
@@ -599,23 +619,41 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
                 }}
               />
             ))}
+            {/* Multi-Chain Feature Chip */}
+            <Chip
+              label="15+ EVM Networks"
+              variant="outlined"
+              icon={<PublicIcon />}
+              sx={{
+                borderColor: 'success.main',
+                color: 'success.main',
+                '&:hover': {
+                  backgroundColor: 'success.main',
+                  color: 'white',
+                }
+              }}
+            />
+          </Box>
+
+          {/* Multi-Chain Networks Display */}
+          <Box sx={{ 
+            background: 'rgba(0, 0, 0, 0.2)', 
+            borderRadius: 2, 
+            p: 3,
+            border: '1px solid rgba(255, 255, 255, 0.1)' 
+          }}>
+            <Box sx={{ textAlign: 'center', mb: 3 }}>
+              <PublicIcon sx={{ fontSize: 32, color: 'success.main', mb: 1 }} />
+              <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
+                🌍 Deploy Anywhere, Anytime
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Your contracts work seamlessly across all EVM-compatible networks
+              </Typography>
+            </Box>
+            <SupportedNetworksHeader />
           </Box>
         </Paper>
-      </Container>
-
-      {/* Multi-Chain Support Visual */}
-      <Container maxWidth="lg" sx={{ mb: 5 }}>
-        <Box sx={{ textAlign: 'center', mb: 3 }}>
-          <PublicIcon sx={{ fontSize: 48, color: 'success.main', mb: 1 }} />
-          <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
-            Multi-Chain Deployment
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            Deploy on 15+ EVM-compatible networks with optimized gas estimation
-          </Typography>
-        </Box>
-        
-        <SupportedNetworksHeader />
       </Container>
 
       {/* CTA Section */}
