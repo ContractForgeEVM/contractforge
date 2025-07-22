@@ -74,7 +74,7 @@ bracket_spacing = false
         await ensureOpenZeppelinCache()
         const ozTargetPath = path.join(tempDir, 'lib', 'openzeppelin-contracts')
         console.log('⚡ Copying OpenZeppelin from cache...')
-        execSync(`cp -r ${OPENZEPPELIN_CACHE_DIR} ${ozTargetPath}`, { shell: '/bin/bash' })
+        execSync(`cp -r ${OPENZEPPELIN_CACHE_DIR}/. ${ozTargetPath}`, { shell: '/bin/bash' })
         if (!fs.existsSync(ozTargetPath)) {
           throw new Error('OpenZeppelin installation failed')
         }
