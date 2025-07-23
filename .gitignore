@@ -22,24 +22,17 @@ quick-test-fixes.js
 test-all-compilations.js
 test-local-generator.js
 test-specific-errors.js
-deploy-production.sh
 
 # Test results and compilation outputs
 local-test-results.json
 compilation-test-results.json
 *-test-results.json
 
-# Deployment scripts - kept local for security
-deploy-backend.sh
-deploy-frontend.sh
-deploy-production.sh
-deploy-*.sh
+# All shell scripts - kept local for security
+*.sh
 
 # Documentation and deployment files
 Docs/
-deploy-production.sh
-deploy-frontend-only.sh
-deploy-backend-only.sh
 ethereum-deploy.log
 investor-presentation.html
 AUDIT_REPORT_UniversalFactoryV2.html
@@ -53,9 +46,8 @@ frontend-generator/
 scripts/
 config/
 
-# Database schemas
-supabase-schema.sql
-subscription-schema.sql
+# All SQL files - database schemas and scripts
+*.sql
 
 # Node modules
 node_modules/
