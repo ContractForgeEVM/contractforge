@@ -1,5 +1,6 @@
 import { generateContractCode } from './contractGenerator'
 import type { TemplateType, PremiumFeatureConfig } from '../types'
+import { createCompilationError, wrapHttpError } from './smartErrorHelper'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3004'
 const COMPILER_API_URL = `${API_BASE_URL}/api/web/compile`
@@ -105,18 +106,22 @@ export async function compileWithBackend(
         errorDetails = responseText
       }
       
-      // Messages d'erreur spécifiques selon le code
-      if (response.status === 400) {
-        throw new Error(`❌ Bad Request (400): ${errorMessage}${errorDetails ? '\nDétails: ' + errorDetails : ''}\n\n🔍 Vérifiez:\n- Les paramètres du template\n- Les premium features sélectionnées\n- La connectivité à l'API backend`)
-      } else if (response.status === 401) {
-        throw new Error(`❌ Unauthorized (401): Clé API invalide ou expirée`)
-      } else if (response.status === 404) {
-        throw new Error(`❌ Not Found (404): Route API introuvable: ${apiUrl}`)
-      } else if (response.status === 500) {
-        throw new Error(`❌ Server Error (500): Erreur interne du serveur de compilation`)
-      } else {
-        throw new Error(`❌ HTTP Error ${response.status}: ${errorMessage}`)
-      }
+      // 🧠 Utiliser les erreurs enrichies du système intelligent
+      const errorData = responseText ? (() => {
+        try { return JSON.parse(responseText) } catch { return null }
+      })() : null
+
+      throw wrapHttpError(
+        response.status, 
+        response.statusText, 
+        errorData,
+        {
+          apiUrl,
+          templateType,
+          features: premiumFeatures,
+          stage: 'compilation'
+        }
+      )
     }
     
     // Analyser la réponse de succès
@@ -136,7 +141,14 @@ export async function compileWithBackend(
     })
     
     if (!result.success) {
-      throw new Error(result.error || 'Compilation failed')
+      throw createCompilationError(
+        result.error || 'Compilation failed',
+        undefined,
+        {
+          templateType,
+          features: premiumFeatures
+        }
+      )
     }
     
     if (!result.bytecode || result.bytecode === '0x') {

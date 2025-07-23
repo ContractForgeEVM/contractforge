@@ -19,6 +19,62 @@ export default {
   "evmCompatible": "Deploy your smart contracts on any EVM-compatible blockchain",
   "moreSoon": "More Soon",
   "moreSoonDesc": "We're working on more templates! Click to contribute on GitHub",
+  "homepage": {
+    "heroTitle": "Deploy Smart Contracts",
+    "heroTitleHighlight": "Without Code",
+    "heroSubtitle": "Professional no-code platform with 44+ premium features, multi-chain support, and automatic mint page generation",
+    "startBuildingNow": "🚀 Start Building Now",
+    "platformStats": {
+      "smartContractTemplates": "Smart Contract Templates",
+      "premiumFeatures": "Premium Features",
+      "supportedNetworks": "Supported Networks",
+      "securityAudited": "Security Audited"
+    },
+    "whyChoose": "Why Choose ContractForge? 🚀",
+    "keyFeatures": {
+      "deployInMinutes": {
+        "title": "Deploy in Minutes",
+        "description": "No-code smart contract deployment with real-time code preview"
+      },
+      "customMintPages": {
+        "title": "Custom Mint Pages",
+        "description": "Automatic subdomain pages for your NFT collections"
+      },
+      "advancedAnalytics": {
+        "title": "Advanced Analytics", 
+        "description": "Real-time deployment tracking and performance metrics"
+      },
+      "fullWeb3Integration": {
+        "title": "Full Web3 Integration",
+        "description": "MetaMask, WalletConnect, and multi-chain support"
+      }
+    },
+    "premiumFeatures": {
+      "title": "44+ Premium Features & Multi-Chain Support",
+      "subtitle": "Advanced smart contract functionality with seamless multi-chain deployment",
+      "features": [
+        "Auction Systems",
+        "Price Oracles",
+        "Staking Rewards", 
+        "DAO Governance",
+        "Multi-sig Security",
+        "Royalties (EIP-2981)",
+        "Whitelist Control",
+        "Dynamic NFTs"
+      ],
+      "evmNetworks": "15+ EVM Networks"
+    },
+    "deployAnywhere": {
+      "title": "🌍 Deploy Anywhere, Anytime",
+      "subtitle": "Your contracts work seamlessly across all EVM-compatible networks"
+    },
+    "readyToDeploy": {
+      "title": "Ready to Deploy? 🚀",
+      "subtitle": "Join thousands of developers using ContractForge for professional smart contract deployment",
+      "chooseTemplate": "Choose Template",
+      "viewDocumentation": "View Documentation"
+    }
+  },
   "compilerMonitoring": {
     "title": "Compiler Monitoring",
     "status": "Status",
@@ -943,6 +999,7 @@ export default {
           "All templates",
           "Premium features",
           "Basic analytics",
+          "Advanced monitoring",
           "Priority support",
           "Custom branding"
         ]
@@ -957,6 +1014,7 @@ export default {
           "White-label solution",
           "Full API",
           "Advanced analytics",
+          "Advanced monitoring",
           "Dedicated support",
           "SLA guaranteed"
         ]
@@ -1037,6 +1095,53 @@ export default {
       "mintPagesUpgradeRequired": "Mint page generation is available for subscribed users only.",
       "apiKeys": "API Keys",
       "apiKeysComingSoon": "API key management coming soon..."
+    },
+    "monitoring": {
+      "title": "Advanced Monitoring",
+      "planLabel": "{plan} Plan",
+      "description": "Monitor your contracts in real-time with detailed metrics, alerts and analytics.",
+      "premiumFeature": {
+        "title": "Advanced Monitoring",
+        "subtitle": "Available with Pro and Enterprise plans",
+        "description": "Monitor your smart contracts in real-time with:",
+        "features": {
+          "metrics": "📊 Detailed performance metrics",
+          "alerts": "🚨 Automatic alerts",
+          "analytics": "📈 Transaction analytics", 
+          "realtime": "⚡ Real-time monitoring"
+        },
+        "upgradeButton": "Upgrade to Pro or Enterprise"
+      },
+      "noContracts": "No contracts to monitor",
+      "noContractsDesc": "Deploy contracts to start monitoring",
+      "contractMetrics": "Contract metrics",
+      "recentEvents": "Recent events",
+      "alerts": "Alerts",
+      "performance": "Performance",
+      "mainTitle": "Contract Monitoring",
+      "subtitle": "Monitor your deployed contracts in real-time",
+      "selectContract": "Select Contract to Monitor",
+      "realTimeUpdates": "Real-time updates",
+      "metrics": {
+        "totalTransactions": "Total Transactions",
+        "todaysActivity": "Today's Activity",
+        "avgGasUsed": "Avg Gas Used",
+        "totalValue": "Total Value (ETH)",
+        "successRate": "success rate",
+        "efficiency": "efficiency",
+        "lastActivity": "Last activity"
+      },
+      "activityLevels": {
+        "high": "high",
+        "medium": "moderate",
+        "low": "low"
+      },
+      "gasEfficiency": {
+        "excellent": "excellent",
+        "good": "good",
+        "moderate": "moderate",
+        "poor": "poor"
+      }
     }
   },
   "deployments": {
@@ -1110,6 +1215,173 @@ export default {
       "description": "Your custom mint page is now live and ready to use.",
       "viewPage": "View Page",
       "createAnother": "Create Another"
+    }
+  },
+  "networksHeader": {
+    "title": "🌍 13 Networks Supported - Deploy Anywhere",
+    "subtitle": "Your contracts can be deployed on any of these networks with the same factory",
+    "deployedAndVerified": "✅ All factory contracts deployed and verified • 🔄 More networks coming soon"
+  },
+  "smartErrors": {
+    "severity": {
+      "low": "Info",
+      "medium": "Warning", 
+      "high": "Error",
+      "critical": "Critical"
+    },
+    "category": {
+      "wallet": "Wallet",
+      "network": "Network",
+      "deployment": "Deployment",
+      "compilation": "Compilation",
+      "validation": "Validation",
+      "system": "System"
+    },
+    "wallet": {
+      "insufficientFunds": {
+        "title": "Insufficient Balance",
+        "message": "You need {{estimatedCost}} but only have {{userBalance}} on {{network}}"
+      },
+      "transactionRejected": {
+        "title": "Transaction Cancelled",
+        "message": "You cancelled the transaction in your wallet"
+      }
+    },
+    "network": {
+      "connectionFailed": {
+        "title": "Connection Failed",
+        "message": "Unable to connect to {{network}} network"
+      }
+    },
+    "deployment": {
+      "simulationFailed": {
+        "title": "Transaction Simulation Failed",
+        "message": "The transaction would fail if executed on {{network}}"
+      },
+      "gasLimit": {
+        "title": "Gas Limit Exceeded",
+        "message": "Transaction requires more gas than available (current: {{gasPrice}})"
+      }
+    },
+    "compilation": {
+      "failed": {
+        "title": "Compilation Failed",
+        "message": "The {{template}} contract with features [{{features}}] could not be compiled"
+      }
+    },
+    "validation": {
+      "invalidInput": {
+        "title": "Invalid Input",
+        "message": "Some parameters are invalid or missing"
+      }
+    },
+    "generic": {
+      "title": "Unexpected Error",
+      "message": "An unexpected error occurred during deployment"
+    },
+    "solutions": {
+      "title": "Recommended Solutions",
+      "autoFix": "Auto Fix",
+      "executing": "Fixing...",
+      "executed": "Fixed",
+      "openHelp": "Help",
+      "wallet": {
+        "solution1": {
+          "title": "Add Funds",
+          "description": "Transfer more ETH to your wallet"
+        },
+        "solution2": {
+          "title": "Switch Network",
+          "description": "Use a cheaper network (Polygon, Arbitrum)"
+        },
+        "solution3": {
+          "title": "Reduce Features",
+          "description": "Remove some premium features to lower cost"
+        }
+      },
+      "network": {
+        "solution1": {
+          "title": "Check Internet",
+          "description": "Ensure you have a stable connection"
+        },
+        "solution2": {
+          "title": "Switch RPC",
+          "description": "Try a different RPC provider"
+        },
+        "solution3": {
+          "title": "Retry",
+          "description": "The network may be temporarily unavailable"
+        }
+      },
+      "deployment": {
+        "solution1": {
+          "title": "Check Connectivity",
+          "description": "Verify network connection"
+        },
+        "solution2": {
+          "title": "Increase Gas",
+          "description": "Use more gas for the transaction"
+        },
+        "solution3": {
+          "title": "Verify Parameters",
+          "description": "Check that all fields are correct"
+        }
+      },
+      "compilation": {
+        "solution1": {
+          "title": "Check Parameters",
+          "description": "Some parameters may be incompatible"
+        },
+        "solution2": {
+          "title": "Simplify Contract",
+          "description": "Remove some premium features"
+        },
+        "solution3": {
+          "title": "Contact Support",
+          "description": "This combination may not be supported"
+        }
+      },
+      "validation": {
+        "solution1": {
+          "title": "Check Fields",
+          "description": "Verify all required fields are filled"
+        },
+        "solution2": {
+          "title": "Validate Addresses",
+          "description": "Ensure addresses are valid Ethereum addresses"
+        }
+      },
+      "generic": {
+        "solution1": {
+          "title": "Retry",
+          "description": "This error may be temporary"
+        },
+        "solution2": {
+          "title": "Check Parameters",
+          "description": "Ensure all fields are correct"
+        },
+        "solution3": {
+          "title": "Contact Support",
+          "description": "If the problem persists, contact our team"
+        }
+      }
+    },
+    "context": {
+      "title": "Context Information",
+      "template": "Template",
+      "network": "Network",
+      "userBalance": "Balance",
+      "estimatedCost": "Estimated Cost",
+      "gasPrice": "Gas Price",
+      "features": "Features"
+    },
+    "technical": {
+      "title": "Technical Details"
+    },
+    "actions": {
+      "close": "Close",
+      "retry": "Retry",
+      "documentation": "Documentation"
     }
   }
 } as const

@@ -5,6 +5,62 @@ export default {
   "evmCompatible": "Déployez vos contrats intelligents sur n'importe quelle blockchain compatible EVM",
   "moreSoon": "Bientôt Plus",
   "moreSoonDesc": "Nous travaillons sur plus de modèles ! Cliquez pour contribuer sur GitHub",
+  "homepage": {
+    "heroTitle": "Déployez des Contrats Intelligents",
+    "heroTitleHighlight": "Sans Code",
+    "heroSubtitle": "Plateforme professionnelle no-code avec plus de 44 fonctionnalités premium, support multi-chaînes et génération automatique de pages de mint",
+    "startBuildingNow": "🚀 Commencer Maintenant",
+    "platformStats": {
+      "smartContractTemplates": "Modèles de Contrats Intelligents",
+      "premiumFeatures": "Fonctionnalités Premium",
+      "supportedNetworks": "Réseaux Supportés",
+      "securityAudited": "Audité Sécurité"
+    },
+    "whyChoose": "Pourquoi Choisir ContractForge ? 🚀",
+    "keyFeatures": {
+      "deployInMinutes": {
+        "title": "Déployez en Minutes",
+        "description": "Déploiement de contrats intelligents no-code avec aperçu du code en temps réel"
+      },
+      "customMintPages": {
+        "title": "Pages de Mint Personnalisées",
+        "description": "Pages de sous-domaine automatiques pour vos collections NFT"
+      },
+      "advancedAnalytics": {
+        "title": "Analytics Avancées",
+        "description": "Suivi des déploiements en temps réel et métriques de performance"
+      },
+      "fullWeb3Integration": {
+        "title": "Intégration Web3 Complète",
+        "description": "MetaMask, WalletConnect et support multi-chaînes"
+      }
+    },
+    "premiumFeatures": {
+      "title": "44+ Fonctionnalités Premium & Support Multi-Chaînes",
+      "subtitle": "Fonctionnalités avancées de contrats intelligents avec déploiement multi-chaînes transparent",
+      "features": [
+        "Systèmes d'Enchères",
+        "Oracles de Prix", 
+        "Récompenses de Staking",
+        "Gouvernance DAO",
+        "Sécurité Multi-sig",
+        "Royalties (EIP-2981)",
+        "Contrôle Whitelist",
+        "NFTs Dynamiques"
+      ],
+      "evmNetworks": "15+ Réseaux EVM"
+    },
+    "deployAnywhere": {
+      "title": "🌍 Déployez Partout, N'importe Quand",
+      "subtitle": "Vos contrats fonctionnent parfaitement sur tous les réseaux compatibles EVM"
+    },
+    "readyToDeploy": {
+      "title": "Prêt à Déployer ? 🚀",
+      "subtitle": "Rejoignez des milliers de développeurs utilisant ContractForge pour un déploiement professionnel de contrats intelligents",
+      "chooseTemplate": "Choisir un Modèle",
+      "viewDocumentation": "Voir la Documentation"
+    }
+  },
   "compilerMonitoring": {
     "title": "Monitoring du Compilateur",
     "status": "Statut",
@@ -907,6 +963,7 @@ export default {
           "Tous les templates",
           "Fonctionnalités premium",
           "Analytics de base",
+          "Monitoring avancé",
           "Support prioritaire",
           "Branding personnalisé"
         ]
@@ -921,6 +978,7 @@ export default {
           "Solution white-label",
           "API complète",
           "Analytics avancées",
+          "Monitoring avancé",
           "Support dédié",
           "SLA garanti"
         ]
@@ -1001,6 +1059,53 @@ export default {
       "mintPagesUpgradeRequired": "La génération de pages de mint est réservée aux utilisateurs abonnés.",
       "apiKeys": "Clés API",
       "apiKeysComingSoon": "La gestion des clés API arrive bientôt..."
+    },
+    "monitoring": {
+      "title": "Monitoring Avancé",
+      "planLabel": "Plan {plan}",
+      "description": "Surveillez vos contrats en temps réel avec des métriques détaillées, alertes et analytics.",
+      "premiumFeature": {
+        "title": "Monitoring Avancé",
+        "subtitle": "Disponible avec les plans Pro et Enterprise",
+        "description": "Surveillez vos contrats intelligents en temps réel avec :",
+        "features": {
+          "metrics": "📊 Métriques détaillées de performance",
+          "alerts": "🚨 Alertes automatiques", 
+          "analytics": "📈 Analytics de transactions",
+          "realtime": "⚡ Monitoring en temps réel"
+        },
+        "upgradeButton": "Upgrader vers Pro ou Enterprise"
+      },
+      "noContracts": "Aucun contrat à surveiller",
+      "noContractsDesc": "Déployez des contrats pour commencer le monitoring",
+      "contractMetrics": "Métriques du contrat",
+      "recentEvents": "Événements récents",
+      "alerts": "Alertes",
+      "performance": "Performance",
+      "mainTitle": "Monitoring de Contrats",
+      "subtitle": "Surveillez vos contrats déployés en temps réel",
+      "selectContract": "Sélectionner un Contrat à Surveiller",
+      "realTimeUpdates": "Mises à jour temps réel",
+      "metrics": {
+        "totalTransactions": "Transactions Totales",
+        "todaysActivity": "Activité d'Aujourd'hui",
+        "avgGasUsed": "Gas Moyen Utilisé",
+        "totalValue": "Valeur Totale (ETH)",
+        "successRate": "taux de succès",
+        "efficiency": "efficacité",
+        "lastActivity": "Dernière activité"
+      },
+      "activityLevels": {
+        "high": "élevé",
+        "medium": "modéré",
+        "low": "faible"
+      },
+      "gasEfficiency": {
+        "excellent": "excellente",
+        "good": "bonne",
+        "moderate": "modérée",
+        "poor": "faible"
+      }
     }
   },
   "deployments": {
@@ -1070,6 +1175,173 @@ export default {
       "description": "Votre page de mint personnalisée est maintenant en ligne et prête à être utilisée.",
       "viewPage": "Voir la page",
       "createAnother": "Créer une autre"
+    }
+  },
+  "networksHeader": {
+    "title": "🌍 13 Réseaux Supportés - Déployez Partout",
+    "subtitle": "Vos contrats peuvent être déployés sur n'importe lequel de ces réseaux avec la même factory",
+    "deployedAndVerified": "✅ Tous les contrats factory déployés et vérifiés • 🔄 Plus de réseaux à venir"
+  },
+  "smartErrors": {
+    "severity": {
+      "low": "Info",
+      "medium": "Avertissement",
+      "high": "Erreur",
+      "critical": "Critique"
+    },
+    "category": {
+      "wallet": "Portefeuille",
+      "network": "Réseau", 
+      "deployment": "Déploiement",
+      "compilation": "Compilation",
+      "validation": "Validation",
+      "system": "Système"
+    },
+    "wallet": {
+      "insufficientFunds": {
+        "title": "Solde Insuffisant",
+        "message": "Vous avez besoin de {{estimatedCost}} mais n'avez que {{userBalance}} sur {{network}}"
+      },
+      "transactionRejected": {
+        "title": "Transaction Annulée",
+        "message": "Vous avez annulé la transaction dans votre portefeuille"
+      }
+    },
+    "network": {
+      "connectionFailed": {
+        "title": "Connexion Échouée",
+        "message": "Impossible de se connecter au réseau {{network}}"
+      }
+    },
+    "deployment": {
+      "simulationFailed": {
+        "title": "Simulation de Transaction Échouée",
+        "message": "La transaction échouerait si exécutée sur {{network}}"
+      },
+      "gasLimit": {
+        "title": "Limite de Gas Dépassée",
+        "message": "La transaction nécessite plus de gas que disponible (actuel: {{gasPrice}})"
+      }
+    },
+    "compilation": {
+      "failed": {
+        "title": "Compilation Échouée",
+        "message": "Le contrat {{template}} avec les fonctionnalités [{{features}}] n'a pas pu être compilé"
+      }
+    },
+    "validation": {
+      "invalidInput": {
+        "title": "Saisie Invalide",
+        "message": "Certains paramètres sont invalides ou manquants"
+      }
+    },
+    "generic": {
+      "title": "Erreur Inattendue", 
+      "message": "Une erreur inattendue s'est produite lors du déploiement"
+    },
+    "solutions": {
+      "title": "Solutions Recommandées",
+      "autoFix": "Corriger Auto",
+      "executing": "Correction...",
+      "executed": "Corrigé",
+      "openHelp": "Aide",
+      "wallet": {
+        "solution1": {
+          "title": "Ajouter des Fonds",
+          "description": "Transférez plus d'ETH vers votre portefeuille"
+        },
+        "solution2": {
+          "title": "Changer de Réseau",
+          "description": "Utilisez un réseau moins cher (Polygon, Arbitrum)"
+        },
+        "solution3": {
+          "title": "Réduire les Fonctionnalités",
+          "description": "Retirez certaines fonctionnalités premium pour réduire les coûts"
+        }
+      },
+      "network": {
+        "solution1": {
+          "title": "Vérifier Internet",
+          "description": "Assurez-vous d'avoir une connexion stable"
+        },
+        "solution2": {
+          "title": "Changer de RPC",
+          "description": "Essayez un autre fournisseur RPC"
+        },
+        "solution3": {
+          "title": "Réessayer",
+          "description": "Le réseau peut être temporairement indisponible"
+        }
+      },
+      "deployment": {
+        "solution1": {
+          "title": "Vérifier la Connectivité", 
+          "description": "Vérifiez la connexion réseau"
+        },
+        "solution2": {
+          "title": "Augmenter le Gas",
+          "description": "Utilisez plus de gas pour la transaction"
+        },
+        "solution3": {
+          "title": "Vérifier les Paramètres",
+          "description": "Vérifiez que tous les champs sont corrects"
+        }
+      },
+      "compilation": {
+        "solution1": {
+          "title": "Vérifier les Paramètres",
+          "description": "Some paramètres peuvent être incompatibles"
+        },
+        "solution2": {
+          "title": "Simplifier le Contrat",
+          "description": "Retirez certaines fonctionnalités premium"
+        },
+        "solution3": {
+          "title": "Contacter le Support",
+          "description": "Cette combinaison peut ne pas être supportée"
+        }
+      },
+      "validation": {
+        "solution1": {
+          "title": "Vérifier les Champs",
+          "description": "Vérifiez que tous les champs requis sont remplis"
+        },
+        "solution2": {
+          "title": "Valider les Adresses",
+          "description": "Assurez-vous que les adresses sont des adresses Ethereum valides"
+        }
+      },
+      "generic": {
+        "solution1": {
+          "title": "Réessayer",
+          "description": "Cette erreur peut être temporaire"
+        },
+        "solution2": {
+          "title": "Vérifier les Paramètres",
+          "description": "Assurez-vous que tous les champs sont corrects"
+        },
+        "solution3": {
+          "title": "Contacter le Support",
+          "description": "Si le problème persiste, contactez notre équipe"
+        }
+      }
+    },
+    "context": {
+      "title": "Informations Contextuelles",
+      "template": "Modèle",
+      "network": "Réseau",
+      "userBalance": "Solde",
+      "estimatedCost": "Coût Estimé",
+      "gasPrice": "Prix du Gas",
+      "features": "Fonctionnalités"
+    },
+    "technical": {
+      "title": "Détails Techniques"
+    },
+    "actions": {
+      "close": "Fermer",
+      "retry": "Réessayer",
+      "documentation": "Documentation"
     }
   }
 } as const
