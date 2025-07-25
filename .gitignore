@@ -30,6 +30,16 @@ test_all_templates.js
 test_extended_templates.js
 check-versions.js
 
+# Security audit tools and reports
+audit-contracts.js
+scripts/security-pipeline.js
+scripts/generate-contracts-for-audit.js
+scripts/complete-audit-workflow.js
+audit-reports/
+security-reports/
+audit-contracts/
+final-audit-report/
+
 # Test results and compilation outputs
 local-test-results.json
 compilation-test-results.json
