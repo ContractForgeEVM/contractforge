@@ -35,10 +35,15 @@ audit-contracts.js
 scripts/security-pipeline.js
 scripts/generate-contracts-for-audit.js
 scripts/complete-audit-workflow.js
+scripts/slither-review-printer.js
+scripts/master-audit-workflow.js
 audit-reports/
 security-reports/
 audit-contracts/
 final-audit-report/
+slither-reports/
+slither-reviews/
+master-audit-report/
 
 # Test results and compilation outputs
 local-test-results.json
