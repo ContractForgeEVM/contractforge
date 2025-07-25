@@ -72,17 +72,55 @@ export const UINT8_TO_FEATURE_ID: Record<number, string> = Object.fromEntries(
 
 /**
  * Convertit les IDs string du frontend vers les uint8 pour le contrat
+ * 🛡️ SÉCURITÉ: Validates and sanitizes feature IDs
  */
 export function convertFeatureIdsToUint8(featureIds: string[]): number[] {
-  return featureIds
+  // 🛡️ Input validation
+  if (!Array.isArray(featureIds)) {
+    throw new Error('Feature IDs must be an array')
+  }
+  
+  if (featureIds.length > 44) { // Max number of premium features
+    throw new Error('Too many premium features selected (max 44)')
+  }
+  
+  const validIds = featureIds
+    .filter(id => {
+      if (typeof id !== 'string') {
+        console.warn(`⚠️ Invalid feature ID type: ${typeof id}, expected string`)
+        return false
+      }
+      if (!(id in PREMIUM_FEATURE_MAPPING)) {
+        console.warn(`⚠️ Unknown premium feature ID: ${id}`)
+        return false
+      }
+      return true
+    })
     .map(id => PREMIUM_FEATURE_MAPPING[id])
-    .filter(id => id !== undefined) // Filtrer les IDs non reconnus
+  
+  // Check for duplicates
+  const uniqueIds = [...new Set(validIds)]
+  if (uniqueIds.length !== validIds.length) {
+    console.warn('⚠️ Duplicate feature IDs detected and removed')
+  }
+  
+  return uniqueIds
 }
 
 /**
  * Convertit un template type string vers l'enum uint8
+ * 🛡️ SÉCURITÉ: Validates template type
  */
 export function getContractTemplateType(templateType: string): number {
+  // 🛡️ Input validation
+  if (typeof templateType !== 'string') {
+    throw new Error(`Template type must be a string, got: ${typeof templateType}`)
+  }
+  
+  if (!templateType || templateType.trim().length === 0) {
+    throw new Error('Template type cannot be empty')
+  }
+  
   const mapping: Record<string, number> = {
     'token': 0,           // TOKEN
     'nft': 1,            // NFT
@@ -97,7 +135,14 @@ export function getContractTemplateType(templateType: string): number {
     'dynamic-nft': 10,   // DYNAMIC_NFT
     'social-token': 11   // SOCIAL_TOKEN
   }
-  return mapping[templateType] ?? 0
+  
+  const normalizedType = templateType.trim().toLowerCase()
+  
+  if (!(normalizedType in mapping)) {
+    throw new Error(`Unknown template type: ${templateType}. Valid types: ${Object.keys(mapping).join(', ')}`)
+  }
+  
+  return mapping[normalizedType]
 }
 
 /**
@@ -109,10 +154,32 @@ export function getContractPremiumFeatures(featureIds: string[]): number[] {
 
 /**
  * Génère un salt unique pour CREATE2
+ * 🛡️ SÉCURITÉ: Validates inputs and generates secure salt
  */
 export const generateSalt = (deployer: string, templateId: string, timestamp: number): string => {
+  // 🛡️ Input validation
+  if (typeof deployer !== 'string' || !/^0x[a-fA-F0-9]{40}$/.test(deployer)) {
+    throw new Error('Invalid deployer address: must be a valid Ethereum address')
+  }
+  
+  if (typeof templateId !== 'string' || templateId.trim().length === 0) {
+    throw new Error('Template ID cannot be empty')
+  }
+  
+  if (typeof timestamp !== 'number' || timestamp <= 0 || !Number.isInteger(timestamp)) {
+    throw new Error('Timestamp must be a positive integer')
+  }
+  
+  // Validate timestamp is reasonable (not too far in past/future)
+  const now = Date.now()
+  const maxAge = 24 * 60 * 60 * 1000 // 24 hours
+  if (Math.abs(now - timestamp) > maxAge) {
+    console.warn('⚠️ Warning: Timestamp is more than 24 hours from current time')
+  }
+  
   const encoder = new TextEncoder()
-  const data = encoder.encode(`${deployer}-${templateId}-${timestamp}`)
+  const sanitizedTemplateId = templateId.trim().toLowerCase()
+  const data = encoder.encode(`${deployer.toLowerCase()}-${sanitizedTemplateId}-${timestamp}`)
   
   // Simple hash pour générer un salt de 32 bytes
   let hash = 0
@@ -124,5 +191,12 @@ export const generateSalt = (deployer: string, templateId: string, timestamp: nu
   const unsignedHash = hash >>> 0
   
   // Convertir en bytes32 (toujours positif maintenant)
-  return '0x' + unsignedHash.toString(16).padStart(64, '0')
+  const salt = '0x' + unsignedHash.toString(16).padStart(64, '0')
+  
+  // Validate generated salt
+  if (salt.length !== 66) { // 0x + 64 hex chars
+    throw new Error('Generated salt has invalid length')
+  }
+  
+  return salt
 } 

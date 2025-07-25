@@ -16,6 +16,119 @@ interface CompilationResponse {
   compilationTime?: number
 }
 
+/**
+ * 🛡️ SÉCURITÉ: Validates compilation inputs before sending to API
+ */
+function validateCompilationInputs(
+  templateType: TemplateType,
+  params: Record<string, any>,
+  premiumFeatures: string[]
+): void {
+  // Validate template type
+  const validTemplates = ['token', 'nft', 'dao', 'lock', 'social-token', 'liquidity-pool', 'yield-farming', 'gamefi-token', 'nft-marketplace', 'revenue-sharing', 'loyalty-program', 'dynamic-nft']
+  if (!validTemplates.includes(templateType)) {
+    throw new Error(`Invalid template type: ${templateType}. Must be one of: ${validTemplates.join(', ')}`)
+  }
+
+  // Validate params object
+  if (!params || typeof params !== 'object') {
+    throw new Error('Invalid params: must be a non-null object')
+  }
+
+  // Template-specific validations
+  switch (templateType) {
+    case 'token':
+      validateTokenParams(params)
+      break
+    case 'nft':
+      validateNFTParams(params)
+      break
+    case 'dao':
+      validateDAOParams(params)
+      break
+    case 'lock':
+      validateLockParams(params)
+      break
+  }
+
+  // Validate premium features
+  if (premiumFeatures && !Array.isArray(premiumFeatures)) {
+    throw new Error('Invalid premiumFeatures: must be an array')
+  }
+
+  // Check for dangerous combinations
+  if (premiumFeatures.includes('flashmint') && premiumFeatures.includes('pausable')) {
+    console.warn('⚠️ Warning: Flashmint with pausable can create DoS vulnerabilities')
+  }
+}
+
+function validateTokenParams(params: Record<string, any>): void {
+  if (params.name && (typeof params.name !== 'string' || params.name.length === 0 || params.name.length > 100)) {
+    throw new Error('Invalid token name: must be 1-100 characters')
+  }
+  
+  if (params.symbol && (typeof params.symbol !== 'string' || params.symbol.length === 0 || params.symbol.length > 20)) {
+    throw new Error('Invalid token symbol: must be 1-20 characters')
+  }
+
+  if (params.totalSupply && (isNaN(Number(params.totalSupply)) || Number(params.totalSupply) <= 0)) {
+    throw new Error('Invalid token supply: must be a positive number')
+  }
+
+  if (params.decimals && (isNaN(Number(params.decimals)) || Number(params.decimals) < 0 || Number(params.decimals) > 18)) {
+    throw new Error('Invalid decimals: must be 0-18')
+  }
+}
+
+function validateNFTParams(params: Record<string, any>): void {
+  if (params.name && (typeof params.name !== 'string' || params.name.length === 0 || params.name.length > 100)) {
+    throw new Error('Invalid NFT name: must be 1-100 characters')
+  }
+  
+  if (params.symbol && (typeof params.symbol !== 'string' || params.symbol.length === 0 || params.symbol.length > 20)) {
+    throw new Error('Invalid NFT symbol: must be 1-20 characters')
+  }
+
+  if (params.maxSupply && (isNaN(Number(params.maxSupply)) || Number(params.maxSupply) <= 0 || Number(params.maxSupply) > 1e9)) {
+    throw new Error('Invalid max supply: must be 1 to 1 billion')
+  }
+
+  if (params.mintPrice && (isNaN(Number(params.mintPrice)) || Number(params.mintPrice) < 0)) {
+    throw new Error('Invalid mint price: must be non-negative')
+  }
+}
+
+function validateDAOParams(params: Record<string, any>): void {
+  if (params.name && (typeof params.name !== 'string' || params.name.length === 0 || params.name.length > 100)) {
+    throw new Error('Invalid DAO name: must be 1-100 characters')
+  }
+
+  if (params.proposalThreshold && (isNaN(Number(params.proposalThreshold)) || Number(params.proposalThreshold) < 1)) {
+    throw new Error('Invalid proposal threshold: must be at least 1')
+  }
+
+  if (params.votingPeriod && (isNaN(Number(params.votingPeriod)) || Number(params.votingPeriod) < 1800)) {
+    throw new Error('Invalid voting period: must be at least 30 minutes (1800 seconds)')
+  }
+}
+
+function validateLockParams(params: Record<string, any>): void {
+  if (params.tokenAddress && !/^0x[a-fA-F0-9]{40}$/.test(params.tokenAddress)) {
+    throw new Error('Invalid token address: must be a valid Ethereum address')
+  }
+
+  if (params.beneficiary && !/^0x[a-fA-F0-9]{40}$/.test(params.beneficiary)) {
+    throw new Error('Invalid beneficiary address: must be a valid Ethereum address')
+  }
+
+  if (params.unlockTime && typeof params.unlockTime === 'string' && params.unlockTime.includes('T')) {
+    const unlockDate = new Date(params.unlockTime)
+    if (isNaN(unlockDate.getTime()) || unlockDate <= new Date()) {
+      throw new Error('Invalid unlock time: must be a future date')
+    }
+  }
+}
+
 export async function compileWithBackend(
   templateType: TemplateType,
   params: Record<string, any>,
@@ -23,6 +136,9 @@ export async function compileWithBackend(
   featureConfigs?: PremiumFeatureConfig
 ): Promise<{ bytecode: string; abi: any[] }> {
   try {
+    // 🛡️ SÉCURITÉ: Input validation
+    validateCompilationInputs(templateType, params, premiumFeatures)
+    
     console.log(`🚀 Compiling ${templateType} with Foundry via backend API...`)
     console.log(`📋 Template: ${templateType}, Features: ${premiumFeatures.length > 0 ? premiumFeatures.join(', ') : 'none'}`)
     

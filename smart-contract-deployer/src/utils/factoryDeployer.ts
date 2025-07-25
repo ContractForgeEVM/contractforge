@@ -40,7 +40,7 @@ function encodeConstructorParams(
           [
             params.name || 'MyToken',
             params.symbol || 'MTK',
-            parseUnits((params.totalSupply || '1000000').toString(), params.decimals || 18), // Convert to wei
+            BigInt(params.totalSupply || '1000000'), // 🛠️ FIX: Send raw value, backend multiplies by decimals
             params.decimals || 18
           ]
         )
@@ -139,7 +139,7 @@ function encodeConstructorParams(
           [
             params.name || 'GameToken',
             params.symbol || 'GAME',
-            parseUnits((params.maxSupply || '1000000').toString(), 18), // CORRECT: Convert to wei
+            BigInt(params.maxSupply || '1000000'), // 🛠️ FIX: Send raw value, backend multiplies by decimals
             BigInt(Math.floor((parseFloat(params.mintPrice) || 0.01) * 1e18)),
             BigInt((parseFloat(params.burnRate) || 2) * 100) // Convert to basis points
           ]
@@ -175,7 +175,7 @@ function encodeConstructorParams(
           [
             params.name || 'Revenue Token',
             params.symbol || 'REV',
-            parseUnits((params.totalSupply || '1000000').toString(), 18), // Convert to wei
+            BigInt(params.totalSupply || '1000000'), // 🛠️ FIX: Send raw value, backend multiplies by decimals
             params.businessWallet as `0x${string}`,
             BigInt((params.distributionPeriod || 30) * 24 * 60 * 60)
           ]
@@ -229,7 +229,7 @@ function encodeConstructorParams(
           [
             params.creatorName || 'Social Token',
             params.symbol || 'SOCIAL',
-            parseUnits((params.initialSupply || '1000000').toString(), 18), // Convert to wei
+            BigInt(params.initialSupply || '1000000'), // 🛠️ FIX: Send raw value, backend multiplies by decimals
             BigInt((params.creatorShare || 20) * 100), // Convert to basis points
             params.communityGoverned !== false // Default to true
           ]
