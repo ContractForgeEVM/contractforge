@@ -12,7 +12,8 @@ import {
   Container,
   Chip,
   IconButton,
-  Tooltip
+  Tooltip,
+  Alert
 } from '@mui/material'
 import {
   BarChart,
@@ -98,7 +99,6 @@ const PublicAnalytics: React.FC = () => {
   const loadPublicAnalytics = async () => {
     setLoading(true)
     try {
-      console.log('🔍 Chargement analytics publiques...')
       const dashboardData = await analyticsService.getDashboardData()
       
       // Transformer les données du dashboard en format public
@@ -107,8 +107,16 @@ const PublicAnalytics: React.FC = () => {
         successRate: dashboardData.deployments?.successRate || 0,
         averageCost: calculateAverageCost(dashboardData.deployments?.totalValue || '0 ETH', dashboardData.deployments?.total || 0),
         totalValue: dashboardData.deployments?.totalValue || '0 ETH',
-        templateStats: dashboardData.templates?.slice(0, 10) || [],
-        chainStats: dashboardData.chains?.slice(0, 8) || [],
+        templateStats: (dashboardData.templates || []).map((t: any) => ({
+          name: t.name,
+          count: t.count,
+          percentage: t.percentage
+        })),
+        chainStats: (dashboardData.chains || []).map((c: any) => ({
+          name: c.name,
+          count: c.count,
+          percentage: c.percentage
+        })),
         premiumFeatures: dashboardData.premiumFeatures?.slice(0, 6) || [],
         monthlyTrend: generateMonthlyTrend(dashboardData),
         recentStats: {
@@ -118,26 +126,9 @@ const PublicAnalytics: React.FC = () => {
         }
       }
 
-      console.log('✅ Analytics publiques chargées:', publicData)
       setData(publicData)
     } catch (error) {
-      console.error('❌ Erreur chargement analytics publiques:', error)
-      // Fallback avec données par défaut
-      setData({
-        totalDeployments: 0,
-        successRate: 0,
-        averageCost: '0 ETH',
-        totalValue: '0 ETH',
-        templateStats: [],
-        chainStats: [],
-        premiumFeatures: [],
-        monthlyTrend: [],
-        recentStats: {
-          todayDeployments: 0,
-          weekDeployments: 0,
-          monthDeployments: 0
-        }
-      })
+      console.error('Erreur lors du chargement des analytics publiques:', error)
     } finally {
       setLoading(false)
     }
@@ -249,11 +240,13 @@ const PublicAnalytics: React.FC = () => {
             </Typography>
           </Box>
         </Box>
-        <Tooltip title={t('publicAnalytics.refresh')}>
-          <IconButton onClick={handleRefresh} disabled={refreshing}>
-            <Refresh sx={{ animation: refreshing ? 'spin 1s linear infinite' : 'none' }} />
-          </IconButton>
-        </Tooltip>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Tooltip title="Actualiser les données">
+            <IconButton onClick={loadPublicAnalytics} size="small">
+              <Refresh />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
 
       {/* Métriques principales */}
@@ -334,7 +327,7 @@ const PublicAnalytics: React.FC = () => {
       {/* Graphiques */}
       <Box sx={{ 
         display: 'grid', 
-        gridTemplateColumns: { xs: '1fr', lg: 'repeat(2, 1fr)' },
+        gridTemplateColumns: { xs: '1fr', lg: 'repeat(3, 1fr)' },
         gap: 3,
         mb: 4
       }}>
@@ -362,45 +355,28 @@ const PublicAnalytics: React.FC = () => {
           </ResponsiveContainer>
         </Paper>
 
-        {/* Répartition par chaîne */}
-        <Paper sx={{ p: 3, height: 450, borderRadius: 3 }}>
+        {/* Distribution par chaînes */}
+        <Paper sx={{ p: 3, height: 400, borderRadius: 3 }}>
           <Typography variant="h6" sx={{ mb: 2 }}>
-            {t('publicAnalytics.blockchainDistribution')}
+            {t('publicAnalytics.chainDistribution')}
           </Typography>
-          <ResponsiveContainer width="100%" height="85%">
+          <ResponsiveContainer width="100%" height="90%">
             <PieChart>
               <Pie
-                data={data.chainStats.slice(0, 8)}
-                dataKey="deployments"
-                nameKey="name"
+                data={data.chainStats}
                 cx="50%"
-                cy="40%"
-                outerRadius={55}
-                innerRadius={20}
-                paddingAngle={1}
+                cy="50%"
+                outerRadius={120}
                 fill="#8884d8"
+                dataKey="count"
+                label={({ name, percentage }) => `${name}: ${percentage.toFixed(1)}%`}
               >
-                {data.chainStats.slice(0, 8).map((entry, index) => (
+                {data.chainStats.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <RechartsTooltip 
-                formatter={(value: any) => [value, t('publicAnalytics.deployments')]}
-                labelFormatter={(label: any) => `${label}`}
-              />
-              <Legend 
-                verticalAlign="bottom" 
-                height={80}
-                wrapperStyle={{
-                  fontSize: '12px',
-                  lineHeight: '1.2',
-                  paddingTop: '10px'
-                }}
-                formatter={(value: any, entry: any) => (
-                  <span style={{ fontSize: '12px' }}>
-                    {value}: {entry.payload.deployments} ({entry.payload.percentage.toFixed(1)}%)
-                  </span>
-                )}
+                formatter={(value: any, name: string) => [value, t('publicAnalytics.deployments')]}
               />
             </PieChart>
           </ResponsiveContainer>

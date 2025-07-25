@@ -301,16 +301,6 @@ class AnalyticsService {
     const effectiveUserId = walletAddress || this.userId
     const deploymentData = { ...data, userId: effectiveUserId }
     
-    console.log('🔍 Tracking deployment:', {
-      template: data.template,
-      chain: data.chain,
-      success: data.success,
-      address: data.address,
-      walletAddress,
-      effectiveUserId,
-      transactionHash: data.transactionHash
-    })
-    
     this.trackWithSupabase('deployment', deploymentData)
     this.addToQueue('deployment', deploymentData)
     this.updateRealTimeAnalytics('deployment', data)
@@ -363,8 +353,34 @@ class AnalyticsService {
   private getSessionPageViews(): number {
     return this.queue.filter(event => event.type === 'pageview').length
   }
+
+  // Méthode pour nettoyer les données localStorage corrompues
+  public clearStoredAnalytics(): void {
+    try {
+      localStorage.removeItem('analytics_data')
+      localStorage.removeItem('recent_deployments')
+      localStorage.removeItem('unique_users')
+      localStorage.removeItem('daily_views')
+      console.log('✅ Analytics localStorage cleared')
+    } catch (error) {
+      console.warn('Failed to clear analytics localStorage:', error)
+    }
+  }
+
   public async getDashboardData(): Promise<any> {
     console.log('🔍 Admin Analytics - Récupération des données Supabase...')
+    
+    // Nettoyer automatiquement le localStorage pour éviter les conflits
+    this.clearStoredAnalytics()
+    
+    // Nettoyage agressif de toutes les données localStorage corrompues
+    try {
+      localStorage.removeItem('analytics_events')
+      localStorage.removeItem('analytics_session_id')
+      console.log('🧹 Nettoyage agressif des données localStorage effectué')
+    } catch (error) {
+      console.warn('Failed to clear additional localStorage:', error)
+    }
     
     if (isSupabaseEnabled) {
       try {
@@ -419,12 +435,14 @@ class AnalyticsService {
 
         // Statistiques par template
         const templateStats = deployments.reduce((acc: Record<string, number>, d: any) => {
-          acc[d.template] = (acc[d.template] || 0) + 1
+          // Normaliser d'abord le nom du template vers son ID canonique
+          const normalizedTemplate = this.normalizeTemplateName(d.template)
+          acc[normalizedTemplate] = (acc[normalizedTemplate] || 0) + 1
           return acc
         }, {})
 
-        const templates = Object.entries(templateStats).map(([name, count]) => ({
-          name: this.formatTemplateName(name),
+        const templates = Object.entries(templateStats).map(([templateId, count]) => ({
+          name: this.formatTemplateName(templateId),
           count: count as number,
           percentage: deployments.length > 0 ? ((count as number) / deployments.length) * 100 : 0
         })).sort((a, b) => b.count - a.count)
@@ -535,15 +553,41 @@ class AnalyticsService {
 
   private formatTemplateName(template: string): string {
     const templateMap: Record<string, string> = {
-      'token': 'ERC-20 Token',
+      'token': 'ERC20 Token',
       'nft': 'NFT Collection', 
-      'dao': 'DAO Governance',
+      'dao': 'DAO',
       'lock': 'Token Lock',
       'multisig': 'Multi-Signature Wallet',
       'vesting': 'Token Vesting',
-      'marketplace': 'NFT Marketplace'
+      'marketplace': 'NFT Marketplace',
+      'social-token': 'Social Token',
+      'liquidity-pool': 'Liquidity Pool',
+      'yield-farming': 'Yield Farming',
+      'gamefi-token': 'GameFi Token',  
+      'nft-marketplace': 'NFT Marketplace',
+      'revenue-sharing': 'Revenue Sharing',
+      'loyalty-program': 'Loyalty Program',
+      'dynamic-nft': 'Dynamic NFT (dNFT)'
     }
     return templateMap[template] || template.toUpperCase()
+  }
+
+  private normalizeTemplateName(template: string): string {
+    const reverseMap: Record<string, string> = {
+      'ERC20 Token': 'token',
+      'ERC-20 Token': 'token', 
+      'Token ERC20': 'token',
+      'erc20': 'token', // ✅ Ajout pour normaliser 'erc20' vers 'token'
+      'ERC20': 'token', // ✅ Ajout pour normaliser 'ERC20' vers 'token'
+      'NFT Collection': 'nft',
+      'Collection NFT': 'nft',
+      'Multi-Signature Wallet': 'multisig',
+      'MultiSig Wallet': 'multisig',
+      'Multisig Wallet': 'multisig',
+      'Social Token': 'social-token',
+      'GameFi Token': 'gamefi-token'
+    }
+    return reverseMap[template] || template.toLowerCase()
   }
 
   private formatChainName(chain: string): string {
@@ -657,11 +701,13 @@ class AnalyticsService {
             currentData.failedDeployments = (currentData.failedDeployments || 0) + 1
           }
           const templates = currentData.templates || []
-          const templateIndex = templates.findIndex((t: any) => t.name === data.template)
+          const normalizedTemplate = this.normalizeTemplateName(data.template)
+          const formattedTemplateName = this.formatTemplateName(normalizedTemplate)
+          const templateIndex = templates.findIndex((t: any) => t.name === formattedTemplateName)
           if (templateIndex >= 0) {
             templates[templateIndex].count += 1
           } else {
-            templates.push({ name: data.template, count: 1, percentage: 0 })
+            templates.push({ name: formattedTemplateName, count: 1, percentage: 0 })
           }
           const totalTemplates = templates.reduce((sum: number, t: any) => sum + t.count, 0)
           templates.forEach((t: any) => {
@@ -669,11 +715,12 @@ class AnalyticsService {
           })
           currentData.templates = templates
           const chains = currentData.chains || []
-          const chainIndex = chains.findIndex((c: any) => c.name === data.chain)
+          const formattedChainName = this.formatChainName(data.chain)
+          const chainIndex = chains.findIndex((c: any) => c.name === formattedChainName)
           if (chainIndex >= 0) {
             chains[chainIndex].deployments += 1
           } else {
-            chains.push({ name: data.chain, deployments: 1, percentage: 0, totalValue: '0 ETH' })
+            chains.push({ name: formattedChainName, deployments: 1, percentage: 0, totalValue: '0 ETH' })
           }
           const totalChains = chains.reduce((sum: number, c: any) => sum + c.deployments, 0)
           chains.forEach((c: any) => {
@@ -683,8 +730,8 @@ class AnalyticsService {
           const recentDeployments = currentData.recentDeployments || []
           recentDeployments.unshift({
             id: Date.now().toString(),
-            template: data.template,
-            chain: data.chain,
+            template: formattedTemplateName,
+            chain: formattedChainName,
             address: data.address?.substring(0, 6) + '...' + data.address?.substring(data.address.length - 3) || 'N/A',
             timestamp: 'Just now',
             success: data.success,
@@ -726,8 +773,9 @@ class AnalyticsService {
     for (let i = 0; i < 10; i++) {
       this.trackPageView('/', { source: 'sample_data' })
     }
-    const templates = ['ERC20 Token', 'NFT Collection', 'Token Lock', 'DAO', 'Multisig Wallet']
-    const chains = ['Ethereum', 'Polygon', 'Arbitrum', 'Optimism', 'BSC']
+    // Utiliser les IDs canoniques des templates au lieu des noms formatés
+    const templates = ['token', 'nft', 'lock', 'dao', 'multisig']
+    const chains = ['ethereum', 'polygon', 'arbitrum', 'optimism', 'bsc']
     for (let i = 0; i < 5; i++) {
       const template = templates[Math.floor(Math.random() * templates.length)]
       const chain = chains[Math.floor(Math.random() * chains.length)]

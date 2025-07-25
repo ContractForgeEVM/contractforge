@@ -32,11 +32,24 @@ router.post('/compile/template', async (req, res) => {
     // Générer le code du contrat à partir du template avec les configurations
     const sourceCode = generateContractCode(templateType, params || {}, features || [], featureConfigs)
     
-    // Extraire le nom du contrat depuis le code généré
-    const contractMatch = sourceCode.match(/contract\s+(\w+)\s+is/)
-    const contractName = contractMatch ? contractMatch[1] : templateType.replace(/-/g, '').replace(/\b\w/g, l => l.toUpperCase()) + 'Contract'
+    // DEBUG: Afficher les premières lignes du code généré
+    console.log(`🔍 DEBUG: Generated source code (first 500 chars):`)
+    console.log(sourceCode.substring(0, 500))
+    
+    // Extraire le nom du contrat depuis le code généré avec une regex plus robuste
+    let contractName = 'Contract'
+    const contractMatch = sourceCode.match(/contract\s+(\w+)(?:\s+is|\s*\{)/)
+    if (contractMatch) {
+      contractName = contractMatch[1]
+    } else {
+      // Fallback: générer un nom basé sur le template et les paramètres
+      const name = params?.name || templateType
+      contractName = name.replace(/\s+/g, '') + (templateType === 'dao' ? 'DAO' : '')
+    }
     
     console.log(`📝 Generated contract: ${contractName}`)
+    console.log(`🔍 Contract name extracted from: ${contractMatch ? 'regex match' : 'fallback generation'}`)
+    console.log(`🔍 Regex match result:`, contractMatch)
     
     const result = await compileContract(sourceCode, contractName)
     res.json({

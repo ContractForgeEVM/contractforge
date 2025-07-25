@@ -18,10 +18,13 @@ debug-token-pausable-whitelist.sol
 debug-token-pausable.sol
 debug-*.sol
 debug-*.js
+debug_lock_test.js
 quick-test-fixes.js
 test-all-compilations.js
 test-local-generator.js
 test-specific-errors.js
+test_all_templates.js
+test_extended_templates.js
 
 # Test results and compilation outputs
 local-test-results.json

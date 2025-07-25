@@ -10,7 +10,8 @@ import ContractForm from './components/ContractForm'
 import PremiumFeatures from './components/PremiumFeatures'
 import CodeViewer from './components/CodeViewer'
 import DeploymentInfo from './components/DeploymentInfo'
-// import DeploymentSuccessModal from './components/DeploymentSuccessModal' // Supprimé - remplacé par toasts
+import DeploymentSuccessModal from './components/DeploymentSuccessModal'
+import DeploymentSkeleton from './components/DeploymentSkeleton'
 import Documentation from './components/Documentation'
 import ProtectedAnalytics from './components/ProtectedAnalytics'
 import AccountDashboard from './components/AccountDashboard'
@@ -26,7 +27,7 @@ import { validateConfig } from './config'
 import './i18n'
 
 // 🎯 Nouveaux imports pour les améliorations UX
-import { ToastProvider, contractToast } from './components/notifications/ToastSystem'
+import { ToastProviderWithRef, contractToast } from './components/notifications'
 import { PageErrorBoundary, Web3ErrorBoundary } from './components/errors/ErrorBoundary'
 
 // 🧠 Import du système d'erreurs intelligentes
@@ -36,20 +37,27 @@ import { SmartErrorDialog } from './components/errors/SmartErrorDialog'
 // 🧪 IMPORT DE TEST - Retirez en production
 import { SmartErrorExample } from './components/SmartErrorExample'
 
+// 🌐 Import pour les traductions
+import { useTranslation } from 'react-i18next'
+
 type PageType = 'deploy' | 'documentation' | 'account' | 'analytics' | 'public-analytics'
 
 function App() {
+  const { t } = useTranslation()
+  
   const [selectedTemplate, setSelectedTemplate] = useState<ContractTemplate | null>(null)
   const [contractParams, setContractParams] = useState<Record<string, any>>({})
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
   const [featureConfigs, setFeatureConfigs] = useState<PremiumFeatureConfig>({})
   const [isDeploying, setIsDeploying] = useState(false)
+  const [deploymentStatus, setDeploymentStatus] = useState<'pending' | 'confirmed'>('pending')
   const [showHomepage, setShowHomepage] = useState(true)
   const [deploymentResult, setDeploymentResult] = useState<{
     address?: string
     hash?: string
     error?: string
   } | null>(null)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
 
   const [gasEstimate, setGasEstimate] = useState<GasEstimate | null>(null)
   const [estimatingGas, setEstimatingGas] = useState(false)
@@ -75,9 +83,9 @@ function App() {
   useEffect(() => {
     const isValid = validateConfig()
     if (!isValid) {
-      console.warn('Some configuration values are missing. The app may not work correctly.')
+      console.warn(t('app.configWarning'))
     }
-  }, [])
+  }, [t])
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -85,6 +93,8 @@ function App() {
     
     if (urlParams.get('admin') === 'true' || pathname.includes('/analytics')) {
       setCurrentPage('analytics')
+    } else if (urlParams.get('docs') === 'true' || pathname.includes('/docs') || urlParams.get('page') === 'documentation') {
+      setCurrentPage('documentation')
     }
   }, [])
 
@@ -97,12 +107,12 @@ function App() {
         .catch(error => {
           console.error('Gas estimation failed:', error)
           // 🎯 Toast notification au lieu de console.error
-          contractToast.error('Failed to estimate gas costs')
+                      contractToast.error(t('app.gasEstimationFailed'), t('app.notifications.gasEstimationFailed'))
           setGasEstimate(null)
         })
         .finally(() => setEstimatingGas(false))
     }
-  }, [selectedTemplate, contractParams, selectedFeatures, chainId, isConnected, publicClient, address])
+  }, [selectedTemplate, contractParams, selectedFeatures, chainId, isConnected, publicClient, address, t])
 
   const handleTemplateSelect = (template: ContractTemplate) => {
     setSelectedTemplate(template)
@@ -114,7 +124,7 @@ function App() {
     trackTemplateSelection(template.id)
     
     // 🎯 Toast de sélection
-    contractToast.info(`Selected ${template.name} template`)
+    contractToast.info(t('app.templateSelected', { templateName: template.name }), t('app.notifications.templateSelected'))
   }
 
   const handleShowTemplates = () => {
@@ -147,20 +157,17 @@ function App() {
   const handleDeploy = async () => {
     if (!selectedTemplate || !walletClient || !publicClient || !gasEstimate || !address) {
       console.error('Missing required deployment data:', { selectedTemplate: !!selectedTemplate, walletClient: !!walletClient, publicClient: !!publicClient, gasEstimate: !!gasEstimate, address: !!address })
-      contractToast.error('Missing required data for deployment')
+      contractToast.error(t('app.missingRequiredData'), t('app.notifications.missingData'))
       return
     }
 
     console.log('🎯🎯🎯 APP.TSX HANDLE DEPLOY CALLED 🎯🎯🎯')
     
     setIsDeploying(true)
+    setDeploymentStatus('pending')
     setDeploymentResult(null)
 
-    // 🎯 Toast de déploiement en cours
-    contractToast.deploymentLoading("Deploying your contract...", {
-      network: getChainName(),
-      cost: gasEstimate.deploymentCost.toString()
-    })
+    // Pas de toast de déploiement - le skeleton gère déjà l'affichage
 
     try {
       // 🔍 DEBUG LOGS - TEMPORAIRE
@@ -178,8 +185,15 @@ function App() {
         publicClient,
         gasEstimate,
         selectedFeatures,
-        featureConfigs
+        featureConfigs,
+        (status) => {
+          // Tous les états intermédiaires sont considérés comme 'pending'
+          setDeploymentStatus('pending')
+          // Pas de notifications multiples - on garde seulement le skeleton
+        }
       )
+
+      // Pas de notification de confirmation - le skeleton gère déjà l'affichage
 
       setDeploymentResult(result)
       
@@ -195,19 +209,18 @@ function App() {
       }, address)
 
       if (result.address) {
+        setDeploymentStatus('confirmed')
         // 🎯 Toast de succès avec détails
-        contractToast.deploymentSuccess("Contract deployed successfully! 🎉", {
-          contractAddress: result.address,
-          txHash: result.hash,
-          explorerUrl: `https://arbiscan.io/tx/${result.hash}`,
-          gasUsed: gasEstimate.gasLimit.toString(),
-          cost: gasEstimate.deploymentCost.toString(),
-          network: getChainName()
-        })
-        // Modal success supprimée - le toast est suffisant
+        contractToast.success(t('app.deploymentSuccess', { address: result.address?.slice(0, 10) }), t('app.notifications.deploymentSuccess'))
+        // Afficher le modal de succès détaillé
+        setShowSuccessModal(true)
       }
     } catch (error: any) {
       console.error('Deployment failed:', error)
+      setDeploymentStatus('pending') // En cas d'erreur, on reste en pending
+      
+      // 🎯 Toast d'erreur de déploiement
+      contractToast.error(error.message || t('app.deploymentFailed'), t('app.notifications.deploymentFailed'))
       
       // Track failed deployment with error details
       trackDeployment({
@@ -232,10 +245,14 @@ function App() {
       )
       
       setDeploymentResult({
-        error: error.message || 'Deployment failed'
+        error: error.message || t('app.deploymentFailed')
       })
     } finally {
-      setIsDeploying(false)
+      // Attendre un peu avant de masquer le skeleton pour que l'utilisateur voie le résultat
+      setTimeout(() => {
+        setIsDeploying(false)
+        setDeploymentStatus('pending')
+      }, 2000)
     }
   }
 
@@ -249,7 +266,7 @@ function App() {
       43114: 'Avalanche',
       8453: 'Base'
     }
-    return chainNames[chainId] || 'Unknown'
+    return chainNames[chainId] || t('app.unknownChain')
   }
 
   const handleNavigateToDeploy = () => {
@@ -280,28 +297,28 @@ function App() {
     switch (currentPage) {
       case 'documentation':
         return (
-          <PageErrorBoundary pageName="Documentation">
+          <PageErrorBoundary pageName={t('app.pages.documentation')}>
             <Documentation />
           </PageErrorBoundary>
         )
       
       case 'analytics':
         return (
-          <PageErrorBoundary pageName="Analytics">
+          <PageErrorBoundary pageName={t('app.pages.analytics')}>
             <ProtectedAnalytics />
           </PageErrorBoundary>
         )
       
       case 'public-analytics':
         return (
-          <PageErrorBoundary pageName="Public Analytics">
+          <PageErrorBoundary pageName={t('app.pages.publicAnalytics')}>
             <PublicAnalytics />
           </PageErrorBoundary>
         )
       
       case 'account':
         return (
-          <PageErrorBoundary pageName="Account Dashboard">
+          <PageErrorBoundary pageName={t('app.pages.accountDashboard')}>
             <AccountDashboard />
           </PageErrorBoundary>
         )
@@ -309,7 +326,7 @@ function App() {
       case 'deploy':
       default:
         return (
-          <PageErrorBoundary pageName="Deploy">
+          <PageErrorBoundary pageName={t('app.pages.deploy')}>
             <Container maxWidth="xl" sx={{ py: 4, flex: 1 }}>
               {!selectedTemplate ? (
                 <TemplateSelector
@@ -326,13 +343,24 @@ function App() {
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                       {/* 🎯 Web3 Error Boundary pour les composants blockchain */}
                       <Web3ErrorBoundary>
-                        <ContractForm
-                          template={selectedTemplate}
-                          onChange={handleParamsChange}
-                          onBack={handleBackToHomepage}
-                          onDeploy={handleDeploy}
-                          isDeploying={isDeploying}
-                        />
+                                {isDeploying && deploymentStatus === 'pending' ? (
+          <DeploymentSkeleton
+            status="pending"
+                            chainName={getChainName()}
+                            templateName={selectedTemplate?.name}
+                            transactionHash={deploymentResult?.hash}
+                            chainId={chainId}
+                          />
+                        ) : (
+                          <ContractForm
+                            template={selectedTemplate}
+                            onChange={handleParamsChange}
+                            onBack={handleBackToHomepage}
+                            onDeploy={handleDeploy}
+                            isDeploying={isDeploying}
+                            deploymentStatus={deploymentStatus}
+                          />
+                        )}
                         <PremiumFeatures
                           template={selectedTemplate}
                           selectedFeatures={selectedFeatures}
@@ -364,7 +392,7 @@ function App() {
                     {process.env.NODE_ENV === 'development' && (
                       <Box sx={{ mt: 2, p: 2, bgcolor: 'warning.light', borderRadius: 1 }}>
                         <Typography variant="h6" gutterBottom>
-                          🧪 Test Système d'Erreurs Intelligentes
+                          {t('app.testSmartErrorSystem')}
                         </Typography>
                         <SmartErrorExample />
                       </Box>
@@ -385,7 +413,7 @@ function App() {
       <Analytics />
       
       {/* 🎯 Toast Provider pour toute l'app */}
-      <ToastProvider>
+      <ToastProviderWithRef>
         <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'background.default' }}>
           <Header
             onNavigateDeploy={handleNavigateToDeploy}
@@ -399,7 +427,16 @@ function App() {
           
           <Footer />
 
-          {/* DeploymentSuccessModal supprimée - remplacée par des toasts riches */}
+          {/* Modal de succès détaillé */}
+          <DeploymentSuccessModal
+            open={showSuccessModal}
+            onClose={() => setShowSuccessModal(false)}
+            deploymentResult={deploymentResult}
+            chainName={getChainName()}
+            gasEstimate={gasEstimate}
+            templateName={selectedTemplate?.name}
+            selectedFeatures={selectedFeatures}
+          />
 
           {/* 🧠 Dialog d'erreurs intelligentes global */}
           <SmartErrorDialog
@@ -425,7 +462,7 @@ function App() {
             </Alert>
           </Snackbar>
         </Box>
-      </ToastProvider>
+      </ToastProviderWithRef>
     </ThemeProvider>
   )
 }

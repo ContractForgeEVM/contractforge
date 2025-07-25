@@ -13,6 +13,7 @@ import verifyRoutes from './routes/verify'
 import analyticsRoutes from './routes/analytics'
 import subscriptionRoutes from './routes/subscription'
 import healthRoutes from './routes/health'
+import monitoringRoutes from './routes/monitoring'
 
 import cryptoPaymentRoutes from './routes/cryptoPayment'
 import mintPagesRoutes from './routes/mintPages'
@@ -85,6 +86,7 @@ app.use('/api/verify', authenticateApiKey, verifyRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/subscription', subscriptionRoutes)
 app.use('/api/compiler', healthLimiter, healthRoutes) // Applique le rate limiter spécifique aux health checks
+app.use('/api/monitoring', monitoringRoutes)
 app.use('/api/crypto', cryptoPaymentRoutes)
 app.use('/api/mint-pages', mintPagesRoutes)
 
@@ -107,7 +109,12 @@ app.use('*', (req, res) => {
       'GET /api/web/cache-stats',
       'POST /api/web/warmup-cache',
       'POST /api/web/clear-cache',
-      'POST /api/compiler/health'
+      'POST /api/compiler/health',
+      'GET /api/monitoring/contracts',
+      'GET /api/monitoring/contract/:address',
+      'POST /api/monitoring/track',
+      'GET /api/monitoring/analytics/:address',
+      'GET /api/monitoring/health'
     ]
   })
 })

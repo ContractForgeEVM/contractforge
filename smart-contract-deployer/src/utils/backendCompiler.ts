@@ -1,4 +1,4 @@
-import { generateContractCode } from './contractGenerator'
+import { generateContract } from './contractGenerator'
 import type { TemplateType, PremiumFeatureConfig } from '../types'
 import { createCompilationError, wrapHttpError } from './smartErrorHelper'
 

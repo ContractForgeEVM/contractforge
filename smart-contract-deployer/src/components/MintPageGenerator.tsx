@@ -410,21 +410,21 @@ const MintPageGenerator: React.FC = () => {
       content: (
         <Box>
           <Typography variant="body2" color="text.secondary" mb={2}>
-            Choisissez un sous-domaine unique pour votre page de mint
+            {t('mintPage.subdomainDesc')}
           </Typography>
           
           {/* 🎯 Alerte de développement local */}
           {isDev && (
             <Alert severity="info" sx={{ mb: 2 }} icon={<Warning />}>
               <Typography variant="body2">
-                <strong>Mode développement :</strong> Utilisation du vrai système de mint pages avec Web3 et badges ContractForge.io x OpenZeppelin.
+                <strong>{t('mintPage.developmentMode')}</strong> {t('mintPage.realMintSystemInfo')}
               </Typography>
             </Alert>
           )}
           
           <TextField
             fullWidth
-            label="Sous-domaine"
+            label={t('mintPage.subdomain')}
             value={config.subdomain}
             onChange={(e) => handleSubdomainChange(e.target.value)}
             helperText={`Preview: ${getMintPageUrl(config.subdomain || 'votre-nom')}`}
@@ -447,12 +447,12 @@ const MintPageGenerator: React.FC = () => {
           />
           {subdomainAvailable === false && (
             <Alert severity="error" sx={{ mt: 1 }}>
-              Ce sous-domaine n'est pas disponible
+              {t('mintPage.subdomainNotAvailable')}
             </Alert>
           )}
           {subdomainAvailable && (
             <Alert severity="success" sx={{ mt: 1 }}>
-              {isDev ? 'Sous-domaine valide pour la simulation !' : 'Sous-domaine disponible !'}
+              {isDev ? t('mintPage.subdomainValid') : t('mintPage.subdomainAvailable')}
             </Alert>
           )}
         </Box>
@@ -464,30 +464,28 @@ const MintPageGenerator: React.FC = () => {
         <Stack spacing={3}>
           <TextField
             fullWidth
-            label="Titre de la page"
+            label={t('mintPage.title')}
             value={config.title}
             onChange={(e) => setConfig({ ...config, title: e.target.value })}
-            placeholder="Ma Collection NFT Incroyable"
+            placeholder={t('mintPage.pageTitlePlaceholder')}
           />
           <TextField
             fullWidth
             multiline
             rows={3}
-            label="Description"
+            label={t('mintPage.description')}
             value={config.description}
             onChange={(e) => setConfig({ ...config, description: e.target.value })}
-                            placeholder={t('mintPage.descriptionPlaceholder')}
+            placeholder={t('mintPage.descriptionPlaceholder')}
           />
           
           {/* Hero Image Upload */}
           <Box>
             <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              🖼️ Image Hero (Optionnelle)
+              {t('mintPage.heroImageOptional')}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Ajoutez une image d'arrière-plan personnalisée pour votre hero section. 
-              Formats supportés : JPG, PNG, WebP. Taille max : 2MB. 
-              Résolution recommandée : 1920x800px.
+              {t('mintPage.heroImageDescription')}
             </Typography>
             
             {heroImagePreview ? (
@@ -541,7 +539,7 @@ const MintPageGenerator: React.FC = () => {
                 {uploadingImage ? (
                   <Stack alignItems="center" spacing={2}>
                     <CircularProgress />
-                    <Typography>Téléchargement...</Typography>
+                    <Typography>{t('mintPage.uploading')}</Typography>
                   </Stack>
                 ) : (
                   <Stack alignItems="center" spacing={2}>
@@ -549,9 +547,9 @@ const MintPageGenerator: React.FC = () => {
                       <Add />
                     </Avatar>
                     <div>
-                      <Typography variant="h6">Cliquez pour ajouter une image</Typography>
+                      <Typography variant="h6">{t('mintPage.clickToAddImage')}</Typography>
                       <Typography variant="body2" color="text.secondary">
-                        ou glissez-déposez votre image ici
+                        {t('mintPage.dragDropImage')}
                       </Typography>
                     </div>
                   </Stack>
@@ -571,7 +569,7 @@ const MintPageGenerator: React.FC = () => {
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
               fullWidth
-              label="Prix de mint"
+              label={t('mintPage.price')}
               value={config.price}
               onChange={(e) => setConfig({ ...config, price: e.target.value })}
               InputProps={{
@@ -580,13 +578,13 @@ const MintPageGenerator: React.FC = () => {
             />
             <TextField
               fullWidth
-              label="Supply maximale"
+              label={t('mintPage.maxSupply')}
               value={config.maxSupply}
               onChange={(e) => setConfig({ ...config, maxSupply: e.target.value })}
             />
             <TextField
               fullWidth
-              label="Max par wallet"
+              label={t('mintPage.maxPerWallet')}
               value={config.maxPerWallet}
               onChange={(e) => setConfig({ ...config, maxPerWallet: e.target.value })}
             />
@@ -606,18 +604,18 @@ const MintPageGenerator: React.FC = () => {
             {/* Présets de couleurs */}
             <Box sx={{ mb: 2 }}>
               <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
-                Thèmes prédéfinis :
+                {t('mintPage.predefinedThemes')}
               </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ gap: 1 }}>
                 {[
-                  { name: 'Violet', primary: '#8b5cf6', bg: '#fafafa' },
-                  { name: 'Bleu', primary: '#3b82f6', bg: '#f8fafc' },
-                  { name: 'Vert', primary: '#10b981', bg: '#f0fdf4' },
-                  { name: 'Rose', primary: '#ec4899', bg: '#fdf2f8' },
-                  { name: 'Orange', primary: '#f59e0b', bg: '#fffbeb' },
-                  { name: 'Sombre', primary: '#6366f1', bg: '#1f2937' },
-                  { name: 'Néon', primary: '#ff0080', bg: '#0a0a0a' },
-                  { name: 'Cyan', primary: '#06b6d4', bg: '#f0fdff' }
+                  { name: t('mintPage.themeNames.purple'), primary: '#8b5cf6', bg: '#fafafa' },
+                  { name: t('mintPage.themeNames.blue'), primary: '#3b82f6', bg: '#f8fafc' },
+                  { name: t('mintPage.themeNames.green'), primary: '#10b981', bg: '#f0fdf4' },
+                  { name: t('mintPage.themeNames.pink'), primary: '#ec4899', bg: '#fdf2f8' },
+                  { name: t('mintPage.themeNames.orange'), primary: '#f59e0b', bg: '#fffbeb' },
+                  { name: t('mintPage.themeNames.dark'), primary: '#6366f1', bg: '#1f2937' },
+                  { name: t('mintPage.themeNames.neon'), primary: '#ff0080', bg: '#0a0a0a' },
+                  { name: t('mintPage.themeNames.cyan'), primary: '#06b6d4', bg: '#f0fdff' }
                 ].map((theme) => (
                   <Chip
                     key={theme.name}
@@ -649,7 +647,7 @@ const MintPageGenerator: React.FC = () => {
                 InputProps={{
                   startAdornment: <Palette sx={{ mr: 1 }} />
                 }}
-                helperText="Couleur des boutons et accents"
+                helperText={t('mintPage.primaryColorHelper')}
               />
               <TextField
                 fullWidth
@@ -660,14 +658,14 @@ const MintPageGenerator: React.FC = () => {
                 InputProps={{
                   startAdornment: <Palette sx={{ mr: 1 }} />
                 }}
-                helperText="Couleur d'arrière-plan"
+                helperText={t('mintPage.backgroundColorHelper')}
               />
             </Stack>
 
             {/* Aperçu des couleurs */}
             <Box sx={{ mt: 2, p: 2, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
               <Typography variant="body2" sx={{ mb: 1 }}>
-                Aperçu :
+                {t('mintPage.preview')}
               </Typography>
               <Stack direction="row" spacing={2} alignItems="center">
                 <Box 
@@ -684,7 +682,7 @@ const MintPageGenerator: React.FC = () => {
                     fontSize: '0.8rem'
                   }}
                 >
-                  Bouton
+                  {t('mintPage.button')}
                 </Box>
                 <Box 
                   sx={{ 
@@ -700,7 +698,7 @@ const MintPageGenerator: React.FC = () => {
                     fontSize: '0.8rem'
                   }}
                 >
-                  Fond
+                  {t('mintPage.background')}
                 </Box>
               </Stack>
             </Box>
@@ -708,7 +706,7 @@ const MintPageGenerator: React.FC = () => {
           
           <Box>
             <Typography variant="subtitle2" gutterBottom>
-              Options d'affichage
+              {t('mintPage.displayOptions')}
             </Typography>
             <Stack>
               <FormControlLabel
@@ -718,7 +716,7 @@ const MintPageGenerator: React.FC = () => {
                     onChange={(e) => setConfig({ ...config, showRemainingSupply: e.target.checked })}
                   />
                 }
-                label="Afficher le supply restant"
+                label={t('mintPage.showRemainingSupply')}
               />
               <FormControlLabel
                 control={
@@ -734,7 +732,7 @@ const MintPageGenerator: React.FC = () => {
 
           <Box>
             <Typography variant="subtitle2" gutterBottom>
-              Liens sociaux
+              {t('mintPage.socialLinks')}
             </Typography>
             <Stack spacing={1}>
               <TextField
@@ -783,11 +781,11 @@ const MintPageGenerator: React.FC = () => {
         <CardContent sx={{ textAlign: 'center', py: 4 }}>
           <Check sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
           <Typography variant="h5" gutterBottom>
-            {isDev ? '🎯 Page de mint créée avec Web3 !' : t('mintPage.success.title')}
+            {isDev ? t('mintPage.success.titleWeb3') : t('mintPage.success.title')}
           </Typography>
           <Typography variant="body1" color="text.secondary" mb={3}>
             {isDev 
-              ? 'Page de mint fonctionnelle créée avec Web3, MetaMask, et badges ContractForge.io x OpenZeppelin.'
+              ? t('mintPage.success.descriptionWeb3')
               : t('mintPage.success.description')
             }
           </Typography>
@@ -796,7 +794,7 @@ const MintPageGenerator: React.FC = () => {
           {isDev && (
             <Alert severity="success" sx={{ mb: 3 }} icon={<Check />}>
               <Typography variant="body2">
-                <strong>✅ Système complet :</strong> Web3, Smart Contracts, RainbowKit, Badges officiels.
+                {t('mintPage.success.completeSystem')}
               </Typography>
             </Alert>
           )}
@@ -812,7 +810,7 @@ const MintPageGenerator: React.FC = () => {
               >
                 {createdPageUrl}
               </Typography>
-              <Tooltip title={isDev ? "Copier le lien de la page de mint" : "Copier le lien"}>
+              <Tooltip title={isDev ? t('mintPage.success.copyLink') : t('common.copy')}>
                 <IconButton
                   size="small"
                   onClick={() => navigator.clipboard.writeText(createdPageUrl)}
@@ -822,7 +820,7 @@ const MintPageGenerator: React.FC = () => {
                   <ContentCopy fontSize="small" />
                 </IconButton>
               </Tooltip>
-              <Tooltip title={isDev ? "Ouvrir la page de mint" : "Ouvrir la page"}>
+              <Tooltip title={isDev ? t('mintPage.success.openPage') : t('common.open')}>
                 <IconButton
                   size="small"
                   onClick={() => window.open(createdPageUrl, '_blank')}
@@ -838,7 +836,7 @@ const MintPageGenerator: React.FC = () => {
               variant="contained"
               onClick={() => window.open(createdPageUrl, '_blank')}
             >
-              {isDev ? 'Voir la page de mint' : 'Voir la page'}
+              {isDev ? t('mintPage.success.viewMintPage') : t('mintPage.success.viewPage')}
             </Button>
             <Button
               variant="outlined"
@@ -875,9 +873,7 @@ const MintPageGenerator: React.FC = () => {
       {isDev && (
         <Alert severity="info" sx={{ mb: 3 }} icon={<Warning />}>
           <Typography variant="body2">
-            <strong>Mode développement détecté :</strong> Le générateur utilise le smart-contract-compiler-api local (port 3004).
-            <br />
-            💡 <strong>Fonctionnalités disponibles :</strong> Pages de mint avec Web3, badges ContractForge.io x OpenZeppelin, styles RainbowKit
+            {t('mintPage.developmentAlert')}
           </Typography>
         </Alert>
       )}
@@ -1033,8 +1029,9 @@ const MintPagePreview: React.FC<MintPagePreviewProps> = ({ open, onClose, config
         {isDev && (
           <Alert severity="success" sx={{ mb: 3 }} icon={<Check />}>
             <Typography variant="body2">
-              <strong>Aperçu du système complet :</strong> Cette page utilisera Web3, MetaMask, et les badges ContractForge.io x OpenZeppelin.
-              La fonctionnalité de mint sera entièrement opérationnelle.
+              <strong>{t('mintPage.fullSystemPreview')}:</strong> {t('mintPage.thisPageWillUseWeb3')}
+              <br />
+              {t('mintPage.mintFunctionalityWillBeFullyOperational')}
             </Typography>
           </Alert>
         )}
@@ -1068,30 +1065,30 @@ const MintPagePreview: React.FC<MintPagePreviewProps> = ({ open, onClose, config
           
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography variant="h3" sx={{ color: config.primaryColor, mb: 2 }}>
-              {config.title || 'Titre de votre NFT'}
+              {config.title || t('mintPage.nftTitlePlaceholder')}
             </Typography>
             <Typography variant="body1" sx={{ mb: 3 }}>
-              {config.description || 'Description de votre collection...'}
+              {config.description || t('mintPage.nftDescriptionPlaceholder')}
             </Typography>
           </Box>
 
           <Paper sx={{ p: 3, maxWidth: 400, mx: 'auto' }}>
             <Typography variant="h6" textAlign="center" mb={2}>
-              Mint votre NFT
+              {t('mintPage.mintYourNft')}
             </Typography>
             
             <Box sx={{ mb: 2 }}>
               <Typography variant="body2" color="text.secondary">
-                Prix: {config.price} ETH
+                {t('mintPage.price')}: {config.price} ETH
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Max par wallet: {config.maxPerWallet}
+                {t('mintPage.maxPerWallet')}: {config.maxPerWallet}
               </Typography>
             </Box>
 
             {config.showRemainingSupply && (
               <Typography variant="body2" color="text.secondary" mb={1}>
-                Supply restant: {config.maxSupply}
+                {t('mintPage.remainingSupply')}: {config.maxSupply}
               </Typography>
             )}
 
@@ -1110,29 +1107,29 @@ const MintPagePreview: React.FC<MintPagePreviewProps> = ({ open, onClose, config
               }}
               disabled={false} // Plus désactivé en mode dev
             >
-              {isDev ? 'Mint NFT (Web3 actif)' : 'Mint maintenant'}
+              {isDev ? t('mintPage.mintNftWeb3Active') : t('mintPage.mintNow')}
             </Button>
 
             {isDev && (
               <Typography variant="caption" color="success.main" display="block" textAlign="center" mt={1}>
-                ✅ Bouton de mint fonctionnel avec Web3
+                ✅ Mint button fully functional with Web3
               </Typography>
             )}
 
             {(config.socialLinks.twitter || config.socialLinks.discord || config.socialLinks.website) && (
               <Box sx={{ mt: 2, textAlign: 'center' }}>
                 <Typography variant="caption" display="block" mb={1}>
-                  Suivez-nous:
+                  {t('mintPage.followUs')}:
                 </Typography>
                 <Stack direction="row" justifyContent="center" spacing={1}>
                   {config.socialLinks.twitter && (
-                    <Chip label="Twitter" size="small" />
+                    <Chip label={t('mintPage.twitter')} size="small" />
                   )}
                   {config.socialLinks.discord && (
-                    <Chip label="Discord" size="small" />
+                    <Chip label={t('mintPage.discord')} size="small" />
                   )}
                   {config.socialLinks.website && (
-                    <Chip label="Website" size="small" />
+                    <Chip label={t('mintPage.website')} size="small" />
                   )}
                 </Stack>
               </Box>

@@ -1,10 +1,54 @@
 export default {
   "welcome": "Bienvenue",
   "selectTemplate": "Sélectionnez un modèle de contrat",
-  "supportedNetworks": "Réseaux Supportés",
+  "supportedNetworks": {
+    "title": "Réseaux Supportés",
+    "status": {
+      "deployed": "Déployé", 
+      "testnet": "Testnet",
+      "pending": "En attente"
+    },
+    "alert": {
+      "title": "Support Réseau",
+      "description": "Tous les contrats factory sont déployés et vérifiés sur les explorateurs de blocs pour une vérification transparente."
+    },
+    "mainnet": {
+      "title": "Réseaux de Production"
+    }
+  },
   "evmCompatible": "Déployez vos contrats intelligents sur n'importe quelle blockchain compatible EVM",
   "moreSoon": "Bientôt Plus",
   "moreSoonDesc": "Nous travaillons sur plus de modèles ! Cliquez pour contribuer sur GitHub",
+  "app": {
+    "configWarning": "Certaines valeurs de configuration sont manquantes. L'application pourrait ne pas fonctionner correctement.",
+    "gasEstimationFailed": "Échec de l'estimation des coûts de gas",
+    "templateSelected": "Modèle {{templateName}} sélectionné",
+    "missingRequiredData": "Données requises manquantes pour le déploiement",
+    "deployingContract": "Déploiement de votre contrat sur {{chainName}}...",
+    "deploymentSuccess": "Contrat déployé avec succès ! 🎉 Adresse : {{address}}...",
+    "deploymentFailed": "Échec du déploiement",
+    "confirmingTransaction": "Transaction en cours de confirmation...",
+    "unknownChain": "Inconnu",
+    "testSmartErrorSystem": "🧪 Test du Système d'Erreurs Intelligentes",
+    "notifications": {
+      "deploymentInProgress": "🚀 Déploiement en cours",
+      "deploymentSuccess": "✅ Déploiement réussi",
+      "deploymentFailed": "❌ Échec du déploiement",
+      "templateSelected": "📋 Template sélectionné",
+      "missingData": "⚠️ Données manquantes",
+      "gasEstimationFailed": "⛽ Estimation échouée",
+      "preparingContract": "⚙️ Préparation du contrat",
+      "sendingTransaction": "📤 Envoi de la transaction",
+      "confirmingTransaction": "⏳ Confirmation de la transaction"
+    },
+    "pages": {
+      "documentation": "Documentation",
+      "analytics": "Analytics",
+      "publicAnalytics": "Analytics Publiques", 
+      "accountDashboard": "Tableau de Bord Compte",
+      "deploy": "Déployer"
+    }
+  },
   "homepage": {
     "heroTitle": "Déployez des Contrats Intelligents",
     "heroTitleHighlight": "Sans Code",
@@ -72,19 +116,19 @@ export default {
   },
   "connect": "Connecter le portefeuille",
   "disconnect": "Déconnecter",
-  "token": "Token ERC20",
+  "token": "ERC20 Token",
   "nft": "Collection NFT",
   "dao": "DAO",
-  "lock": "Verrouillage de tokens",
+  "lock": "Token Lock",
   "liquidity-pool": "Pool de Liquidité",
   "yield-farming": "Yield Farming",
   "gamefi-token": "Token GameFi",
   "nft-marketplace": "Marketplace NFT",
   "revenue-sharing": "Partage de Revenus",
   "loyalty-program": "Programme de Fidélité",
-  "dynamic-nft": "NFT Dynamique",
-  "social-token": "Token Social",
-  "tokenDesc": "Créez votre propre token ERC20 avec approvisionnement et décimales personnalisables",
+  "dynamic-nft": "NFT Dynamique (dNFT)",
+  "social-token": "Social Token",
+  "tokenDesc": "Créez votre propre token ERC20 avec une offre et des décimales personnalisables",
   "nftDesc": "Déployez une collection NFT avec capacités de frappe",
   "daoDesc": "Créez une organisation autonome décentralisée",
   "lockDesc": "Verrouillez des tokens jusqu'à un moment spécifié",
@@ -199,7 +243,46 @@ export default {
       "viewOnExplorer": "Voir sur l'Explorer",
       "viewTransaction": "Voir la Transaction",
       "nextSteps": "Votre contrat est maintenant actif ! Vous pouvez interagir avec lui en utilisant l'adresse du contrat ci-dessus.",
-      "close": "Fermer"
+      "close": "Fermer",
+      "premiumFeatures": "Fonctionnalités Premium",
+      "noPremiumFeatures": "Aucune fonctionnalité premium",
+      "contractAddressTitle": "Adresse du Contrat",
+      "copyAddress": "Copier l'adresse",
+      "viewOnExplorerShort": "Voir sur l'explorateur",
+      "transactionHashTitle": "Hash de Transaction",
+      "copyHash": "Copier le hash",
+      "viewTransactionOnExplorer": "Voir la transaction sur l'explorateur",
+      "costDetails": "Détails des Coûts",
+      "deploymentCost": "Coût de déploiement",
+      "platformFees": "Frais de plateforme",
+      "premiumFeaturesCost": "Fonctionnalités premium",
+      "totalCost": "Coût total",
+      "nextStepsTitle": "🎉 Prochaines étapes",
+      "nextStepsDescription": "Votre contrat est maintenant déployé et actif sur {chainName}. Vous pouvez :",
+      "nextStep1": "Interagir avec votre contrat via l'adresse ci-dessus",
+      "nextStep2": "Vérifier le contrat sur l'explorateur de blockchain",
+      "nextStep3": "Suivre les transactions via le hash fourni",
+      "nextStep4": "Consulter vos contrats déployés dans votre tableau de bord"
+    },
+    "skeleton": {
+      "preparing": {
+        "title": "Préparation du contrat",
+        "subtitle": "Compilation et validation en cours...",
+        "message": "Ne fermez pas cette page pendant la compilation..."
+      },
+      "sending": {
+        "title": "Envoi de la transaction",
+        "subtitle": "Signature et envoi au réseau...",
+        "message": "Veuillez confirmer la transaction dans votre wallet..."
+      },
+      "confirming": {
+        "title": "Confirmation de la transaction",
+        "subtitle": "Attente de la confirmation par le réseau...",
+        "message": "La transaction est en cours de confirmation par le réseau...",
+        "followTransaction": "Suivez votre transaction en temps réel :",
+        "viewOnExplorer": "Voir sur l'explorateur →"
+      },
+      "progress": "Progression"
     }
   },
   "codeViewer": {
@@ -426,7 +509,7 @@ export default {
   },
   "templates": {
     "token": {
-      "name": "Token ERC20",
+      "name": "ERC20 Token",
       "fields": {
         "name": "Nom du Token",
         "symbol": "Symbole du Token",
@@ -1042,7 +1125,10 @@ export default {
     "tabs": {
       "overview": "Vue d'ensemble",
       "deployments": "Déploiements",
-      "tools": "Outils",
+      "monitoring": "Monitoring",
+      "mintPages": "Pages de Mint",
+      "api": "API",
+      "settings": "Paramètres",
       "billing": "Facturation"
     },
     "subscription": {
@@ -1054,58 +1140,65 @@ export default {
     },
     "recentActivity": "Activité récente",
     "noRecentActivity": "Aucune activité récente à afficher",
-    "tools": {
-      "mintPages": "Pages de mint NFT",
-      "mintPagesUpgradeRequired": "La génération de pages de mint est réservée aux utilisateurs abonnés.",
-      "apiKeys": "Clés API",
-      "apiKeysComingSoon": "La gestion des clés API arrive bientôt..."
+    "mintPages": {
+      "title": "Pages de Mint NFT",
+      "description": "Créez des pages de mint personnalisées et élégantes pour vos collections NFT",
+      "upgradeRequired": "La génération de pages de mint est réservée aux utilisateurs abonnés."
+    },
+    "api": {
+      "title": "Gestion API",
+      "description": "Gérez vos clés API et jetons d'accès",
+      "keys": "Clés API",
+      "keysComingSoon": "La gestion des clés API arrive bientôt...",
+      "upgradeRequired": "La gestion API est disponible pour les plans Pro et Enterprise. Passez à un plan supérieur pour gérer vos clés API et accéder aux fonctionnalités d'intégration avancées.",
+      "generateKey": "Générer une Nouvelle Clé API",
+      "revokeKey": "Révoquer la Clé",
+      "keyCreated": "Clé API créée avec succès",
+      "keyRevoked": "Clé API révoquée"
+    },
+    "settings": {
+      "title": "Paramètres du Compte",
+      "description": "Configurez vos préférences et notifications",
+      "notifications": {
+        "title": "Notifications",
+        "description": "Configurez comment vous souhaitez recevoir les notifications",
+        "telegram": {
+          "title": "Notifications Telegram",
+          "description": "Recevoir des notifications via un bot Telegram",
+          "enable": "Activer les notifications Telegram",
+          "token": "Token du Bot",
+          "chatId": "ID du Chat",
+          "test": "Envoyer un Message de Test"
+        },
+        "discord": {
+          "title": "Notifications Discord",
+          "description": "Recevoir des notifications via un webhook Discord",
+          "enable": "Activer les notifications Discord",
+          "webhook": "URL du Webhook",
+          "test": "Envoyer un Message de Test"
+        },
+        "email": {
+          "title": "Notifications Email",
+          "description": "Recevoir des notifications par email",
+          "enable": "Activer les notifications email",
+          "deployments": "Notifications de déploiement",
+          "billing": "Notifications de facturation",
+          "security": "Notifications de sécurité"
+        }
+      },
+      "preferences": {
+        "title": "Préférences",
+        "language": "Langue",
+        "theme": "Thème",
+        "timezone": "Fuseau Horaire"
+      },
+      "saveSettings": "Enregistrer les Paramètres",
+      "settingsSaved": "Paramètres enregistrés avec succès",
+      "comingSoon": "Bientôt disponible"
     },
     "monitoring": {
-      "title": "Monitoring Avancé",
-      "planLabel": "Plan {plan}",
-      "description": "Surveillez vos contrats en temps réel avec des métriques détaillées, alertes et analytics.",
-      "premiumFeature": {
-        "title": "Monitoring Avancé",
-        "subtitle": "Disponible avec les plans Pro et Enterprise",
-        "description": "Surveillez vos contrats intelligents en temps réel avec :",
-        "features": {
-          "metrics": "📊 Métriques détaillées de performance",
-          "alerts": "🚨 Alertes automatiques", 
-          "analytics": "📈 Analytics de transactions",
-          "realtime": "⚡ Monitoring en temps réel"
-        },
-        "upgradeButton": "Upgrader vers Pro ou Enterprise"
-      },
-      "noContracts": "Aucun contrat à surveiller",
-      "noContractsDesc": "Déployez des contrats pour commencer le monitoring",
-      "contractMetrics": "Métriques du contrat",
-      "recentEvents": "Événements récents",
-      "alerts": "Alertes",
-      "performance": "Performance",
-      "mainTitle": "Monitoring de Contrats",
-      "subtitle": "Surveillez vos contrats déployés en temps réel",
-      "selectContract": "Sélectionner un Contrat à Surveiller",
-      "realTimeUpdates": "Mises à jour temps réel",
-      "metrics": {
-        "totalTransactions": "Transactions Totales",
-        "todaysActivity": "Activité d'Aujourd'hui",
-        "avgGasUsed": "Gas Moyen Utilisé",
-        "totalValue": "Valeur Totale (ETH)",
-        "successRate": "taux de succès",
-        "efficiency": "efficacité",
-        "lastActivity": "Dernière activité"
-      },
-      "activityLevels": {
-        "high": "élevé",
-        "medium": "modéré",
-        "low": "faible"
-      },
-      "gasEfficiency": {
-        "excellent": "excellente",
-        "good": "bonne",
-        "moderate": "modérée",
-        "poor": "faible"
-      }
+      "title": "Monitoring des Contrats",
+      "upgradeRequired": "Le monitoring des contrats est disponible pour les plans Pro et Enterprise. Passez à un plan supérieur pour surveiller vos contrats en temps réel avec des analytics avancées et des alertes."
     }
   },
   "deployments": {
@@ -1116,6 +1209,9 @@ export default {
     "allTemplates": "Tous les modèles",
     "noContracts": "Aucun contrat déployé trouvé",
     "noMatchingContracts": "Aucun contrat ne correspond à vos critères de recherche",
+    "noContractsFound": "🔍 Aucun contrat déployé trouvé pour votre adresse : **{{address}}**",
+    "realDataOnly": "ℹ️ Seules les données réelles de Supabase sont affichées - aucune donnée fictive/mock ne sera montrée.",
+    "deployToSee": "Déployez un contrat pour qu'il apparaisse ici.",
     "contract": "Contrat",
     "template": "Modèle",
     "chain": "Chaîne",
@@ -1137,45 +1233,6 @@ export default {
     "uniqueChains": "Chaînes uniques",
     "successRate": "Taux de réussite",
     "customPages": "Pages personnalisées"
-  },
-  "mintPage": {
-    "steps": {
-      "selectContract": "Sélectionner le contrat NFT",
-      "chooseSubdomain": "Choisir un sous-domaine",
-      "basicInfo": "Informations de base",
-      "customization": "Personnalisation"
-    },
-    "selectContractDesc": "Sélectionnez le contrat NFT pour lequel vous souhaitez créer une page de mint",
-    "subdomainDesc": "Choisissez un sous-domaine unique pour votre page de mint",
-    "nftContract": "Contrat NFT",
-    "subdomain": "Sous-domaine",
-    "checking": "Vérification...",
-    "subdomainTaken": "Ce sous-domaine est déjà pris. Veuillez en choisir un autre.",
-    "title": "Titre de la page",
-    "description": "Description",
-    "price": "Prix de mint",
-    "maxSupply": "Offre maximale",
-    "maxPerWallet": "Maximum par portefeuille",
-    "colors": "Couleurs",
-    "primaryColor": "Couleur principale",
-    "backgroundColor": "Couleur de fond",
-    "displayOptions": "Options d'affichage",
-    "showRemainingSupply": "Afficher l'offre restante",
-    "showMintedCount": "Afficher le nombre de mint",
-    "socialLinks": "Liens sociaux",
-    "preview": "Aperçu",
-    "review": "Vérifier et créer",
-    "url": "URL de la page",
-    "contract": "Contrat",
-    "createPage": "Créer la page",
-    "creating": "Création...",
-    "info": "Créez une page de mint personnalisée pour votre collection NFT. Cette page sera hébergée sur un sous-domaine de contractforge.io et permettra aux utilisateurs de minter vos NFTs directement.",
-    "success": {
-      "title": "Page de mint créée avec succès!",
-      "description": "Votre page de mint personnalisée est maintenant en ligne et prête à être utilisée.",
-      "viewPage": "Voir la page",
-      "createAnother": "Créer une autre"
-    }
   },
   "networksHeader": {
     "title": "🌍 13 Réseaux Supportés - Déployez Partout",
@@ -1342,6 +1399,246 @@ export default {
       "close": "Fermer",
       "retry": "Réessayer",
       "documentation": "Documentation"
+    }
+  },
+  "templateSelector": {
+    "heroTitle": "Déployez des Contrats Intelligents",
+    "heroTitleHighlight": "Sans Code",
+    "heroSubtitle": "Plateforme professionnelle no-code avec plus de 44 fonctionnalités premium, support multi-chaînes et génération automatique de pages de mint",
+    "startBuildingNow": "🚀 Commencer Maintenant",
+    "platformStats": {
+      "smartContractTemplates": "Modèles de Contrats Intelligents",
+      "premiumFeatures": "Fonctionnalités Premium",
+      "supportedNetworks": "Réseaux Supportés",
+      "securityAudited": "Audité Sécurité"
+    },
+    "keyFeatures": {
+      "deployInMinutes": {
+        "title": "Déployez en Minutes",
+        "description": "Déploiement de contrats intelligents no-code avec aperçu du code en temps réel"
+      },
+      "customMintPages": {
+        "title": "Pages de Mint Personnalisées",
+        "description": "Pages de sous-domaine automatiques pour vos collections NFT"
+      },
+      "advancedAnalytics": {
+        "title": "Analytics Avancées",
+        "description": "Suivi des déploiements en temps réel et métriques de performance"
+      },
+      "fullWeb3Integration": {
+        "title": "Intégration Web3 Complète",
+        "description": "MetaMask, WalletConnect et support multi-chaînes"
+      }
+    },
+    "whyChoose": "Pourquoi Choisir ContractForge ? 🚀",
+    "premiumFeaturesTitle": "44+ Fonctionnalités Premium & Support Multi-Chaînes",
+    "premiumFeaturesSubtitle": "Fonctionnalités avancées de contrats intelligents avec déploiement multi-chaînes transparent",
+    "premiumHighlights": {
+      "auctionSystems": "Systèmes d'Enchères",
+      "priceOracles": "Oracles de Prix",
+      "stakingRewards": "Récompenses de Staking",
+      "daoGovernance": "Gouvernance DAO",
+      "multisigSecurity": "Sécurité Multi-sig",
+      "royalties": "Royalties (EIP-2981)",
+      "whitelistControl": "Contrôle Whitelist",
+      "dynamicNfts": "NFTs Dynamiques"
+    },
+    "evmNetworks": "15+ Réseaux EVM",
+    "deployAnywhere": "🌍 Déployez Partout, N'importe Quand",
+    "deployAnywhereSubtitle": "Vos contrats fonctionnent parfaitement sur tous les réseaux compatibles EVM",
+    "readyToDeploy": "Prêt à Déployer ? 🚀",
+    "readyToDeploySubtitle": "Rejoignez des milliers de développeurs utilisant ContractForge pour un déploiement professionnel de contrats intelligents",
+    "chooseTemplate": "Choisir un Modèle",
+    "viewDocumentation": "Voir la Documentation",
+    "battleTestedTemplates": "Choisissez parmi nos modèles de contrats intelligents éprouvés",
+    "popularity": {
+      "mostPopular": "Le Plus Populaire",
+      "trending": "Tendance",
+      "advanced": "Avancé",
+      "security": "Sécurité"
+    },
+    "comingSoon": "Bientôt Disponible"
+  },
+  "contractMonitoring": {
+    "title": "Monitoring des Contrats",
+    "subtitle": "Surveillez vos contrats déployés en temps réel",
+    "connectWallet": "Connectez Votre Portefeuille",
+    "connectWalletDesc": "Veuillez connecter votre portefeuille pour surveiller vos contrats",
+    "loading": "Chargement...",
+    "refresh": "Actualiser",
+    "noContracts": "Aucun Contrat Trouvé",
+    "noContractsDesc": "Déployez des contrats pour commencer à les surveiller",
+    "dashboardTitle": "Tableau de Bord de Surveillance",
+    "contractsTitle": "Vos Contrats",
+    "metricsTitle": "Métriques des Contrats",
+    "alertsTitle": "Alertes Récentes",
+    "performanceTitle": "Vue d'Ensemble des Performances",
+    "filters": {
+      "timeframe": "Période",
+      "network": "Réseau",
+      "template": "Modèle"
+    },
+    "timeframes": {
+      "last24h": "Dernières 24 heures",
+      "last7d": "7 derniers jours",
+      "last30d": "30 derniers jours",
+      "last90d": "3 derniers mois"
+    },
+    "networks": {
+      "all": "Tous les Réseaux"
+    },
+    "templates": {
+      "all": "Tous les Modèles"
+    },
+    "metrics": {
+      "totalContracts": "Total des Contrats",
+      "totalGasUsed": "Gas Total Utilisé",
+      "totalFeesSpent": "Frais Totaux Dépensés",
+      "totalTransactions": "Transactions Totales",
+      "averageSuccessRate": "Taux de Succès Moyen",
+      "estimatedTotalValue": "Valeur Totale Estimée",
+      "highlyActive": "très actifs",
+      "acrossAllContracts": "Sur tous les contrats",
+      "networkTransactionFees": "Frais de transaction du réseau",
+      "postDeploymentActivity": "Activité post-déploiement",
+      "transactionSuccessRate": "Taux de succès des transactions",
+      "currentEstimatedValue": "Valeur estimée actuelle"
+    },
+    "charts": {
+      "gasUsageByContract": "Utilisation Gas par Contrat",
+      "feesSpentByContract": "Frais Dépensés par Contrat",
+      "dailyActivity": "Activité Quotidienne (7 Derniers Jours)",
+      "templateComparison": "Comparaison par Modèle",
+      "networkDistribution": "Distribution par Réseau"
+    },
+    "contractDetails": {
+      "title": "Détails des Contrats",
+      "transactions": "Transactions",
+      "gasUsed": "Gas Utilisé",
+      "feesSpent": "Frais Dépensés",
+      "success": "Succès"
+    },
+    "tooltips": {
+      "gas": "gas",
+      "fees": "Frais",
+      "transactions": "Transactions",
+      "contracts": "contrats",
+      "activeContracts": "Contrats Actifs"
+    }
+  },
+  "mintPage": {
+    "selectContractDesc": "Sélectionnez un contrat NFT pour créer une page de mint",
+    "noNftContracts": "Aucun contrat NFT trouvé. Déployez d'abord un contrat NFT.",
+    "nftContract": "Contrat NFT",
+    "subdomainDesc": "Choisissez un sous-domaine unique pour votre page de mint",
+    "developmentMode": "Mode Développement",
+    "realMintSystemInfo": "En production, cela utilisera le vrai système de mint",
+    "subdomain": "Sous-domaine",
+    "subdomainNotAvailable": "Ce sous-domaine n'est pas disponible",
+    "subdomainValid": "Sous-domaine valide",
+    "subdomainAvailable": "Sous-domaine disponible",
+    "title": "Titre de la Page",
+    "pageTitlePlaceholder": "Entrez le titre de votre collection NFT",
+    "description": "Description",
+    "descriptionPlaceholder": "Décrivez votre collection NFT",
+    "heroImageOptional": "Image Héro (Optionnelle)",
+    "heroImageDescription": "Téléchargez une image pour présenter votre collection NFT",
+    "uploading": "Téléchargement...",
+    "clickToAddImage": "Cliquez pour ajouter une image",
+    "dragDropImage": "Ou glissez-déposez une image ici",
+    "price": "Prix",
+    "maxSupply": "Offre Maximale",
+    "maxPerWallet": "Maximum par Portefeuille",
+    "colors": "Couleurs et Thème",
+    "predefinedThemes": "Thèmes Prédéfinis",
+    "primaryColor": "Couleur Principale",
+    "primaryColorHelper": "Couleur d'accent principale pour les boutons et mises en évidence",
+    "backgroundColor": "Couleur de Fond",
+    "backgroundColorHelper": "Couleur de fond principale de la page",
+    "preview": "Aperçu",
+    "button": "Bouton",
+    "background": "Arrière-plan",
+    "displayOptions": "Options d'Affichage",
+    "showRemainingSupply": "Afficher l'Offre Restante",
+    "showMintedCount": "Afficher le Nombre Minté",
+    "socialLinks": "Liens Sociaux",
+    "success": {
+      "copyLink": "Copier le Lien",
+      "openPage": "Ouvrir la Page"
+    },
+    "developmentAlert": "Mode Développement Actif",
+    "info": "Info",
+    "creating": "Création...",
+    "createPage": "Créer la Page",
+    "review": "Révision",
+    "previewTitle": "Aperçu de la Page de Mint",
+    "fullSystemPreview": "Aperçu du Système Complet",
+    "thisPageWillUseWeb3": "Cette page utilisera les fonctionnalités Web3",
+    "mintFunctionalityWillBeFullyOperational": "La fonctionnalité de mint sera entièrement opérationnelle",
+    "nftTitlePlaceholder": "Votre Collection NFT",
+    "nftDescriptionPlaceholder": "Une collection NFT incroyable sur la blockchain",
+    "mintYourNft": "Mintez Votre NFT",
+    "remainingSupply": "Offre Restante",
+    "alreadyMinted": "Déjà Minté",
+    "mintNftWeb3Active": "Minter NFT (Web3 Actif)",
+    "mintNow": "Minter Maintenant",
+    "followUs": "Suivez-Nous",
+    "twitter": "Twitter",
+    "discord": "Discord",
+    "website": "Site Web"
+  },
+  "supportedNetworksHeader": {
+    "title": "🌍 13 Réseaux Supportés - Déployez Partout",
+    "subtitle": "Vos contrats peuvent être déployés sur n'importe lequel de ces réseaux avec la même factory",
+    "footer": "✅ Tous les contrats factory déployés et vérifiés • 🔄 Plus de réseaux bientôt"
+  },
+  "errorRecovery": "Récupération d'Erreur",
+  "monitoring": {
+    "title": "Monitoring des Contrats",
+    "planLabel": "Plan {plan}",
+    "description": "Surveillez vos contrats en temps réel avec des métriques détaillées, alertes et analytics.",
+    "upgradeRequired": "Le monitoring de contrats est disponible pour les plans payants. Upgradez pour surveiller vos contrats en temps réel avec des analytics avancées et des alertes.",
+    "premiumFeature": {
+      "title": "Monitoring Avancé",
+      "subtitle": "Disponible avec les plans Pro et Enterprise",
+      "description": "Surveillez vos contrats intelligents en temps réel avec :",
+      "features": {
+        "metrics": "📊 Métriques détaillées de performance",
+        "alerts": "🚨 Alertes automatiques", 
+        "analytics": "📈 Analytics de transactions",
+        "realtime": "⚡ Monitoring en temps réel"
+      },
+      "upgradeButton": "Upgrader vers Pro ou Enterprise"
+    },
+    "noContracts": "Aucun contrat à surveiller",
+    "noContractsDesc": "Déployez des contrats pour commencer le monitoring",
+    "contractMetrics": "Métriques du contrat",
+    "recentEvents": "Événements récents",
+    "alerts": "Alertes",
+    "performance": "Performance",
+    "mainTitle": "Monitoring de Contrats",
+    "subtitle": "Surveillez vos contrats déployés en temps réel",
+    "selectContract": "Sélectionner un Contrat à Surveiller",
+    "realTimeUpdates": "Mises à jour temps réel",
+    "metrics": {
+      "totalTransactions": "Transactions Totales",
+      "todaysActivity": "Activité d'Aujourd'hui",
+      "avgGasUsed": "Gas Moyen Utilisé",
+      "totalValue": "Valeur Totale (ETH)",
+      "successRate": "taux de succès",
+      "efficiency": "efficacité",
+      "lastActivity": "Dernière activité"
+    },
+    "activityLevels": {
+      "high": "élevé",
+      "medium": "modéré",
+      "low": "faible"
+    },
+    "gasEfficiency": {
+      "excellent": "excellente",
+      "good": "bonne",
+      "moderate": "modérée",
+      "poor": "faible"
     }
   }
 } as const

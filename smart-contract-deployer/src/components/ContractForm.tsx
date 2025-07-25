@@ -34,8 +34,9 @@ interface ContractFormProps {
   onBack: () => void
   onDeploy: () => void
   isDeploying: boolean
+  deploymentStatus?: 'pending' | 'confirmed'
 }
-const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying }: ContractFormProps) => {
+const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying, deploymentStatus }: ContractFormProps) => {
   const { t } = useTranslation()
   const { isConnected } = useAccount()
   const { permissions, loading: permissionsLoading } = useDeploymentPermissions()
@@ -282,7 +283,7 @@ const ContractForm = ({ template, onChange, onBack, onDeploy, isDeploying }: Con
           : permissionsLoading
           ? 'Loading permissions...'
           : isDeploying
-          ? t('contractForm.deploying')
+          ? '⏳ Deploying Contract...'
           : !permissions?.canDeploy
           ? 'Deploy not allowed'
           : permissions?.payAsYouGo

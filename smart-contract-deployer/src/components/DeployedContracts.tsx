@@ -158,13 +158,21 @@ const DeployedContracts: React.FC = () => {
 
   const getTemplateDisplayName = (template: string): string => {
     const templateNames: Record<string, string> = {
-      'token': 'ERC-20 Token',
+      'token': 'ERC20 Token',
       'nft': 'NFT Collection',
-      'dao': 'DAO Governance',
+      'dao': 'DAO',
       'lock': 'Token Lock',
       'multisig': 'Multi-Signature Wallet',
       'vesting': 'Token Vesting',
-      'marketplace': 'NFT Marketplace'
+      'marketplace': 'NFT Marketplace',
+      'social-token': 'Social Token',
+      'liquidity-pool': 'Liquidity Pool',
+      'yield-farming': 'Yield Farming',
+      'gamefi-token': 'GameFi Token',
+      'nft-marketplace': 'NFT Marketplace',
+      'revenue-sharing': 'Revenue Sharing',
+      'loyalty-program': 'Loyalty Program',
+      'dynamic-nft': 'Dynamic NFT (dNFT)'
     }
     return templateNames[template] || template.toUpperCase()
   }
@@ -387,17 +395,17 @@ const DeployedContracts: React.FC = () => {
           {contracts.length === 0 ? (
             <Box>
               <Typography variant="body2" gutterBottom>
-                🔍 Aucun contrat déployé trouvé pour votre adresse : <strong>{address}</strong>
+                {t('deployments.noContractsFound', { address })}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                ℹ️ Seules les données réelles de Supabase sont affichées - aucune donnée fictive/mock ne sera montrée.
+                {t('deployments.realDataOnly')}
                 <br />
-                Déployez un contrat pour qu'il apparaisse ici.
+                {t('deployments.deployToSee')}
               </Typography>
             </Box>
           ) : (
             <Typography>
-              Aucun contrat ne correspond à vos filtres actuels.
+              {t('deployments.noMatchingContracts')}
             </Typography>
           )}
         </Alert>

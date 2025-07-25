@@ -254,7 +254,8 @@ export async function deployContractWithFactory(
   publicClient: PublicClient,
   gasEstimate: GasEstimate,
   premiumFeatures: string[] = [],
-  featureConfigs?: PremiumFeatureConfig
+  featureConfigs?: PremiumFeatureConfig,
+  onStatusChange?: (status: 'preparing' | 'sending' | 'confirming') => void
 ): Promise<DeploymentResult> {
   try {
     console.log('🏭 Starting deployment via UniversalFactory...')
@@ -264,6 +265,9 @@ export async function deployContractWithFactory(
     // 1. Obtenir l'adresse de la factory
     const chainId = await walletClient.getChainId()
     const factoryAddress = getFactoryAddress(chainId)
+    
+    // 🔄 Status: Preparing
+    onStatusChange?.('preparing')
     
     if (!factoryAddress) {
       throw new Error(`UniversalFactory not deployed on chain ${chainId}`)
@@ -312,6 +316,9 @@ export async function deployContractWithFactory(
     })
 
     console.log('📤 Sending transaction...')
+
+    // 🔄 Status: Sending
+    onStatusChange?.('sending')
 
     // 🔍 DEBUG - Analyser les données de transaction
     console.log('🔍 TRANSACTION DEBUG:')
@@ -435,6 +442,10 @@ export async function deployContractWithFactory(
 
     // 8. Attendre la confirmation
     console.log('⏳ Waiting for transaction confirmation...')
+    
+    // 🔄 Status: Confirming
+    onStatusChange?.('confirming')
+    
     const receipt = await publicClient.waitForTransactionReceipt({ hash })
 
     if (receipt.status === 'reverted') {
@@ -444,13 +455,69 @@ export async function deployContractWithFactory(
     console.log('✅ Transaction confirmed in block:', receipt.blockNumber)
 
     // 9. Extraire l'adresse du contrat déployé depuis les logs
+    console.log('🔍 Extracting deployed contract address from logs...')
+    console.log('📋 Receipt logs count:', receipt.logs.length)
+    console.log('📋 Receipt status:', receipt.status)
+    console.log('📋 Receipt blockNumber:', receipt.blockNumber)
+    console.log('📋 Receipt transactionHash:', receipt.transactionHash)
+    
     const contractAddress = await extractDeployedAddress(publicClient, receipt.logs, factoryAddress)
 
     if (!contractAddress) {
+      console.error('❌ Could not extract deployed contract address from logs')
+      console.log('📋 Available logs:', receipt.logs.map((log, i) => ({
+        index: i,
+        address: log.address,
+        topics: log.topics,
+        data: log.data
+      })))
+      
+      // Fallback: Essayer de prédire l'adresse CREATE2
+      console.log('🔄 Attempting CREATE2 address prediction as fallback...')
+      try {
+        const predictedAddress = await predictDeployedAddress(
+          factoryAddress,
+          walletClient.account?.address || '0x0',
+          templateType,
+          Date.now()
+        )
+        console.log('🎯 Predicted CREATE2 address:', predictedAddress)
+        
+        if (predictedAddress) {
+          console.log('✅ Using predicted address as fallback')
+          return {
+            address: predictedAddress,
+            hash: hash
+          }
+        }
+      } catch (predictionError) {
+        console.error('❌ Address prediction failed:', predictionError)
+      }
+      
+      // Dernier recours: Utiliser l'API de l'explorateur
+      console.log('🔄 Attempting explorer API fallback...')
+      try {
+        const explorerAddress = await getContractAddressFromExplorer(hash, chainId)
+        if (explorerAddress) {
+          console.log('✅ Found address from explorer API:', explorerAddress)
+          return {
+            address: explorerAddress,
+            hash: hash
+          }
+        }
+      } catch (explorerError) {
+        console.error('❌ Explorer API failed:', explorerError)
+      }
+      
       throw new Error('Could not extract deployed contract address')
     }
 
     console.log('🎉 Contract deployed at:', contractAddress)
+    console.log('🔍 Address validation:', {
+      isAddress: contractAddress.startsWith('0x') && contractAddress.length === 42,
+      address: contractAddress,
+      isCreator: contractAddress.toLowerCase() === walletClient.account?.address?.toLowerCase()
+    })
 
     return {
       address: contractAddress,
@@ -466,6 +533,70 @@ export async function deployContractWithFactory(
 }
 
 /**
+ * Récupère l'adresse du contrat déployé depuis l'API de l'explorateur
+ */
+async function getContractAddressFromExplorer(txHash: string, chainId: number): Promise<string | null> {
+  try {
+    const explorers: Record<number, string> = {
+      1: 'https://api.etherscan.io',
+      137: 'https://api.polygonscan.com',
+      42161: 'https://api.arbiscan.io',
+      10: 'https://api-optimistic.etherscan.io',
+      56: 'https://api.bscscan.com',
+      43114: 'https://api.snowtrace.io'
+    }
+    
+    const explorerUrl = explorers[chainId]
+    if (!explorerUrl) {
+      console.log('❌ No explorer API available for chain:', chainId)
+      return null
+    }
+    
+    // Pour l'instant, on retourne null car les APIs d'explorateur nécessitent des clés API
+    // Cette fonction peut être implémentée plus tard si nécessaire
+    console.log('🔍 Explorer API not implemented yet for chain:', chainId)
+    return null
+  } catch (error) {
+    console.error('Error getting address from explorer:', error)
+    return null
+  }
+}
+
+/**
+ * Prédit l'adresse du contrat déployé en utilisant CREATE2
+ */
+function predictDeployedAddress(
+  factoryAddress: string,
+  deployerAddress: string,
+  templateType: string,
+  timestamp: number
+): string {
+  try {
+    // Générer le même salt que celui utilisé pour le déploiement
+    const salt = generateSalt(deployerAddress, templateType, timestamp)
+    
+    // Pour CREATE2, nous avons besoin du bytecode du contrat
+    // Comme nous ne l'avons pas ici, nous allons utiliser une approche différente
+    // Nous allons essayer de récupérer l'adresse depuis les logs de la factory
+    
+    console.log('🔮 CREATE2 prediction attempt:', {
+      factoryAddress,
+      deployerAddress,
+      salt,
+      timestamp
+    })
+    
+    // Pour l'instant, retourner une adresse vide car nous ne pouvons pas prédire
+    // l'adresse CREATE2 sans le bytecode exact
+    console.log('❌ CREATE2 prediction requires bytecode - not implemented yet')
+    return ''
+  } catch (error) {
+    console.error('Error predicting CREATE2 address:', error)
+    return ''
+  }
+}
+
+/**
  * Extrait l'adresse du contrat déployé depuis les logs de la transaction
  */
 async function extractDeployedAddress(
@@ -474,21 +605,125 @@ async function extractDeployedAddress(
   factoryAddress: string
 ): Promise<string | null> {
   try {
+    console.log('🔍 Searching for ContractDeployed event in logs...')
+    console.log('🏭 Factory address to match:', factoryAddress)
+    console.log('📋 Total logs to analyze:', logs.length)
+    
     // Rechercher l'événement ContractDeployed
-    for (const log of logs) {
+    for (let i = 0; i < logs.length; i++) {
+      const log = logs[i]
+      console.log(`📋 Log ${i}:`, {
+        address: log.address,
+        topicsCount: log.topics?.length || 0,
+        topics: log.topics,
+        data: log.data
+      })
+      
       if (log.address?.toLowerCase() === factoryAddress.toLowerCase()) {
-        // Le premier topic après l'event signature est l'adresse du contrat
-        if (log.topics && log.topics.length >= 2) {
-          // Décoder l'adresse depuis le premier topic (après l'event signature)
-          const addressHex = log.topics[1]
-          if (addressHex) {
+        console.log('✅ Found log from factory address')
+        
+        // Vérifier si c'est l'événement ContractDeployed
+        // La signature de l'événement est: ContractDeployed(address,address,uint8,uint256,uint256)
+        // Le topic[0] devrait être la signature de l'événement
+        if (log.topics && log.topics.length >= 3) { // Au moins 3 topics: signature + deployer + deployedContract
+          console.log('📋 Topics found:', log.topics)
+          
+          // Le troisième topic (index 2) est l'adresse du contrat déployé
+          const deployedContractHex = log.topics[2]
+          if (deployedContractHex) {
+            console.log('🔍 Deployed contract hex from topic[2]:', deployedContractHex)
+            
             // Convertir le bytes32 en adresse (prendre les 20 derniers bytes)
-            const address = '0x' + addressHex.slice(-40)
-            return address
+            const address = '0x' + deployedContractHex.slice(-40)
+            console.log('🎯 Extracted address:', address)
+            
+            // Validation de l'adresse
+            if (address.startsWith('0x') && address.length === 42) {
+              console.log('✅ Address validation passed')
+              
+              // Vérifier que ce n'est pas l'adresse du déployeur
+              const deployerHex = log.topics[1] // Le deuxième topic est le déployeur
+              const deployerAddress = '0x' + deployerHex.slice(-40)
+              console.log('🔍 Deployer address from topic[1]:', deployerAddress)
+              
+              if (address.toLowerCase() !== deployerAddress.toLowerCase()) {
+                console.log('✅ Address is different from deployer - this is the deployed contract!')
+                return address
+              } else {
+                console.log('❌ Address is same as deployer - this is not the deployed contract')
+              }
+            } else {
+              console.log('❌ Address validation failed:', address)
+            }
+          }
+        } else {
+          console.log('❌ Not enough topics for ContractDeployed event (need at least 3)')
+        }
+      }
+      
+      // Alternative: Chercher d'autres types d'événements qui pourraient contenir l'adresse du contrat
+      if (log.topics && log.topics.length > 0) {
+        const firstTopic = log.topics[0]
+        
+        // Signature de l'événement Transfer(address,address,uint256)
+        if (firstTopic === '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef') {
+          console.log('🔍 Found Transfer event - this is likely a fee transfer, not contract creation')
+          // Ne pas traiter les événements Transfer comme des créations de contrat
+          continue
+        }
+        
+        // Chercher d'autres types d'événements qui pourraient contenir l'adresse du contrat
+        console.log('🔍 Checking other event types for contract address...')
+        console.log('📋 Event signature:', firstTopic)
+        
+        // Si c'est un événement personnalisé, l'adresse pourrait être dans les topics
+        if (log.topics.length >= 2) {
+          // Le deuxième topic pourrait contenir l'adresse du contrat
+          const potentialAddress = log.topics[1]
+          if (potentialAddress && potentialAddress.length === 66) { // 32 bytes + 0x
+            const address = '0x' + potentialAddress.slice(-40) // Prendre les 20 derniers bytes
+            console.log('🔍 Potential address from topic[1]:', address)
+            
+            if (address.startsWith('0x') && address.length === 42 && !address.startsWith('0x00000000000000000000')) {
+              console.log('✅ Valid non-zero address found in topic[1]')
+              return address
+            }
           }
         }
       }
     }
+    
+    console.log('❌ No ContractDeployed event found in logs')
+    console.log('🔍 All logs analyzed. Factory address not found or event not emitted.')
+    
+    // Méthode de fallback: Analyser tous les logs pour des adresses valides
+    console.log('🔄 Trying fallback method: scanning all logs for valid addresses...')
+    
+    const validAddresses: string[] = []
+    
+    for (const log of logs) {
+      if (log.topics) {
+        for (const topic of log.topics) {
+          if (topic && topic.length === 66) { // 32 bytes + 0x
+            const address = '0x' + topic.slice(-40) // Prendre les 20 derniers bytes
+            if (address.startsWith('0x') && address.length === 42 && !address.startsWith('0x00000000000000000000')) {
+              console.log('🔍 Found valid address in log:', address)
+              validAddresses.push(address)
+            }
+          }
+        }
+      }
+    }
+    
+    // Si nous avons trouvé des adresses valides, prendre la première qui n'est pas la factory
+    for (const address of validAddresses) {
+      if (address.toLowerCase() !== factoryAddress.toLowerCase()) {
+        console.log('🎯 Using first valid non-factory address from fallback scan:', address)
+        return address
+      }
+    }
+    
+    console.log('❌ No valid contract address found in any logs')
     return null
   } catch (error) {
     console.error('Error extracting deployed address:', error)

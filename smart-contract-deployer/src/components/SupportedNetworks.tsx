@@ -218,6 +218,8 @@ const networks: NetworkInfo[] = [
 
 // Composant header des réseaux supportés
 export const SupportedNetworksHeader: React.FC = () => {
+  const { t } = useTranslation()
+  
   const deployedNetworks = [
     { chainId: 1, name: 'Ethereum', shortName: 'ETH' },
     { chainId: 59144, name: 'Linea', shortName: 'Linea' },
@@ -243,10 +245,10 @@ export const SupportedNetworksHeader: React.FC = () => {
       borderRadius: 2
     }}>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-        🌍 13 Networks Supported - Deploy Anywhere
+        {t('supportedNetworksHeader.title')}
       </Typography>
       <Typography variant="body2" sx={{ textAlign: 'center', mb: 3, opacity: 0.9 }}>
-        Your contracts can be deployed on any of these networks with the same factory
+        {t('supportedNetworksHeader.subtitle')}
       </Typography>
       
       <Box sx={{ 
@@ -288,7 +290,7 @@ export const SupportedNetworksHeader: React.FC = () => {
         mt: 2, 
         opacity: 0.8 
       }}>
-        ✅ All factory contracts deployed and verified • 🔄 More networks coming soon
+        {t('supportedNetworksHeader.footer')}
       </Typography>
     </Paper>
   )

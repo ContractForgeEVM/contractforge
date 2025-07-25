@@ -25,7 +25,10 @@ import {
   Add,
   Visibility,
   CreditCard,
-  TrendingUp
+  TrendingUp,
+  Speed,
+  Api,
+  Settings
 } from '@mui/icons-material'
 import { useAccount, useChainId } from 'wagmi'
 import { useTranslation } from 'react-i18next'
@@ -33,6 +36,7 @@ import SubscriptionStatus from './SubscriptionStatus'
 import DeployedContracts from './DeployedContracts'
 import MintPageGenerator from './MintPageGenerator'
 import SubscriptionPlans from './SubscriptionPlans'
+import ContractMonitoring from './ContractMonitoring'
 import { useDeploymentPermissions } from '../hooks/useDeploymentPermissions'
 import { getChainConfig } from '../config/cryptoConfig'
 
@@ -278,39 +282,7 @@ const AccountDashboard: React.FC = () => {
           </Stack>
         </Stack>
 
-        {/* Quick Stats */}
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <Card sx={{ flex: 1 }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" color="primary">
-                {subscriptionData?.usage.deployments || 0}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {t('account.stats.contractsDeployed')}
-              </Typography>
-            </CardContent>
-          </Card>
-          <Card sx={{ flex: 1 }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" color="success.main">
-                {subscriptionData?.usage.compilations || 0}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {t('account.stats.compilations')}
-              </Typography>
-            </CardContent>
-          </Card>
-          <Card sx={{ flex: 1 }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" color="warning.main">
-                {subscriptionData?.usage.apiCalls || 0}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {t('account.stats.apiCalls')}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Stack>
+        {/* Navigation directe vers les tabs - plus de stats */}
       </Box>
 
       {/* Tabs Navigation */}
@@ -328,7 +300,52 @@ const AccountDashboard: React.FC = () => {
         >
           <Tab icon={<TrendingUp />} label={t('account.tabs.overview')} />
           <Tab icon={<History />} label={t('account.tabs.deployments')} />
-          <Tab icon={<Build />} label={t('account.tabs.tools')} />
+          <Tab 
+            icon={<Speed />} 
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {t('account.tabs.monitoring')}
+                <Chip
+                  label="Pro"
+                  size="small"
+                  sx={{
+                    height: 18,
+                    fontSize: '0.6rem',
+                    fontWeight: 'bold',
+                    backgroundColor: '#FFD700',
+                    color: '#1a1a1a',
+                    '& .MuiChip-label': {
+                      px: 0.5,
+                    },
+                  }}
+                />
+              </Box>
+            } 
+          />
+          <Tab icon={<Build />} label={t('account.tabs.mintPages')} />
+          <Tab 
+            icon={<Api />} 
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {t('account.tabs.api')}
+                <Chip
+                  label="Pro"
+                  size="small"
+                  sx={{
+                    height: 18,
+                    fontSize: '0.6rem',
+                    fontWeight: 'bold',
+                    backgroundColor: '#FFD700',
+                    color: '#1a1a1a',
+                    '& .MuiChip-label': {
+                      px: 0.5,
+                    },
+                  }}
+                />
+              </Box>
+            } 
+          />
+          <Tab icon={<Settings />} label={t('account.tabs.settings')} />
           <Tab icon={<CreditCard />} label={t('account.tabs.billing')} />
         </Tabs>
       </Paper>
@@ -422,17 +439,44 @@ const AccountDashboard: React.FC = () => {
       </TabPanel>
 
       <TabPanel value={tabValue} index={2}>
-        {/* Tools Tab */}
+        {/* Monitoring Tab */}
+        {permissions?.plan !== 'pro' && permissions?.plan !== 'enterprise' ? (
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                {t('account.monitoring.title', 'Contract Monitoring')}
+              </Typography>
+              <Divider sx={{ my: 2 }} />
+              <Alert severity="warning">
+                {t('account.monitoring.upgradeRequired', 'Contract monitoring is available for Pro and Enterprise plans. Upgrade to monitor your contracts in real-time with advanced analytics and alerts.')}
+                <Button
+                  size="small"
+                  startIcon={<Star />}
+                  onClick={() => setShowPlans(true)}
+                  sx={{ mt: 1 }}
+                >
+                  {t('account.upgrade')}
+                </Button>
+              </Alert>
+            </CardContent>
+          </Card>
+        ) : (
+          <ContractMonitoring />
+        )}
+      </TabPanel>
+
+      <TabPanel value={tabValue} index={3}>
+        {/* Mint Pages Tab */}
         <Stack spacing={3}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                {t('account.tools.mintPages')}
+                {t('account.mintPages.title')}
               </Typography>
               <Divider sx={{ my: 2 }} />
               {permissions?.plan === 'free' ? (
                 <Alert severity="warning">
-                  {t('account.tools.mintPagesUpgradeRequired')}
+                  {t('account.mintPages.upgradeRequired')}
                   <Button
                     size="small"
                     startIcon={<Star />}
@@ -447,22 +491,83 @@ const AccountDashboard: React.FC = () => {
               )}
             </CardContent>
           </Card>
+        </Stack>
+      </TabPanel>
 
+      <TabPanel value={tabValue} index={4}>
+        {/* API Tab */}
+        <Stack spacing={3}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                {t('account.tools.apiKeys')}
+                {t('account.api.title')}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                {t('account.api.description')}
               </Typography>
               <Divider sx={{ my: 2 }} />
-              <Alert severity="info">
-                {t('account.tools.apiKeysComingSoon')}
-              </Alert>
+              {permissions?.plan !== 'pro' && permissions?.plan !== 'enterprise' ? (
+                <Alert severity="warning">
+                  {t('account.api.upgradeRequired', 'API management is available for Pro and Enterprise plans. Upgrade to manage your API keys and access advanced integration features.')}
+                  <Button
+                    size="small"
+                    startIcon={<Star />}
+                    onClick={() => setShowPlans(true)}
+                    sx={{ mt: 1 }}
+                  >
+                    {t('account.upgrade')}
+                  </Button>
+                </Alert>
+              ) : (
+                <Alert severity="info">
+                  {t('account.api.keysComingSoon')}
+                </Alert>
+              )}
             </CardContent>
           </Card>
         </Stack>
       </TabPanel>
 
-      <TabPanel value={tabValue} index={3}>
+      <TabPanel value={tabValue} index={5}>
+        {/* Settings Tab */}
+        <Stack spacing={3}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                {t('account.settings.title')}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                {t('account.settings.description')}
+              </Typography>
+              <Divider sx={{ my: 2 }} />
+              
+              {/* Notifications Section */}
+              <Box sx={{ mb: 3 }}>
+                <Typography variant="h6" gutterBottom>
+                  {t('account.settings.notifications.title')}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  {t('account.settings.notifications.description')}
+                </Typography>
+                
+                <Stack spacing={2}>
+                  <Alert severity="info">
+                    🔧 {t('account.settings.notifications.telegram.title')} - {t('account.settings.comingSoon')}
+                  </Alert>
+                  <Alert severity="info">
+                    🔧 {t('account.settings.notifications.discord.title')} - {t('account.settings.comingSoon')}
+                  </Alert>
+                  <Alert severity="info">
+                    📧 {t('account.settings.notifications.email.title')} - {t('account.settings.comingSoon')}
+                  </Alert>
+                </Stack>
+              </Box>
+            </CardContent>
+          </Card>
+        </Stack>
+      </TabPanel>
+
+      <TabPanel value={tabValue} index={6}>
         {/* Billing Tab */}
         <SubscriptionPlans onSubscribe={() => {
           setShowPlans(false)

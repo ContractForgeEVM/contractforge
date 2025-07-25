@@ -55,16 +55,16 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
     >
       <Toolbar sx={{ 
         justifyContent: 'space-between', 
-        py: 1,
-        minHeight: '64px',
-        gap: 2,
-        px: { xs: 1, sm: 2, md: 3 }
+        py: 0.5, // Réduit de 1 à 0.5
+        minHeight: '56px', // Réduit de 64px à 56px
+        gap: 1, // Réduit de 2 à 1
+        px: { xs: 1, sm: 2, md: 2 } // Réduit le padding md de 3 à 2
       }}>
         {/* Logo */}
         <Box sx={{ 
           display: 'flex', 
           alignItems: 'center', 
-          gap: 1,
+          gap: 0.5, // Réduit de 1 à 0.5
           minWidth: 0,
           flex: '0 0 auto'
         }}>
@@ -72,7 +72,7 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
             src="/ContractForge.io.png"
             alt="ContractForge.io"
             style={{
-              height: '40px',
+              height: '36px', // Réduit de 40px à 36px
               width: 'auto',
               objectFit: 'contain',
               cursor: 'pointer'
@@ -83,15 +83,15 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
             label="OpenZeppelin"
             size="small"
             sx={{
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'none', lg: 'flex' }, // Masqué sur md, visible seulement sur lg+
               backgroundColor: 'rgba(78, 94, 228, 0.1)',
               color: '#4E5EE4',
               fontWeight: 500,
-              fontSize: '0.7rem',
-              height: 20,
+              fontSize: '0.65rem', // Réduit de 0.7rem à 0.65rem
+              height: 18, // Réduit de 20 à 18
               border: '1px solid rgba(78, 94, 228, 0.3)',
               '& .MuiChip-label': {
-                px: 1,
+                px: 0.5, // Réduit de 1 à 0.5
               },
             }}
           />
@@ -99,13 +99,18 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
           {/* 🌟 Indicateur compte développeur */}
           {isDevAccount(address) && (
             <Chip
-              label="🎯 DEV MODE"
+              label="DEV"
               size="small"
               sx={{
                 backgroundColor: '#ff4081',
                 color: 'white',
                 fontWeight: 'bold',
-                fontSize: '0.75rem',
+                fontSize: '0.65rem', // Réduit de 0.75rem
+                height: 18, // Plus petit
+                minWidth: 'auto',
+                '& .MuiChip-label': {
+                  px: 0.5,
+                },
                 animation: 'pulse 2s ease-in-out infinite',
                 '@keyframes pulse': {
                   '0%': { opacity: 1 },
@@ -120,7 +125,7 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
         {/* Desktop Navigation */}
         <Box sx={{ 
           display: { xs: 'none', md: 'flex' }, 
-          gap: 1,
+          gap: 0.5, // Réduit de 1 à 0.5
           alignItems: 'center',
           flex: 1,
           justifyContent: 'center'
@@ -133,11 +138,15 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
               startIcon={item.icon}
               sx={{ 
                 textTransform: 'none',
-                fontSize: '0.875rem',
-                padding: '6px 16px',
+                fontSize: '0.75rem', // Réduit de 0.875rem à 0.75rem
+                padding: '4px 8px', // Réduit de 6px 16px à 4px 8px
                 minWidth: 'auto',
                 fontWeight: currentPage === item.key ? 600 : 400,
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                '& .MuiButton-startIcon': {
+                  fontSize: '1rem', // Icônes plus petites
+                  marginRight: '4px' // Moins d'espace entre icône et texte
+                }
               }}
             >
               {item.label}
@@ -148,13 +157,13 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
         {/* Right Side Actions */}
         <Box sx={{ 
           display: 'flex', 
-          gap: { xs: 0.5, sm: 1 }, 
+          gap: { xs: 0.25, sm: 0.5 }, // Réduit les gaps
           alignItems: 'center',
           minWidth: 0,
           flex: '0 0 auto'
         }}>
           {/* Desktop Only Items */}
-          <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 1, alignItems: 'center' }}>
+          <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 0.5, alignItems: 'center' }}>
             <LanguageToggle />
             <SubscriptionStatus />
           </Box>
@@ -162,8 +171,18 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
           {/* Connect Button - Always Visible */}
           <Box sx={{ 
             '& button': {
-              fontSize: { xs: '0.75rem', sm: '0.875rem' },
-              padding: { xs: '4px 8px', sm: '6px 12px' },
+              fontSize: { xs: '0.7rem', sm: '0.75rem' }, // Encore plus petit
+              padding: { xs: '3px 6px', sm: '4px 8px' }, // Padding réduit
+              minHeight: { xs: '28px', sm: '32px' }, // Hauteur limitée
+              '& > div': {
+                fontSize: { xs: '0.7rem', sm: '0.75rem' } // Pour les éléments internes du ConnectButton
+              }
+            },
+            // Styles spécifiques pour RainbowKit
+            '& [data-testid="rk-connect-button"]': {
+              fontSize: { xs: '0.7rem', sm: '0.75rem' },
+              padding: { xs: '3px 6px', sm: '4px 8px' },
+              minHeight: { xs: '28px', sm: '32px' }
             }
           }}>
             <ConnectButton />
@@ -171,11 +190,15 @@ const Header = ({ onNavigateDeploy, onNavigateDocs, onNavigateAccount, onNavigat
 
           {/* Mobile Menu */}
           <IconButton
-            sx={{ display: { xs: 'flex', md: 'none' }, ml: 1 }}
+            sx={{ 
+              display: { xs: 'flex', md: 'none' }, 
+              ml: 0.5, // Réduit de 1 à 0.5
+              padding: '6px' // Padding réduit pour l'icône
+            }}
             onClick={handleMobileMenuOpen}
             color="inherit"
           >
-            <MenuIcon />
+            <MenuIcon sx={{ fontSize: '1.2rem' }} />
           </IconButton>
         </Box>
 

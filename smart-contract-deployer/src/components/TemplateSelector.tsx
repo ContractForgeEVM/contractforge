@@ -44,45 +44,52 @@ interface TemplateSelectorProps {
   onSelectTemplate: (template: ContractTemplate) => void
   showHomepage?: boolean
   onShowTemplates?: () => void
+  onNavigateDocs?: () => void
 }
 
 // Composant Hero Section avec avantages
-const HeroSection: React.FC = () => {
+const HeroSection: React.FC<{ onNavigateDocs?: () => void }> = ({ onNavigateDocs }) => {
   const { t } = useTranslation()
   
   const platformStats = [
-    { icon: <RocketIcon />, value: '12+', label: 'Smart Contract Templates' },
-    { icon: <AutoAwesomeIcon />, value: '44+', label: 'Premium Features' },
-    { icon: <PublicIcon />, value: '15+', label: 'Supported Networks' },
-    { icon: <ShieldIcon />, value: '100%', label: 'Security Audited' }
+    { icon: <RocketIcon />, value: '12+', label: t('templateSelector.platformStats.smartContractTemplates') },
+    { icon: <AutoAwesomeIcon />, value: '44+', label: t('templateSelector.platformStats.premiumFeatures') },
+    { icon: <PublicIcon />, value: '15+', label: t('templateSelector.platformStats.supportedNetworks') },
+    { icon: <ShieldIcon />, value: '100%', label: t('templateSelector.platformStats.securityAudited') }
   ]
 
   const keyFeatures = [
     {
       icon: <SpeedIcon />,
-      title: 'Deploy in Minutes',
-      description: 'No-code smart contract deployment with real-time code preview'
+      title: t('templateSelector.keyFeatures.deployInMinutes.title'),
+      description: t('templateSelector.keyFeatures.deployInMinutes.description')
     },
     {
       icon: <PaletteIcon />,
-      title: 'Custom Mint Pages',
-      description: 'Automatic subdomain pages for your NFT collections'
+      title: t('templateSelector.keyFeatures.customMintPages.title'),
+      description: t('templateSelector.keyFeatures.customMintPages.description')
     },
     {
       icon: <AnalyticsIcon />,
-      title: 'Advanced Analytics',
-      description: 'Real-time deployment tracking and performance metrics'
+      title: t('templateSelector.keyFeatures.advancedAnalytics.title'),
+      description: t('templateSelector.keyFeatures.advancedAnalytics.description')
     },
     {
       icon: <IntegrationIcon />,
-      title: 'Full Web3 Integration',
-      description: 'MetaMask, WalletConnect, and multi-chain support'
+      title: t('templateSelector.keyFeatures.fullWeb3Integration.title'),
+      description: t('templateSelector.keyFeatures.fullWeb3Integration.description')
     }
   ]
 
   const premiumHighlights = [
-    'Auction Systems', 'Price Oracles', 'Staking Rewards', 'DAO Governance',
-    'Multi-sig Security', 'Royalties (EIP-2981)', 'Whitelist Control', 'Dynamic NFTs'
+    t('templateSelector.premiumHighlights.auctionSystems'),
+    t('templateSelector.premiumHighlights.priceOracles'), 
+    t('templateSelector.premiumHighlights.stakingRewards'),
+    t('templateSelector.premiumHighlights.daoGovernance'),
+    t('templateSelector.premiumHighlights.multisigSecurity'),
+    t('templateSelector.premiumHighlights.royalties'),
+    t('templateSelector.premiumHighlights.whitelistControl'),
+    t('templateSelector.premiumHighlights.dynamicNfts')
   ]
 
   return (
@@ -101,350 +108,9 @@ const HeroSection: React.FC = () => {
             mb: 2,
           }}
         >
-          Deploy Smart Contracts
+          {t('templateSelector.heroTitle')}
           <br />
-          <Box component="span" sx={{ color: '#10b981' }}>Without Code</Box>
-        </Typography>
-        
-                 <Typography 
-           variant="h5" 
-           color="text.secondary" 
-           sx={{ mb: 4, maxWidth: '600px', mx: 'auto', lineHeight: 1.4 }}
-         >
-           Professional no-code platform with 44+ premium features, 
-           multi-chain support, and automatic mint page generation
-         </Typography>
-
-         {/* Hero CTA Button */}
-         <Box sx={{ mb: 4 }}>
-           <Button
-             variant="contained"
-             size="large"
-             startIcon={<RocketIcon />}
-             onClick={() => {
-               const templatesSection = document.getElementById('templates-section')
-               if (templatesSection) {
-                 templatesSection.scrollIntoView({ behavior: 'smooth' })
-               }
-             }}
-             sx={{
-               background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
-               px: 6,
-               py: 2,
-               fontSize: '1.3rem',
-               fontWeight: 700,
-               borderRadius: 3,
-               boxShadow: '0 8px 24px rgba(236, 72, 153, 0.4)',
-               '&:hover': {
-                 background: 'linear-gradient(135deg, #db2777 0%, #7c3aed 100%)',
-                 transform: 'translateY(-4px) scale(1.05)',
-                 boxShadow: '0 12px 32px rgba(236, 72, 153, 0.6)',
-               },
-               transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-               animation: 'pulse 2s infinite',
-               '@keyframes pulse': {
-                 '0%, 100%': {
-                   boxShadow: '0 8px 24px rgba(236, 72, 153, 0.4)',
-                 },
-                 '50%': {
-                   boxShadow: '0 8px 24px rgba(236, 72, 153, 0.8)',
-                 },
-               },
-             }}
-           >
-             🚀 Start Building Now
-           </Button>
-         </Box>
-
-        {/* Stats Row */}
-        <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center', flexWrap: 'wrap', mb: 4 }}>
-          {platformStats.map((stat, index) => (
-            <Box key={index} sx={{ flex: '1 1 250px', maxWidth: '300px' }}>
-              <Paper
-                elevation={3}
-                sx={{
-                  p: 3,
-                  textAlign: 'center',
-                  background: 'rgba(26, 26, 46, 0.6)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: '0 12px 24px rgba(99, 102, 241, 0.2)',
-                  }
-                }}
-              >
-                <Avatar
-                  sx={{
-                    bgcolor: 'primary.main',
-                    width: 48,
-                    height: 48,
-                    mx: 'auto',
-                    mb: 1,
-                  }}
-                >
-                  {stat.icon}
-                </Avatar>
-                <Typography variant="h4" fontWeight={700} color="primary">
-                  {stat.value}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {stat.label}
-                </Typography>
-              </Paper>
-            </Box>
-          ))}
-        </Box>
-      </Container>
-
-      {/* Key Features Grid */}
-      <Container maxWidth="lg" sx={{ mb: 5 }}>
-        <Typography variant="h3" align="center" fontWeight={700} sx={{ mb: 4 }}>
-          Why Choose ContractForge? 🚀
-        </Typography>
-        
-        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
-          {keyFeatures.map((feature, index) => (
-            <Box key={index} sx={{ flex: '1 1 250px', maxWidth: '300px' }}>
-              <Card
-                sx={{
-                  height: '100%',
-                  background: 'rgba(26, 26, 46, 0.4)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    borderColor: 'primary.main',
-                    boxShadow: '0 16px 32px rgba(99, 102, 241, 0.3)',
-                  }
-                }}
-              >
-                <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                  <Avatar
-                    sx={{
-                      bgcolor: 'primary.main',
-                      width: 56,
-                      height: 56,
-                      mx: 'auto',
-                      mb: 2,
-                    }}
-                  >
-                    {feature.icon}
-                  </Avatar>
-                  <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
-                    {feature.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {feature.description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-          ))}
-        </Box>
-      </Container>
-
-      {/* Premium Features & Multi-Chain Showcase */}
-      <Container maxWidth="lg" sx={{ mb: 5 }}>
-        <Paper
-          sx={{
-            p: 4,
-            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
-            border: '1px solid rgba(99, 102, 241, 0.2)',
-            borderRadius: 3,
-          }}
-        >
-          <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <StarIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
-            <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
-              44+ Premium Features & Multi-Chain Support
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Advanced smart contract functionality with seamless multi-chain deployment
-            </Typography>
-          </Box>
-          
-          {/* Premium Features Chips */}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mb: 4 }}>
-            {premiumHighlights.map((feature, index) => (
-              <Chip
-                key={index}
-                label={feature}
-                variant="outlined"
-                sx={{
-                  borderColor: 'primary.main',
-                  color: 'primary.main',
-                  '&:hover': {
-                    backgroundColor: 'primary.main',
-                    color: 'white',
-                  }
-                }}
-              />
-            ))}
-            {/* Multi-Chain Feature Chip */}
-            <Chip
-              label="15+ EVM Networks"
-              variant="outlined"
-              icon={<PublicIcon />}
-              sx={{
-                borderColor: 'success.main',
-                color: 'success.main',
-                '&:hover': {
-                  backgroundColor: 'success.main',
-                  color: 'white',
-                }
-              }}
-            />
-          </Box>
-
-          {/* Multi-Chain Networks Display */}
-          <Box sx={{ 
-            background: 'rgba(0, 0, 0, 0.2)', 
-            borderRadius: 2, 
-            p: 3,
-            border: '1px solid rgba(255, 255, 255, 0.1)' 
-          }}>
-            <Box sx={{ textAlign: 'center', mb: 3 }}>
-              <PublicIcon sx={{ fontSize: 32, color: 'success.main', mb: 1 }} />
-              <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
-                🌍 Deploy Anywhere, Anytime
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Your contracts work seamlessly across all EVM-compatible networks
-              </Typography>
-            </Box>
-            <SupportedNetworksHeader />
-          </Box>
-        </Paper>
-      </Container>
-
-      {/* CTA Section */}
-      <Container maxWidth="md" sx={{ textAlign: 'center' }}>
-        <Paper
-          sx={{
-            p: 4,
-            background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
-            border: '2px solid',
-            borderColor: 'primary.main',
-            borderRadius: 3,
-          }}
-        >
-          <Typography variant="h4" fontWeight={700} sx={{ mb: 2 }}>
-            Ready to Deploy? 🚀
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            Join thousands of developers using ContractForge for professional smart contract deployment
-          </Typography>
-          
-                     <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-             <Button
-               variant="contained"
-               size="large"
-               startIcon={<RocketIcon />}
-               onClick={() => {
-                 const templatesSection = document.getElementById('templates-section')
-                 if (templatesSection) {
-                   templatesSection.scrollIntoView({ behavior: 'smooth' })
-                 }
-               }}
-               sx={{
-                 background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                 px: 4,
-                 py: 1.5,
-                 fontSize: '1.1rem',
-                 '&:hover': {
-                   background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                   transform: 'translateY(-2px)',
-                 },
-                 transition: 'all 0.3s ease',
-               }}
-             >
-               Choose Template
-             </Button>
-             <Button
-               variant="outlined"
-               size="large"
-               startIcon={<CodeIcon />}
-               onClick={() => window.open('/docs', '_blank')}
-               sx={{ 
-                 px: 4, 
-                 py: 1.5, 
-                 fontSize: '1.1rem',
-                 '&:hover': {
-                   transform: 'translateY(-2px)',
-                 },
-                 transition: 'all 0.3s ease',
-               }}
-             >
-               View Documentation
-             </Button>
-           </Box>
-        </Paper>
-      </Container>
-    </Box>
-  )
-}
-
-// Nouveau composant Homepage séparé
-export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemplates }) => {
-  const { t } = useTranslation()
-  
-  const platformStats = [
-    { icon: <RocketIcon />, value: '12+', label: 'Smart Contract Templates' },
-    { icon: <AutoAwesomeIcon />, value: '44+', label: 'Premium Features' },
-    { icon: <PublicIcon />, value: '15+', label: 'Supported Networks' },
-    { icon: <ShieldIcon />, value: '100%', label: 'Security Audited' }
-  ]
-
-  const keyFeatures = [
-    {
-      icon: <SpeedIcon />,
-      title: 'Deploy in Minutes',
-      description: 'No-code smart contract deployment with real-time code preview'
-    },
-    {
-      icon: <PaletteIcon />,
-      title: 'Custom Mint Pages',
-      description: 'Automatic subdomain pages for your NFT collections'
-    },
-    {
-      icon: <AnalyticsIcon />,
-      title: 'Advanced Analytics',
-      description: 'Real-time deployment tracking and performance metrics'
-    },
-    {
-      icon: <IntegrationIcon />,
-      title: 'Full Web3 Integration',
-      description: 'MetaMask, WalletConnect, and multi-chain support'
-    }
-  ]
-
-  const premiumHighlights = [
-    'Auction Systems', 'Price Oracles', 'Staking Rewards', 'DAO Governance',
-    'Multi-sig Security', 'Royalties (EIP-2981)', 'Whitelist Control', 'Dynamic NFTs'
-  ]
-
-  return (
-    <Box sx={{ mb: 6 }}>
-      {/* Hero Header */}
-      <Container maxWidth="lg" sx={{ textAlign: 'center', mb: 6 }}>
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: { xs: '2.5rem', md: '4rem' },
-            fontWeight: 900,
-            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            mb: 2,
-          }}
-        >
-          Deploy Smart Contracts
-          <br />
-          <Box component="span" sx={{ color: '#10b981' }}>Without Code</Box>
+          <Box component="span" sx={{ color: '#10b981' }}>{t('templateSelector.heroTitleHighlight')}</Box>
         </Typography>
         
         <Typography 
@@ -452,8 +118,7 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
           color="text.secondary" 
           sx={{ mb: 4, maxWidth: '600px', mx: 'auto', lineHeight: 1.4 }}
         >
-          Professional no-code platform with 44+ premium features, 
-          multi-chain support, and automatic mint page generation
+          {t('templateSelector.heroSubtitle')}
         </Typography>
 
         {/* Hero CTA Button */}
@@ -462,7 +127,12 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
             variant="contained"
             size="large"
             startIcon={<RocketIcon />}
-            onClick={onShowTemplates}
+            onClick={() => {
+              const templatesSection = document.getElementById('templates-section')
+              if (templatesSection) {
+                templatesSection.scrollIntoView({ behavior: 'smooth' })
+              }
+            }}
             sx={{
               background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
               px: 6,
@@ -488,7 +158,7 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
               },
             }}
           >
-            🚀 Start Building Now
+            {t('templateSelector.startBuildingNow')}
           </Button>
         </Box>
 
@@ -537,7 +207,7 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
       {/* Key Features Grid */}
       <Container maxWidth="lg" sx={{ mb: 5 }}>
         <Typography variant="h3" align="center" fontWeight={700} sx={{ mb: 4 }}>
-          Why Choose ContractForge? 🚀
+          {t('templateSelector.whyChoose')}
         </Typography>
         
         <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -595,10 +265,10 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <StarIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
             <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
-              44+ Premium Features & Multi-Chain Support
+              {t('templateSelector.premiumFeaturesTitle')}
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Advanced smart contract functionality with seamless multi-chain deployment
+              {t('templateSelector.premiumFeaturesSubtitle')}
             </Typography>
           </Box>
           
@@ -621,7 +291,7 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
             ))}
             {/* Multi-Chain Feature Chip */}
             <Chip
-              label="15+ EVM Networks"
+              label={t('templateSelector.evmNetworks')}
               variant="outlined"
               icon={<PublicIcon />}
               sx={{
@@ -645,10 +315,10 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
             <Box sx={{ textAlign: 'center', mb: 3 }}>
               <PublicIcon sx={{ fontSize: 32, color: 'success.main', mb: 1 }} />
               <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
-                🌍 Deploy Anywhere, Anytime
+                {t('templateSelector.deployAnywhere')}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Your contracts work seamlessly across all EVM-compatible networks
+                {t('templateSelector.deployAnywhereSubtitle')}
               </Typography>
             </Box>
             <SupportedNetworksHeader />
@@ -668,10 +338,351 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
           }}
         >
           <Typography variant="h4" fontWeight={700} sx={{ mb: 2 }}>
-            Ready to Deploy? 🚀
+            {t('templateSelector.readyToDeploy')}
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            Join thousands of developers using ContractForge for professional smart contract deployment
+            {t('templateSelector.readyToDeploySubtitle')}
+          </Typography>
+          
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<RocketIcon />}
+              onClick={() => {
+                const templatesSection = document.getElementById('templates-section')
+                if (templatesSection) {
+                  templatesSection.scrollIntoView({ behavior: 'smooth' })
+                }
+              }}
+              sx={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                px: 4,
+                py: 1.5,
+                fontSize: '1.1rem',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                  transform: 'translateY(-2px)',
+                },
+                transition: 'all 0.3s ease',
+              }}
+            >
+              {t('templateSelector.chooseTemplate')}
+            </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              startIcon={<CodeIcon />}
+              onClick={onNavigateDocs || (() => {})}
+              sx={{ 
+                px: 4, 
+                py: 1.5, 
+                fontSize: '1.1rem',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                },
+                transition: 'all 0.3s ease',
+              }}
+            >
+              {t('templateSelector.viewDocumentation')}
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
+    </Box>
+  )
+}
+
+// Nouveau composant Homepage séparé
+export const Homepage: React.FC<{ onShowTemplates: () => void; onNavigateDocs?: () => void }> = ({ onShowTemplates, onNavigateDocs }) => {
+  const { t } = useTranslation()
+  
+  const platformStats = [
+    { icon: <RocketIcon />, value: '12+', label: t('templateSelector.platformStats.smartContractTemplates') },
+    { icon: <AutoAwesomeIcon />, value: '44+', label: t('templateSelector.platformStats.premiumFeatures') },
+    { icon: <PublicIcon />, value: '15+', label: t('templateSelector.platformStats.supportedNetworks') },
+    { icon: <ShieldIcon />, value: '100%', label: t('templateSelector.platformStats.securityAudited') }
+  ]
+
+  const keyFeatures = [
+    {
+      icon: <SpeedIcon />,
+      title: t('templateSelector.keyFeatures.deployInMinutes.title'),
+      description: t('templateSelector.keyFeatures.deployInMinutes.description')
+    },
+    {
+      icon: <PaletteIcon />,
+      title: t('templateSelector.keyFeatures.customMintPages.title'),
+      description: t('templateSelector.keyFeatures.customMintPages.description')
+    },
+    {
+      icon: <AnalyticsIcon />,
+      title: t('templateSelector.keyFeatures.advancedAnalytics.title'),
+      description: t('templateSelector.keyFeatures.advancedAnalytics.description')
+    },
+    {
+      icon: <IntegrationIcon />,
+      title: t('templateSelector.keyFeatures.fullWeb3Integration.title'),
+      description: t('templateSelector.keyFeatures.fullWeb3Integration.description')
+    }
+  ]
+
+  const premiumHighlights = [
+    t('templateSelector.premiumHighlights.auctionSystems'),
+    t('templateSelector.premiumHighlights.priceOracles'), 
+    t('templateSelector.premiumHighlights.stakingRewards'),
+    t('templateSelector.premiumHighlights.daoGovernance'),
+    t('templateSelector.premiumHighlights.multisigSecurity'),
+    t('templateSelector.premiumHighlights.royalties'),
+    t('templateSelector.premiumHighlights.whitelistControl'),
+    t('templateSelector.premiumHighlights.dynamicNfts')
+  ]
+
+  return (
+    <Box sx={{ mb: 6 }}>
+      {/* Hero Header */}
+      <Container maxWidth="lg" sx={{ textAlign: 'center', mb: 6 }}>
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: { xs: '2.5rem', md: '4rem' },
+            fontWeight: 900,
+            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            mb: 2,
+          }}
+        >
+          {t('templateSelector.heroTitle')}
+          <br />
+          <Box component="span" sx={{ color: '#10b981' }}>{t('templateSelector.heroTitleHighlight')}</Box>
+        </Typography>
+        
+        <Typography 
+          variant="h5" 
+          color="text.secondary" 
+          sx={{ mb: 4, maxWidth: '600px', mx: 'auto', lineHeight: 1.4 }}
+        >
+          {t('templateSelector.heroSubtitle')}
+        </Typography>
+
+        {/* Hero CTA Button */}
+        <Box sx={{ mb: 4 }}>
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<RocketIcon />}
+            onClick={onShowTemplates}
+            sx={{
+              background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
+              px: 6,
+              py: 2,
+              fontSize: '1.3rem',
+              fontWeight: 700,
+              borderRadius: 3,
+              boxShadow: '0 8px 24px rgba(236, 72, 153, 0.4)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #db2777 0%, #7c3aed 100%)',
+                transform: 'translateY(-4px) scale(1.05)',
+                boxShadow: '0 12px 32px rgba(236, 72, 153, 0.6)',
+              },
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+              animation: 'pulse 2s infinite',
+              '@keyframes pulse': {
+                '0%, 100%': {
+                  boxShadow: '0 8px 24px rgba(236, 72, 153, 0.4)',
+                },
+                '50%': {
+                  boxShadow: '0 8px 24px rgba(236, 72, 153, 0.8)',
+                },
+              },
+            }}
+          >
+            {t('templateSelector.startBuildingNow')}
+          </Button>
+        </Box>
+
+        {/* Stats Row */}
+        <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center', flexWrap: 'wrap', mb: 4 }}>
+          {platformStats.map((stat, index) => (
+            <Box key={index} sx={{ flex: '1 1 250px', maxWidth: '300px' }}>
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  textAlign: 'center',
+                  background: 'rgba(26, 26, 46, 0.6)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 12px 24px rgba(99, 102, 241, 0.2)',
+                  }
+                }}
+              >
+                <Avatar
+                  sx={{
+                    bgcolor: 'primary.main',
+                    width: 48,
+                    height: 48,
+                    mx: 'auto',
+                    mb: 1,
+                  }}
+                >
+                  {stat.icon}
+                </Avatar>
+                <Typography variant="h4" fontWeight={700} color="primary">
+                  {stat.value}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {stat.label}
+                </Typography>
+              </Paper>
+            </Box>
+          ))}
+        </Box>
+      </Container>
+
+      {/* Key Features Grid */}
+      <Container maxWidth="lg" sx={{ mb: 5 }}>
+        <Typography variant="h3" align="center" fontWeight={700} sx={{ mb: 4 }}>
+          {t('templateSelector.whyChoose')}
+        </Typography>
+        
+        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {keyFeatures.map((feature, index) => (
+            <Box key={index} sx={{ flex: '1 1 250px', maxWidth: '300px' }}>
+              <Card
+                sx={{
+                  height: '100%',
+                  background: 'rgba(26, 26, 46, 0.4)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 16px 32px rgba(99, 102, 241, 0.3)',
+                  }
+                }}
+              >
+                <CardContent sx={{ textAlign: 'center', p: 3 }}>
+                  <Avatar
+                    sx={{
+                      bgcolor: 'primary.main',
+                      width: 56,
+                      height: 56,
+                      mx: 'auto',
+                      mb: 2,
+                    }}
+                  >
+                    {feature.icon}
+                  </Avatar>
+                  <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+          ))}
+        </Box>
+      </Container>
+
+      {/* Premium Features & Multi-Chain Showcase */}
+      <Container maxWidth="lg" sx={{ mb: 5 }}>
+        <Paper
+          sx={{
+            p: 4,
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+            border: '1px solid rgba(99, 102, 241, 0.2)',
+            borderRadius: 3,
+          }}
+        >
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <StarIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+            <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
+              {t('templateSelector.premiumFeaturesTitle')}
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              {t('templateSelector.premiumFeaturesSubtitle')}
+            </Typography>
+          </Box>
+          
+          {/* Premium Features Chips */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mb: 4 }}>
+            {premiumHighlights.map((feature, index) => (
+              <Chip
+                key={index}
+                label={feature}
+                variant="outlined"
+                sx={{
+                  borderColor: 'primary.main',
+                  color: 'primary.main',
+                  '&:hover': {
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                  }
+                }}
+              />
+            ))}
+            {/* Multi-Chain Feature Chip */}
+            <Chip
+              label={t('templateSelector.evmNetworks')}
+              variant="outlined"
+              icon={<PublicIcon />}
+              sx={{
+                borderColor: 'success.main',
+                color: 'success.main',
+                '&:hover': {
+                  backgroundColor: 'success.main',
+                  color: 'white',
+                }
+              }}
+            />
+          </Box>
+
+          {/* Multi-Chain Networks Display */}
+          <Box sx={{ 
+            background: 'rgba(0, 0, 0, 0.2)', 
+            borderRadius: 2, 
+            p: 3,
+            border: '1px solid rgba(255, 255, 255, 0.1)' 
+          }}>
+            <Box sx={{ textAlign: 'center', mb: 3 }}>
+              <PublicIcon sx={{ fontSize: 32, color: 'success.main', mb: 1 }} />
+              <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
+                {t('templateSelector.deployAnywhere')}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {t('templateSelector.deployAnywhereSubtitle')}
+              </Typography>
+            </Box>
+            <SupportedNetworksHeader />
+          </Box>
+        </Paper>
+      </Container>
+
+      {/* CTA Section */}
+      <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+        <Paper
+          sx={{
+            p: 4,
+            background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
+            border: '2px solid',
+            borderColor: 'primary.main',
+            borderRadius: 3,
+          }}
+        >
+          <Typography variant="h4" fontWeight={700} sx={{ mb: 2 }}>
+            {t('templateSelector.readyToDeploy')}
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            {t('templateSelector.readyToDeploySubtitle')}
           </Typography>
           
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -692,13 +703,13 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
                 transition: 'all 0.3s ease',
               }}
             >
-              Choose Template
+              {t('templateSelector.chooseTemplate')}
             </Button>
             <Button
               variant="outlined"
               size="large"
               startIcon={<CodeIcon />}
-              onClick={() => window.open('/docs', '_blank')}
+              onClick={onNavigateDocs || (() => {})}
               sx={{ 
                 px: 4, 
                 py: 1.5, 
@@ -709,7 +720,7 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
                 transition: 'all 0.3s ease',
               }}
             >
-              View Documentation
+              {t('templateSelector.viewDocumentation')}
             </Button>
           </Box>
         </Paper>
@@ -718,20 +729,20 @@ export const Homepage: React.FC<{ onShowTemplates: () => void }> = ({ onShowTemp
   )
 }
 
-const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = true, onShowTemplates }: TemplateSelectorProps) => {
+const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = true, onShowTemplates, onNavigateDocs }: TemplateSelectorProps) => {
   const { t } = useTranslation()
   
   // Si on doit afficher la homepage
   if (showHomepage && onShowTemplates) {
-    return <Homepage onShowTemplates={onShowTemplates} />
+    return <Homepage onShowTemplates={onShowTemplates} onNavigateDocs={onNavigateDocs} />
   }
   
   const getPopularityBadge = (templateId: string) => {
     const popularity: Record<string, string> = {
-      token: 'Most Popular',
-      nft: 'Trending',
-      dao: 'Advanced',
-      lock: 'Security',
+      token: t('templateSelector.popularity.mostPopular'),
+      nft: t('templateSelector.popularity.trending'),
+      dao: t('templateSelector.popularity.advanced'),
+      lock: t('templateSelector.popularity.security'),
     }
     return popularity[templateId]
   }
@@ -741,7 +752,7 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = t
       {/* Version avec Hero intégré et smooth scroll */}
       {showHomepage && (
         <>
-          <HeroSection />
+          <HeroSection onNavigateDocs={onNavigateDocs} />
           
           <Box id="templates-section" sx={{ scrollMarginTop: '100px' }}>
             <Stack spacing={1} alignItems="center" sx={{ mb: 4 }}>
@@ -759,7 +770,7 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = t
                 {t('selectTemplate')}
               </Typography>
               <Typography variant="body1" color="text.secondary" align="center">
-                Choose from our battle-tested smart contract templates
+                {t('templateSelector.battleTestedTemplates')}
               </Typography>
             </Stack>
           </Box>
@@ -783,7 +794,7 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = t
           {t('selectTemplate')}
         </Typography>
         <Typography variant="body1" color="text.secondary" align="center">
-          Choose from our battle-tested smart contract templates
+          {t('templateSelector.battleTestedTemplates')}
         </Typography>
       </Stack>
       )}
@@ -875,7 +886,7 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = t
                     gap: 1,
                   }}
                 >
-                  {t(template.id)}
+                  {template.name}
                   {template.id === 'token' && (
                     <VerifiedIcon sx={{ fontSize: 18, color: 'primary.main' }} />
                   )}
@@ -885,13 +896,13 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = t
                   color="text.secondary"
                   sx={{ lineHeight: 1.6 }}
                 >
-                  {t(`${template.id}Desc`)}
+                  {template.description}
                 </Typography>
               </CardContent>
             </CardActionArea>
           </Card>
         ))}
-        {}
+        {/* Coming Soon Template */}
         <Card
           sx={{
             height: '100%',
@@ -925,7 +936,7 @@ const TemplateSelector = ({ selectedTemplate, onSelectTemplate, showHomepage = t
           onClick={() => window.open('https://contractforge.io/premium', '_blank')}
         >
           <Chip
-            label="Coming Soon"
+            label={t('templateSelector.comingSoon')}
             size="small"
             color="default"
             icon={<ConstructionIcon sx={{ fontSize: 16 }} />}

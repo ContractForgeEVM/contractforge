@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import { execSync } from 'child_process'
-import { getOpenZeppelinSources } from './openzeppelin'
 interface CompilationResult {
   bytecode: string
   abi: any[]
@@ -19,7 +18,7 @@ async function ensureOpenZeppelinCache() {
       cwd: OPENZEPPELIN_CACHE_DIR,
       shell: '/bin/bash'
     })
-    execSync(`git fetch origin v4.9.0 --depth=1`, {
+    execSync(`git fetch origin v4.9.6 --depth=1`, {
       cwd: OPENZEPPELIN_CACHE_DIR,
       shell: '/bin/bash'
     })
@@ -72,7 +71,9 @@ bracket_spacing = false
     console.log(sourceCode.substring(0, 1000))
     console.log(`🔍 DEBUG: Full contract length: ${sourceCode.length} characters`)
     
-    fs.writeFileSync(path.join(tempDir, 'src', 'Contract.sol'), sourceCode)
+    // Utiliser le nom du contrat pour le fichier
+    const fileName = `${contractName}.sol`
+    fs.writeFileSync(path.join(tempDir, 'src', fileName), sourceCode)
     if (sourceCode.includes('@openzeppelin')) {
       console.log('📦 Installing OpenZeppelin for Foundry...')
       try {
@@ -125,7 +126,7 @@ bracket_spacing = false
       
       // DEBUG: Vérifier la structure des fichiers de sortie
       console.log(`🔍 DEBUG: Checking output structure for contract ${contractName}`)
-      const outDir = path.join(tempDir, 'out', 'Contract.sol')
+      const outDir = path.join(tempDir, 'out', fileName)
       console.log(`🔍 DEBUG: Looking in directory: ${outDir}`)
       
       if (fs.existsSync(outDir)) {
@@ -152,6 +153,24 @@ bracket_spacing = false
       const artifactPath = path.join(outDir, `${contractName}.json`)
       console.log(`🔍 DEBUG: Expected artifact path: ${artifactPath}`)
       console.log(`🔍 DEBUG: Artifact exists: ${fs.existsSync(artifactPath)}`)
+      
+      // DEBUG: Lister tous les fichiers JSON dans le répertoire de sortie
+      if (fs.existsSync(path.join(tempDir, 'out'))) {
+        console.log(`🔍 DEBUG: Searching for all JSON files in output...`)
+        const searchForJsonFiles = (dir: string, prefix = '') => {
+          const items = fs.readdirSync(dir)
+          items.forEach(item => {
+            const itemPath = path.join(dir, item)
+            const stat = fs.statSync(itemPath)
+            if (stat.isDirectory()) {
+              searchForJsonFiles(itemPath, prefix + '  ')
+            } else if (item.endsWith('.json')) {
+              console.log(`🔍 DEBUG: ${prefix}Found JSON: ${itemPath}`)
+            }
+          })
+        }
+        searchForJsonFiles(path.join(tempDir, 'out'))
+      }
       
       if (!fs.existsSync(artifactPath)) {
         throw new Error(`Artifact not found for contract ${contractName}`)
