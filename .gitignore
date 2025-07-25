@@ -193,4 +193,23 @@ smart-contract-deployer/contracts/SubscriptionManagerUSDC.sol
 # Test files
 test-results/
 playwright-report/
-test-output/ 
+test-output/
+
+# Foundry audit contracts directory - generated for security audits
+foundry-contracts-audit/
+
+# Audit-related files generated at project root
+audit-report.js
+generate-contracts.js
+foundry.toml
+remappings.txt
+
+# Backend API test and debug files
+smart-contract-compiler-api/database-migration.sql
+smart-contract-compiler-api/test-all-fixes.js
+smart-contract-compiler-api/test-restored-fixes.js
+
+# Frontend deployer test and debug files
+smart-contract-deployer/comprehensive-security-audit-report.html
+smart-contract-deployer/test-complete-compatibility.js
+smart-contract-deployer/test-frontend-encoding-fix.js 
