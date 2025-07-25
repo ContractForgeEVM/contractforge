@@ -19,12 +19,16 @@ debug-token-pausable.sol
 debug-*.sol
 debug-*.js
 debug_lock_test.js
+debug_lock_detailed.js
 quick-test-fixes.js
+quick-test.cjs
 test-all-compilations.js
+test-all-compilations.cjs
 test-local-generator.js
 test-specific-errors.js
 test_all_templates.js
 test_extended_templates.js
+check-versions.js
 
 # Test results and compilation outputs
 local-test-results.json
@@ -40,6 +44,12 @@ ethereum-deploy.log
 investor-presentation.html
 AUDIT_REPORT_UniversalFactoryV2.html
 Deployment JS/
+
+# Configuration and deployment files
+nginx.conf
+hardhat.arbitrum.config.cjs
+hardhat.simple.config.cjs
+hardhat.subscription.config.cjs
 
 # Test files
 test/
@@ -63,6 +73,9 @@ dist/
 build/
 .next/
 out/
+
+# Frontend files
+index.html
 
 # IDE and editor files
 .vscode/
