@@ -1,0 +1,97 @@
+{
+  "name": "ContractForge.io - Deploy Smart Contracts Without Code",
+  "short_name": "ContractForge.io",
+  "description": "Deploy ERC20 tokens, NFT collections, DAOs, and smart contracts on any EVM blockchain without coding. Professional templates with premium features.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a202e",
+  "theme_color": "#5C6BC0",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["business", "developer", "finance", "productivity"],
+  "screenshots": [
+    {
+      "src": "/ContractForge.io.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Create ERC20 Token",
+      "short_name": "ERC20",
+      "description": "Deploy an ERC20 token contract",
+      "url": "/templates/erc20",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Create NFT Collection",
+      "short_name": "NFT",
+      "description": "Deploy an NFT collection contract",
+      "url": "/templates/nft",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Create DAO",
+      "short_name": "DAO",
+      "description": "Deploy a DAO governance contract",
+      "url": "/templates/dao",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 480
+  }
+}

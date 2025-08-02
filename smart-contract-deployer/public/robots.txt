@@ -1,0 +1,37 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://contractforge.io/sitemap.xml
+
+# Crawl-delay (optional, for heavy crawlers)
+Crawl-delay: 1
+
+# Specific instructions for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block access to unnecessary files
+Disallow: /*.json$
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /.git/
+Disallow: /src/
+
+# Allow important directories
+Allow: /public/
+Allow: /assets/
+Allow: /images/
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.svg$
+Allow: /*.ico$
+
+# Host directive
+Host: https://contractforge.io 

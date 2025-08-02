@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+    <msapplication>
+        <tile>
+            <square150x150logo src="/ContractForge.io.png"/>
+            <wide310x150logo src="/ContractForge.io.png"/>
+            <square310x310logo src="/ContractForge.io.png"/>
+            <TileColor>#5C6BC0</TileColor>
+        </tile>
+    </msapplication>
+</browserconfig> 
