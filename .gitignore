@@ -1,0 +1,224 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Temporary folders
+tmp/
+temp/
+
+# Docker
+.dockerignore
+
+# Hardhat
+cache/
+artifacts/
+typechain/
+typechain-types/
+
+# Foundry
+out/
+cache/
+broadcast/
+
+# SENSITIVE FILES - EXCLUDE FROM PUBLIC REPO
+smart-contract-compiler-api/data/apiKeys.json
+smart-contract-compiler-api/data/
+Deployment JS/
+deployment-*.json
+**/apiKeys.json
+**/secrets.json
+**/config/production/
+**/config/private/
+
+# API Keys and sensitive data
+**/apiKeys.json
+**/secrets.json
+**/private.json
+**/production.json
+
+# Deployment data
+**/deployment-*.json
+**/deployment-data/
+**/deployments/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.backup
+*.bak
+*~
+
+# Documentation files - EXCLUDE FROM PUBLIC REPO
+*.md
+!README.md
+!**/README.md
+
+# Debug and test files - EXCLUDE FROM PUBLIC REPO
+debug-*.js
+debug-*.sol
+debug_*.js
+test-*.js
+test-*.sh
+test-*.json
+Galxe_Introduction_Text.txt
+test_*.js
+quick-test-*.js
+local-test-*.json
+
+# Deployment and cleanup scripts - EXCLUDE FROM PUBLIC REPO
+deploy-*.sh
+cleanup-*.sh
+
+# Audit contracts - EXCLUDE FROM PUBLIC REPO
+audit-contracts/
+
+# Sensitive business documents - EXCLUDE FROM PUBLIC REPO
+**/investor-presentation.html
+**/AUDIT_REPORT_*.html
+
+# =====================================
+# ADDITIONAL FILES TO IGNORE - ADDED
+# =====================================
+
+# Deploy packages and backend
+deploy-package/
+deploy-package-backend/
+
+# Scripts and utilities
+scripts/
+check-versions.js
+verify-versions.js
+
+# Test and debug files
+compilation-test-results.json
+debug_lock_detailed.js
+debug_lock_test.js
+test_all_templates.js
+test_extended_templates.js
+test-advanced-templates.js
+test-all-templates.js
+test-output.log
+test-premium-features-compatibility.js
+
+# Database files and migrations
+database-migration.sql
+database-migration2.sql
+fix-rls-policies.sql
+
+# Documentation and guides
+MINT_PAGE_FIX.md
+PRIVATE_API_GUIDE.md
+SECURITY_UPGRADE_SUMMARY.md
+
+# Server and logs
+server.log
+telegram-bot.js
+
+# Additional specific files to ignore
+Dockerfile
+package-lock.json
+package.json
+tsconfig.json
+
+# Backup and temporary data
+backup-fake-deployments/
+
+# Contracts and deployment data
+contracts/
+docs/
+test/
+
+# Environment and config files
+.env.account1.example
+.env.hardware-wallet.example
+.env.notifications.example
+.env.verification.example
+.env.remote
+
+# Setup and documentation files
+ACCOUNT1_SETUP.md
+AVALANCHE_LEDGER_SETUP.md
+FACTORY_SECURITY_IMPROVEMENTS.md
+FACTORY_UPDATE_LOG.md
+FACTORY_VERIFICATION_GUIDE.md
+GOOGLE_ANALYTICS_SETUP.md
+HARDWARE_WALLET_GUIDE.md
+HARDWARE_WALLET_SETUP.md
+NOTIFICATION_SETUP_GUIDE.md
+
+# Deployment files
+deployment-*.json
+deploy.sh
+
+# Clear scripts and utilities
+clear-stuck-transactions.cjs
+convert-to-medium.cjs
+copy-*.sh
+quick-test.cjs
+
+# Configuration files
+eslint.config.js
+foundry.toml
+hardhat.*.config.cjs
+nginx.conf
+tsconfig.*.json
+vite.config.ts
+
+# Schema files
+notifications-schema.sql
+subscription-schema.sql
+supabase-schema.sql
+
+# Articles and presentations
+MEDIUM_ARTICLE_MEDIUM_READY.txt
+MEDIUM_ARTICLE.md
+REDDIT_POST.md
+tokenomics-contractforge.md
+index.html
+investor-presentation.html
+
+# Test compilation files
+test-all-compilations.cjs
+
+# Docs directory
+Docs/ 

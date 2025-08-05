@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test des Tooltips Plans</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #f5f5f5;
+        }
+        .test-container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin: 4px 0;
+            background: #f8f9fa;
+            border-radius: 4px;
+            position: relative;
+        }
+        .feature-item:hover {
+            background: #e3f2fd;
+            cursor: help;
+        }
+        .tooltip {
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-left: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .tooltip::before {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 5px solid transparent;
+            border-right-color: #333;
+        }
+        .feature-item:hover .tooltip {
+            opacity: 1;
+        }
+        .metric-box {
+            display: inline-block;
+            text-align: center;
+            padding: 16px;
+            margin: 8px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            position: relative;
+            cursor: help;
+        }
+        .metric-box:hover {
+            background: #bbdefb;
+        }
+        .metric-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Test des Tooltips Plans d'Abonnement</h1>
+        
+        <div style="margin: 20px 0;">
+            <h3>📊 Métriques avec Tooltips :</h3>
+            <div class="metric-box">
+                <div class="metric-number">5</div>
+                <div class="metric-label">déploiements/mois</div>
+                <div class="tooltip">Nombre de déploiements de contrats inclus chaque mois</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-number">1.5%</div>
+                <div class="metric-label">frais de plateforme</div>
+                <div class="tooltip">Pourcentage prélevé sur chaque déploiement pour couvrir les frais de réseau</div>
+            </div>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <h3>📋 Fonctionnalités avec Tooltips :</h3>
+            
+            <div class="feature-item">
+                ✅ Templates de base
+                <div class="tooltip">Accès aux modèles de contrats de base (ERC20, ERC721, etc.)</div>
+            </div>
+            
+            <div class="feature-item">
+                ✅ Déploiement mainnet
+                <div class="tooltip">Déployez sur les réseaux principaux (Ethereum, Polygon, etc.)</div>
+            </div>
+            
+            <div class="feature-item">
+                ✅ Support email
+                <div class="tooltip">Support prioritaire par email avec réponse sous 24h</div>
+            </div>
+            
+            <div class="feature-item">
+                ✅ Fonctionnalités premium
+                <div class="tooltip">Fonctionnalités premium comme les airdrops, vesting, etc.</div>
+            </div>
+            
+            <div class="feature-item">
+                ✅ API complète
+                <div class="tooltip">Accès complet à l'API pour intégrations personnalisées</div>
+            </div>
+            
+            <div class="feature-item">
+                ✅ SLA garanti
+                <div class="tooltip">Accord de niveau de service garanti 99.9%</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 15px; background: #e8f5e8; border-radius: 8px;">
+            <h4>✅ Si vous voyez les tooltips au survol :</h4>
+            <p>Les traductions <code>planTooltips</code> fonctionnent correctement !</p>
+            <p>Le problème dans l'interface réelle devrait maintenant être résolu.</p>
+        </div>
+        
+        <div style="margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 8px;">
+            <h4>⚠️ Si vous voyez encore les clés (ex: "planTooltips.basicTemplates") :</h4>
+            <p>Il y a encore un problème de chargement des traductions dans React.</p>
+            <p>Vérifiez la console du navigateur pour les erreurs.</p>
+        </div>
+    </div>
+</body>
+</html>

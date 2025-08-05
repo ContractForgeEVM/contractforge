@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  contractforge-docs:
+    build: .
+    container_name: contractforge-docs
+    restart: unless-stopped
+    ports:
+      - "3007:3007"
+    environment:
+      - NODE_ENV=production
+      - PORT=3007
+    networks:
+      - contractforge-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3007/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.docker.compose.project=contractforge"
+      - "com.docker.compose.service=docs"
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+# Create external network if it doesn't exist
+networks:
+  contractforge-network:
+    external: true
+    # If the network doesn't exist, create it with:
+    # docker network create contractforge-network

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Variables d'Environnement Frontend</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Variables d'Environnement Frontend</h1>
+    
+    <div id="results"></div>
+    
+    <script type="module">
+        const results = document.getElementById('results');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+        
+        // Test des variables d'environnement
+        log('<h2>📋 Variables d\'Environnement Vite:</h2>');
+        
+        const envVars = [
+            'VITE_API_URL',
+            'VITE_MASTER_API_KEY',
+            'VITE_FRONTEND_URL',
+            'VITE_ENVIRONMENT'
+        ];
+        
+        envVars.forEach(varName => {
+            const value = import.meta.env[varName];
+            if (value) {
+                if (varName === 'VITE_MASTER_API_KEY') {
+                    log(`✅ ${varName}: ${value.substring(0, 15)}... (${value.length} caractères)`, 'success');
+                } else {
+                    log(`✅ ${varName}: ${value}`, 'success');
+                }
+            } else {
+                log(`❌ ${varName}: NON DÉFINIE`, 'error');
+            }
+        });
+        
+        // Test spécifique de la clé master
+        log('<h2>🔑 Test Clé Master API:</h2>');
+        
+        const masterKey = import.meta.env.VITE_MASTER_API_KEY;
+        if (!masterKey) {
+            log('❌ Clé master API non configurée. Contactez l\'administrateur.', 'error');
+        } else if (!masterKey.startsWith('cfio_')) {
+            log(`⚠️  Clé master avec préfixe incorrect: ${masterKey.substring(0, 10)}... (attendu cfio_)`, 'error');
+        } else {
+            log(`✅ Clé master correctement configurée avec préfixe cfio_`, 'success');
+            log(`📏 Longueur de la clé: ${masterKey.length} caractères`, 'info');
+        }
+        
+        // Test de connectivité API
+        log('<h2>🌐 Test Connectivité API:</h2>');
+        
+        const apiUrl = import.meta.env.VITE_API_URL;
+        if (apiUrl) {
+            try {
+                fetch(`${apiUrl}/health`)
+                    .then(response => {
+                        if (response.ok) {
+                            log(`✅ API accessible sur ${apiUrl}`, 'success');
+                        } else {
+                            log(`⚠️  API répond mais avec erreur: ${response.status}`, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        log(`❌ Erreur de connexion API: ${error.message}`, 'error');
+                    });
+            } catch (error) {
+                log(`❌ Erreur lors du test API: ${error.message}`, 'error');
+            }
+        } else {
+            log('❌ URL API non configurée', 'error');
+        }
+        
+        log('<h2>📊 Résumé:</h2>');
+        log('Si toutes les variables sont ✅, le frontend devrait fonctionner correctement.', 'info');
+    </script>
+</body>
+</html>

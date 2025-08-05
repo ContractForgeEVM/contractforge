@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test des Tooltips</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@mui/material@5/umd/material-ui.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-container { max-width: 800px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+        const { Tooltip, Typography, Box, List, ListItem, ListItemIcon, ListItemText, Paper } = MaterialUI;
+        
+        function TooltipTest() {
+            const features = [
+                { name: "Compilation illimitée", tooltip: "Compilez autant de contrats que vous voulez sans limite" },
+                { name: "Prévisualisation de contrat", tooltip: "Prévisualisez votre code de contrat avant déploiement" },
+                { name: "Simulation de gas", tooltip: "Estimez les coûts de gas avant déploiement" },
+                { name: "Modèles de base", tooltip: "Accès aux modèles de contrats de base (ERC20, ERC721, etc.)" }
+            ];
+            
+            return (
+                <div className="test-container">
+                    <Typography variant="h4" gutterBottom>
+                        🧪 Test des Tooltips
+                    </Typography>
+                    
+                    <Paper sx={{ p: 3, mb: 3 }}>
+                        <Typography variant="h6" gutterBottom>
+                            Survolez les fonctionnalités ci-dessous :
+                        </Typography>
+                        
+                        <List>
+                            {features.map((feature, index) => (
+                                <ListItem key={index}>
+                                    <ListItemIcon>
+                                        ✅
+                                    </ListItemIcon>
+                                    <Tooltip title={feature.tooltip} arrow placement="right">
+                                        <ListItemText
+                                            primary={feature.name}
+                                            sx={{ 
+                                                cursor: 'help',
+                                                '&:hover': { color: 'primary.main' }
+                                            }}
+                                        />
+                                    </Tooltip>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Paper>
+                    
+                    <Paper sx={{ p: 3 }}>
+                        <Typography variant="h6" gutterBottom>
+                            Test des métriques :
+                        </Typography>
+                        
+                        <Box sx={{ display: 'flex', gap: 4 }}>
+                            <Tooltip title="Nombre de déploiements de contrats inclus chaque mois" arrow>
+                                <Box sx={{ textAlign: 'center', cursor: 'help' }}>
+                                    <Typography variant="h4" color="primary">5</Typography>
+                                    <Typography variant="caption">déploiements/mois</Typography>
+                                </Box>
+                            </Tooltip>
+                            
+                            <Tooltip title="Pourcentage prélevé sur chaque déploiement pour couvrir les frais de réseau" arrow>
+                                <Box sx={{ textAlign: 'center', cursor: 'help' }}>
+                                    <Typography variant="h4" color="primary">1.5%</Typography>
+                                    <Typography variant="caption">frais de plateforme</Typography>
+                                </Box>
+                            </Tooltip>
+                        </Box>
+                    </Paper>
+                    
+                    <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary' }}>
+                        Si vous voyez les tooltips au survol, l'implémentation fonctionne ! 🎉
+                    </Typography>
+                </div>
+            );
+        }
+        
+        ReactDOM.render(<TooltipTest />, document.getElementById('root'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,1072 @@
+{
+  "welcome": "Welcome",
+  "home": "Home",
+  "docs": "Documentation",
+  "subscriptionNav": "Subscription",
+  "nav": {
+    "deploy": "Deploy",
+    "documentation": "Documentation",
+    "account": "Account"
+  },
+  "common": {
+    "copy": "Copy",
+    "open": "Open",
+    "continue": "Continue",
+    "back": "Back"
+  },
+  "selectTemplate": "Select a Contract Template",
+  "supportedNetworks": "Supported Networks",
+  "evmCompatible": "Deploy your smart contracts on any EVM-compatible blockchain",
+  "moreSoon": "More Soon",
+  "moreSoonDesc": "We're working on more templates! Click to contribute on GitHub",
+  "connect": "Connect Wallet",
+  "disconnect": "Disconnect",
+  "token": "ERC20 Token",
+  "nft": "NFT Collection",
+  "dao": "DAO",
+  "lock": "Token Lock",
+  "liquidity-pool": "Liquidity Pool",
+  "yield-farming": "Yield Farming",
+  "gamefi-token": "GameFi Token",
+  "nft-marketplace": "NFT Marketplace",
+  "revenue-sharing": "Revenue Sharing",
+  "loyalty-program": "Loyalty Program",
+  "dynamic-nft": "Dynamic NFT",
+  "social-token": "Social Token",
+  "tokenDesc": "Create your own ERC20 token with customizable supply and decimals",
+  "nftDesc": "Deploy an NFT collection with minting capabilities",
+  "daoDesc": "Create a decentralized autonomous organization",
+  "lockDesc": "Lock tokens until a specified time",
+  "liquidity-poolDesc": "Create automated market maker pools for token trading",
+  "yield-farmingDesc": "Deploy staking contracts with automatic reward distribution",
+  "gamefi-tokenDesc": "Optimized tokens for gaming and play-to-earn applications",
+  "nft-marketplaceDesc": "Complete marketplace for buying and selling NFTs",
+  "revenue-sharingDesc": "Tokens that automatically distribute business revenue to holders",
+  "loyalty-programDesc": "Blockchain-based loyalty and rewards program",
+  "dynamic-nftDesc": "NFTs that evolve, merge, and change over time",
+  "social-tokenDesc": "Community tokens for creators and social platforms",
+  "contractName": "Contract Name",
+  "contractSymbol": "Contract Symbol",
+  "symbol": "Symbol",
+  "totalSupply": "Total Supply",
+  "initialSupply": "Initial Supply",
+  "decimals": "Decimals",
+  "maxSupply": "Max Supply",
+  "baseURI": "Base URI",
+  "proposalThreshold": "Proposal Threshold",
+  "votingPeriod": "Voting Period (blocks)",
+  "governanceTokenAddress": "Governance Token Address",
+  "tokenAddress": "Token Address",
+  "beneficiary": "Beneficiary Address",
+  "unlockTime": "Unlock Time",
+  "deploy": "Deploy Contract",
+  "deploying": "Deploying...",
+  "connectWallet": "Connect Wallet",
+  "switchLanguage": "Switch to French",
+  "estimatedGas": "Estimated Gas",
+  "deploymentCost": "Deployment Cost",
+  "platformFee": "Platform Fee",
+  "totalCost": "Total Cost",
+  "deploymentSuccess": "Contract deployed successfully!",
+  "deploymentError": "Deployment failed",
+  "copyAddress": "Copy address",
+  "contractCode": "Contract Code",
+  "connectWalletFirst": "Please connect your wallet first",
+  "back": "Back",
+  "contractForm": {
+    "required": "This field is required",
+    "invalidAddress": "Invalid Ethereum address",
+    "invalidNumber": "Invalid number",
+    "daoWarning": "DAO contracts require an existing governance token with voting capabilities (ERC20Votes). Make sure you have deployed a governance token first.",
+    "lockWarning": "Token Lock contracts require an existing ERC20 token address to lock.",
+    "connectWallet": "Connect Wallet",
+    "deploying": "Deploying...",
+    "deploy": "Deploy Contract"
+  },
+  "deployment": {
+    "estimatingGas": "Estimating gas costs...",
+    "connectWallet": "Connect wallet to see deployment costs",
+    "gasCost": "Gas Cost",
+    "platformFee": "Platform Fee (2%)",
+    "totalCost": "Total Cost",
+    "gasInfo": "Gas prices are estimates and may vary",
+    "estimatedCosts": "Estimated Costs",
+    "success": {
+      "title": "Deployment Successful!",
+      "description": "Your smart contract has been successfully deployed to the blockchain.",
+      "network": "Network",
+      "contractAddress": "Contract Address",
+      "transactionHash": "Transaction Hash",
+      "viewOnExplorer": "View on Explorer",
+      "viewTransaction": "View Transaction",
+      "nextSteps": "Your contract is now live! You can interact with it using the contract address above.",
+      "close": "Close"
+    }
+  },
+  "codeViewer": {
+    "title": "Smart Contract Code",
+    "copy": "Copy code",
+    "copied": "Copied!"
+  },
+  "premiumFeatures": {
+    "title": "Premium Features",
+    "optional": "OPTIONAL",
+    "description": "Enhance your contract with professional features",
+    "additionalCost": "Additional cost",
+    "selected": "feature selected",
+    "selectedPlural": "features selected",
+    "incompatibleWith": "Incompatible with",
+    "noFeatures": "No premium features available for this contract type",
+    "configure": "Configure",
+    "uploadFile": "Upload Address File",
+    "supportedFormats": "Supported formats:",
+    "manualEntry": "Manual Entry",
+    "addressLabel": "Ethereum Address",
+    "addressHelper": "Enter a valid Ethereum address (0x...)",
+    "addressList": "Address List",
+    "noAddresses": "No addresses configured yet",
+    "largeListWarning": "Large address lists may increase deployment gas costs",
+    "downloadExamples": "Download example files:",
+    "pausable": {
+      "name": "Pausable",
+      "description": "Add ability to pause/unpause all contract operations"
+    },
+    "burnable": {
+      "name": "Burnable",
+      "description": "Allow token holders to burn (destroy) their tokens"
+    },
+    "mintable": {
+      "name": "Mintable",
+      "description": "Owner can mint new tokens after deployment"
+    },
+    "capped": {
+      "name": "Capped Supply",
+      "description": "Set a maximum supply that cannot be exceeded",
+      "configDescription": "Set the maximum token supply that cannot be exceeded",
+      "maxSupplyLabel": "Maximum Supply",
+      "maxSupplyHelper": "Enter the maximum number of tokens that can ever exist",
+      "currentConfig": "Current configuration: Maximum supply of {maxSupply} tokens"
+    },
+    "snapshot": {
+      "name": "Snapshot",
+      "description": "Take snapshots of balances for voting or dividends"
+    },
+    "permit": {
+      "name": "EIP-2612 Permit",
+      "description": "Gasless approvals with signatures"
+    },
+    "votes": {
+      "name": "Voting Power",
+      "description": "Enable token-based voting (required for DAO)"
+    },
+    "royalties": {
+      "name": "EIP-2981 Royalties",
+      "description": "Built-in royalty support for secondary sales"
+    },
+    "enumerable": {
+      "name": "Enumerable",
+      "description": "List all tokens and owners on-chain"
+    },
+    "uristorage": {
+      "name": "URI Storage",
+      "description": "Store metadata URIs on-chain"
+    },
+    "whitelist": {
+      "name": "Whitelist",
+      "description": "Restrict transfers to whitelisted addresses",
+      "configDescription": "Configure addresses that are allowed to transfer tokens",
+      "uploadDescription": "Upload a file containing Ethereum addresses to whitelist"
+    },
+    "blacklist": {
+      "name": "Blacklist",
+      "description": "Block specific addresses from transfers",
+      "configDescription": "Configure addresses that are blocked from transfers",
+      "uploadDescription": "Upload a file containing Ethereum addresses to blacklist"
+    },
+    "tax": {
+      "name": "Transfer Tax",
+      "description": "Automatic tax on transfers (customizable rate)",
+      "configDescription": "Set up automatic tax on token transfers",
+      "rateLabel": "Tax Rate (%)",
+      "rateHelper": "Enter tax rate as percentage (e.g., 2.5 for 2.5%)",
+      "recipientLabel": "Tax Recipient Address",
+      "recipientHelper": "Address that will receive the collected tax",
+      "currentConfig": "Current configuration: {rate}% tax to {recipient}"
+    },
+    "timelock": {
+      "name": "Timelock Controller",
+      "description": "Add time delays to critical functions",
+      "configDescription": "Set the delay for critical function executions",
+      "delayLabel": "Delay (seconds)",
+      "delayHelper": "Delay in seconds before critical functions can be executed (86400 = 24 hours)",
+      "currentConfig": "Current configuration: {delay} seconds delay"
+    },
+    "multisig": {
+      "name": "Multi-signature",
+      "description": "Require multiple signatures for owner actions",
+      "configDescription": "Set up multi-signature requirements for owner actions",
+      "signerLabel": "Signer Address",
+      "signerHelper": "Add a signer address",
+      "thresholdLabel": "Required Signatures",
+      "thresholdHelper": "Number of signatures required to execute actions",
+      "currentConfig": "Current configuration: {threshold} of {signers} signatures required",
+      "addSigner": "Add Signer"
+    },
+    "upgradeable": {
+      "name": "Upgradeable (Proxy)",
+      "description": "Deploy as upgradeable proxy contract"
+    },
+    "vesting": {
+      "name": "Vesting Schedule",
+      "description": "Built-in token vesting functionality"
+    },
+    "airdrop": {
+      "name": "Batch Airdrop",
+      "description": "Efficient batch token distribution"
+    },
+    "staking": {
+      "name": "Staking Rewards",
+      "description": "Built-in staking mechanism with rewards"
+    },
+    "flashmint": {
+      "name": "Flash Minting",
+      "description": "Enable flash loans for your token"
+    },
+    "oracle": {
+      "name": "Oracle Integration",
+      "description": "Integrate Chainlink price feeds for accurate pricing"
+    },
+    "antiBot": {
+      "name": "Anti-Bot Protection",
+      "description": "Protect against bot manipulation and front-running"
+    },
+    "evolution": {
+      "name": "NFT Evolution",
+      "description": "Allow NFTs to evolve and upgrade over time"
+    },
+    "breeding": {
+      "name": "NFT Breeding",
+      "description": "Enable NFT breeding mechanics for new token generation"
+    },
+    "auction": {
+      "name": "Auction System",
+      "description": "Built-in auction functionality for NFT sales"
+    },
+    "escrow": {
+      "name": "Escrow Protection",
+      "description": "Secure escrow system for safe transactions"
+    },
+    "governance": {
+      "name": "Community Governance",
+      "description": "Token-based voting and governance system"
+    },
+    "accounting": {
+      "name": "Revenue Accounting",
+      "description": "Automated revenue tracking and distribution"
+    },
+    "tiered": {
+      "name": "Tiered Rewards",
+      "description": "Multi-level reward system based on user activity"
+    },
+    "rewards": {
+      "name": "Reward System",
+      "description": "Automated reward distribution and management"
+    },
+    "tipping": {
+      "name": "Creator Tipping",
+      "description": "Direct tipping system for content creators"
+    },
+    "communityGoverned": {
+      "name": "Community Governance",
+      "description": "Community-based voting and proposal system"
+    },
+    "lockup": {
+      "name": "Token Lockup",
+      "description": "Temporary lockup mechanism for staked tokens"
+    },
+    "curation": {
+      "name": "NFT Curation",
+      "description": "Curated marketplace with approval system for NFT listings"
+    },
+    "lazyMint": {
+      "name": "Lazy Minting",
+      "description": "Gas-efficient minting where users pay for their own NFT minting"
+    },
+    "crossChain": {
+      "name": "Cross-Chain Bridge",
+      "description": "Bridge tokens between different blockchain networks"
+    },
+    "analytics": {
+      "name": "Advanced Analytics",
+      "description": "Comprehensive analytics and reporting dashboard for contract activity"
+    },
+    "api": {
+      "name": "API Access",
+      "description": "Full API access for programmatic contract interaction"
+    },
+    "webhook": {
+      "name": "Webhook Integration",
+      "description": "Real-time webhook notifications for contract events"
+    },
+    "backup": {
+      "name": "Contract Backup",
+      "description": "Automated backup and recovery system for contract data"
+    },
+    "monitoring": {
+      "name": "Smart Monitoring",
+      "description": "Advanced monitoring and alerting system for contract health"
+    },
+    "partnership": {
+      "name": "Partnership Program",
+      "description": "Built-in partnership and collaboration features for business growth"
+    },
+    "exclusive": {
+      "name": "Exclusive Access",
+      "description": "Exclusive content and features for premium token holders"
+    },
+    "insurance": {
+      "name": "DeFi Insurance",
+      "description": "Insurance coverage for DeFi protocols and liquidity pools"
+    }
+  },
+  "templates": {
+    "token": {
+      "name": "ERC20 Token",
+      "fields": {
+        "name": "Token Name",
+        "symbol": "Token Symbol",
+        "totalSupply": "Total Supply",
+        "decimals": "Decimals"
+      },
+      "placeholders": {
+        "name": "e.g. MyToken",
+        "symbol": "e.g. MTK",
+        "totalSupply": "e.g. 1000000",
+        "decimals": "e.g. 18"
+      }
+    },
+    "nft": {
+      "name": "NFT Collection",
+      "fields": {
+        "name": "Collection Name",
+        "symbol": "Collection Symbol",
+        "maxSupply": "Max Supply",
+        "baseURI": "Base URI"
+      },
+      "placeholders": {
+        "name": "e.g. MyNFTCollection",
+        "symbol": "e.g. MNFT",
+        "maxSupply": "e.g. 10000",
+        "baseURI": "e.g. https://api.example.com/metadata/"
+      }
+    },
+    "dao": {
+      "name": "DAO",
+      "fields": {
+        "name": "DAO Name",
+        "governanceTokenAddress": "Governance Token Address",
+        "tokenAddress": "Token Address",
+        "proposalThreshold": "Proposal Threshold",
+        "votingPeriod": "Voting Period (blocks)"
+      },
+      "placeholders": {
+        "name": "e.g. MyDAO",
+        "governanceTokenAddress": "e.g. 0x...",
+        "proposalThreshold": "e.g. 100",
+        "votingPeriod": "e.g. 50400 (~1 week)"
+      }
+    },
+    "lock": {
+      "name": "Token Lock",
+      "fields": {
+        "tokenAddress": "Token Address",
+        "beneficiary": "Beneficiary Address",
+        "unlockTime": "Unlock Time"
+      },
+      "placeholders": {
+        "tokenAddress": "e.g. 0x...",
+        "beneficiary": "e.g. 0x...",
+        "unlockTime": "Select date and time"
+      }
+    },
+    "liquidity-pool": {
+      "name": "Liquidity Pool",
+      "fields": {
+        "name": "Pool Name",
+        "tokenA": "Token A Address",
+        "tokenB": "Token B Address",
+        "fee": "Pool Fee (basis points)",
+        "initialPrice": "Initial Price"
+      },
+      "placeholders": {
+        "name": "e.g. ETH/USDC Pool",
+        "tokenA": "e.g. 0x... (ETH token address)",
+        "tokenB": "e.g. 0x... (USDC token address)",
+        "fee": "e.g. 3000 (0.3%)",
+        "initialPrice": "e.g. 1.0"
+      }
+    },
+    "yield-farming": {
+      "name": "Yield Farming",
+      "fields": {
+        "name": "Farm Name",
+        "stakingToken": "Staking Token Address",
+        "rewardToken": "Reward Token Address",
+        "rewardRate": "Reward Rate (tokens/second)",
+        "duration": "Farming Duration (days)"
+      },
+      "placeholders": {
+        "name": "e.g. My Yield Farm",
+        "stakingToken": "e.g. 0x... (LP token address)",
+        "rewardToken": "e.g. 0x... (reward token address)",
+        "rewardRate": "e.g. 0.001",
+        "duration": "e.g. 30"
+      }
+    },
+    "gamefi-token": {
+      "name": "GameFi Token",
+      "fields": {
+        "name": "Token Name",
+        "symbol": "Token Symbol",
+        "maxSupply": "Max Supply",
+        "mintPrice": "Mint Price (ETH)",
+        "burnRate": "Burn Rate (%)"
+      },
+      "placeholders": {
+        "name": "e.g. GameToken",
+        "symbol": "e.g. GAME",
+        "maxSupply": "e.g. 1000000",
+        "mintPrice": "e.g. 0.01",
+        "burnRate": "e.g. 2"
+      }
+    },
+    "nft-marketplace": {
+      "name": "NFT Marketplace",
+      "fields": {
+        "name": "Marketplace Name",
+        "nftContract": "NFT Contract Address",
+        "platformFee": "Platform Fee (%)",
+        "creatorFee": "Creator Fee (%)"
+      },
+      "placeholders": {
+        "name": "e.g. My NFT Market",
+        "nftContract": "e.g. 0x... (NFT contract address)",
+        "platformFee": "e.g. 2.5",
+        "creatorFee": "e.g. 5.0"
+      }
+    },
+    "revenue-sharing": {
+      "name": "Revenue Sharing Token",
+      "fields": {
+        "name": "Token Name",
+        "symbol": "Token Symbol",
+        "totalSupply": "Total Supply",
+        "businessWallet": "Business Wallet Address",
+        "distributionPeriod": "Distribution Period (days)"
+      },
+      "placeholders": {
+        "name": "e.g. Revenue Token",
+        "symbol": "e.g. REV",
+        "totalSupply": "e.g. 1000000",
+        "businessWallet": "e.g. 0x... (business wallet)",
+        "distributionPeriod": "e.g. 30"
+      }
+    },
+    "loyalty-program": {
+      "name": "Loyalty Program",
+      "fields": {
+        "name": "Program Name",
+        "pointsPerPurchase": "Points per Purchase",
+        "redemptionRate": "Redemption Rate",
+        "transferable": "Transferable Points",
+        "expirable": "Expirable Points"
+      },
+      "placeholders": {
+        "name": "e.g. My Loyalty Program",
+        "pointsPerPurchase": "e.g. 10",
+        "redemptionRate": "e.g. 0.01"
+      }
+    },
+    "dynamic-nft": {
+      "name": "Dynamic NFT",
+      "fields": {
+        "name": "Collection Name",
+        "symbol": "Collection Symbol",
+        "maxSupply": "Max Supply",
+        "evolvable": "Evolvable NFTs",
+        "mergeable": "Mergeable NFTs"
+      },
+      "placeholders": {
+        "name": "e.g. Dynamic NFTs",
+        "symbol": "e.g. DNFT",
+        "maxSupply": "e.g. 10000"
+      }
+    },
+    "social-token": {
+      "name": "Social Token",
+      "fields": {
+        "creatorName": "Creator Name",
+        "symbol": "Token Symbol",
+        "initialSupply": "Initial Supply",
+        "creatorShare": "Creator Share (%)",
+        "communityGoverned": "Community Governed"
+      },
+      "placeholders": {
+        "creatorName": "e.g. My Community",
+        "symbol": "e.g. SOCIAL",
+        "initialSupply": "e.g. 1000000",
+        "creatorShare": "e.g. 20"
+      }
+    }
+  },
+  "documentation": {
+    "title": "ContractForge.io Documentation",
+    "subtitle": "Technical documentation for the smart contract deployment platform",
+    "tabs": {
+      "overview": "Overview",
+      "templates": "Templates",
+      "premiumFeatures": "Premium Features",
+      "api": "API",
+      "apiReference": "API Reference",
+      "networks": "Networks",
+      "deployment": "Deployment",
+      "security": "Security"
+    },
+    "overview": {
+      "description": "ContractForge.io is a no-code platform that allows users to deploy smart contracts on EVM-compatible blockchains without programming knowledge.",
+      "platformTitle": "ContractForge.io Platform",
+      "platformDesc": "ContractForge.io is a no-code platform that allows users to deploy smart contracts on EVM-compatible blockchains without programming knowledge.",
+      "keyFeatures": "Key Features",
+      "multiTemplate": "Multiple Contract Templates",
+      "multiTemplateDesc": "ERC20 tokens, NFT collections, DAO governance, and token lock contracts",
+      "premiumFeaturesTitle": "Premium Features",
+      "premiumFeaturesDesc": "20+ advanced features including pausable, burnable, mintable, and more",
+      "multiChain": "Multi-Chain Support",
+      "multiChainDesc": "Deploy on Ethereum, Polygon, Arbitrum, BSC, and other EVM-compatible chains",
+      "realTimeComp": "Real-Time Code Preview",
+      "realTimeCompDesc": "See your contract code with syntax highlighting before deployment",
+      "techStack": "Technology Stack",
+      "frontend": "Frontend",
+      "smartContracts": "Smart Contracts",
+      "quickStats": "Quick Statistics",
+      "templates": "Templates",
+      "supportedNetworks": "Supported Networks",
+      "platformFee": "Platform Fee",
+      "securityNote": "Always verify contract parameters before deployment. Smart contracts are immutable once deployed on mainnet.",
+      "reviewWarning": "Double-check all parameters before deployment. Contracts cannot be modified after deployment."
+    },
+    "templates": {
+      "title": "Contract Templates",
+      "availableTemplates": "Available Templates",
+      "requiredFields": "Required Fields",
+      "compatibleFeatures": "Compatible Premium Features",
+      "exampleParams": "Example Parameters",
+      "copyParams": "Copy Parameters",
+      "copied": "Copied!",
+      "copyExample": "Copy Example",
+      "field": "Field",
+      "type": "Type",
+      "description": "Description",
+      "required": "Required",
+      "optional": "Optional",
+      "default": "Default",
+      "fields": "fields",
+      "usageExample": "Usage Example",
+      "token": {
+        "name": "ERC20 Token",
+        "description": "Create your own ERC20 token with customizable supply and decimals",
+        "fields": {
+          "name": "Token Name",
+          "symbol": "Token Symbol",
+          "totalSupply": "Total Supply",
+          "decimals": "Decimals"
+        }
+      },
+      "nft": {
+        "name": "NFT Collection",
+        "description": "Deploy an NFT collection with minting capabilities",
+        "fields": {
+          "name": "Collection Name",
+          "symbol": "Collection Symbol",
+          "maxSupply": "Max Supply",
+          "baseURI": "Base URI"
+        }
+      },
+      "dao": {
+        "name": "DAO",
+        "description": "Create a decentralized autonomous organization",
+        "fields": {
+          "name": "DAO Name",
+          "governanceTokenAddress": "Governance Token Address",
+          "proposalThreshold": "Proposal Threshold",
+          "votingPeriod": "Voting Period (blocks)"
+        }
+      },
+      "lock": {
+        "name": "Token Lock",
+        "description": "Lock tokens until a specified time",
+        "fields": {
+          "tokenAddress": "Token Address",
+          "beneficiary": "Beneficiary Address",
+          "unlockTime": "Unlock Time"
+        }
+      },
+      "liquidity-pool": {
+        "name": "Liquidity Pool",
+        "description": "Create automated market maker pools for token trading",
+        "fields": {
+          "name": "Pool Name",
+          "tokenA": "Token A Address",
+          "tokenB": "Token B Address",
+          "fee": "Pool Fee (basis points)",
+          "initialPrice": "Initial Price"
+        }
+      },
+      "yield-farming": {
+        "name": "Yield Farming",
+        "description": "Deploy staking contracts with automatic reward distribution",
+        "fields": {
+          "name": "Farm Name",
+          "stakingToken": "Staking Token Address",
+          "rewardToken": "Reward Token Address",
+          "rewardRate": "Reward Rate (tokens/second)",
+          "duration": "Farming Duration (days)"
+        }
+      },
+      "gamefi-token": {
+        "name": "GameFi Token",
+        "description": "Optimized tokens for gaming and play-to-earn applications",
+        "fields": {
+          "name": "Token Name",
+          "symbol": "Token Symbol",
+          "maxSupply": "Max Supply",
+          "mintPrice": "Mint Price (ETH)",
+          "burnRate": "Burn Rate (%)"
+        }
+      },
+      "nft-marketplace": {
+        "name": "NFT Marketplace",
+        "description": "Complete marketplace for buying and selling NFTs",
+        "fields": {
+          "name": "Marketplace Name",
+          "nftContract": "NFT Contract Address",
+          "platformFee": "Platform Fee (%)",
+          "creatorFee": "Creator Fee (%)"
+        }
+      },
+      "revenue-sharing": {
+        "name": "Revenue Sharing Token",
+        "description": "Tokens that automatically distribute business revenue to holders",
+        "fields": {
+          "name": "Token Name",
+          "symbol": "Token Symbol",
+          "totalSupply": "Total Supply",
+          "businessWallet": "Business Wallet Address",
+          "distributionPeriod": "Distribution Period (days)"
+        }
+      },
+      "loyalty-program": {
+        "name": "Loyalty Program",
+        "description": "Blockchain-based loyalty and rewards program",
+        "fields": {
+          "name": "Program Name",
+          "pointsPerPurchase": "Points per Purchase",
+          "redemptionRate": "Redemption Rate",
+          "transferable": "Transferable Points",
+          "expirable": "Expirable Points"
+        }
+      },
+      "dynamic-nft": {
+        "name": "Dynamic NFT",
+        "description": "NFTs that evolve, merge, and change over time",
+        "fields": {
+          "name": "Collection Name",
+          "symbol": "Collection Symbol",
+          "maxSupply": "Max Supply",
+          "evolvable": "Evolvable NFTs",
+          "mergeable": "Mergeable NFTs"
+        }
+      },
+      "social-token": {
+        "name": "Social Token",
+        "description": "Community tokens for creators and social platforms",
+        "fields": {
+          "creatorName": "Creator Name",
+          "symbol": "Token Symbol",
+          "initialSupply": "Initial Supply",
+          "creatorShare": "Creator Share (%)",
+          "communityGoverned": "Community Governed"
+        }
+      }
+    },
+    "premiumFeatures": {
+      "title": "Premium Features",
+      "catalog": "Premium Features Catalog",
+      "description": "Enhance your contracts with advanced features for additional cost",
+      "price": "Price",
+      "compatible": "Compatible with",
+      "incompatible": "Incompatible",
+      "warning": "Some features may be incompatible with others",
+      "templates": "templates",
+      "compatibleWith": "Compatible with",
+      "incompatibleWith": "Incompatible with"
+    },
+    "api": {
+      "title": "API Reference",
+      "reference": "API Reference",
+      "baseUrl": "Base URL",
+      "authentication": "Authentication",
+      "authDesc": "No authentication required for public endpoints",
+      "noAuth": "No authentication required",
+      "endpoints": "Available Endpoints",
+      "endpoint": "Endpoint",
+      "method": "Method",
+      "description": "Description",
+      "authRequired": "Auth Required",
+      "compileContract": "Compile smart contract code",
+      "deployContract": "Deploy compiled contract",
+      "gasEstimate": "Estimate deployment gas costs",
+      "contractInfo": "Get contract information",
+      "verifyContract": "Verify contract on block explorer",
+      "exampleRequest": "Example Request",
+      "requestExample": "Request Example",
+      "responseExample": "Response Example"
+    },
+    "networks": {
+      "title": "Supported Networks",
+      "description": "Deploy your contracts on any of these EVM-compatible networks",
+      "supported": "Supported Networks",
+      "network": "Network",
+      "chainId": "Chain ID",
+      "gasToken": "Gas Token",
+      "explorer": "Explorer",
+      "blockExplorer": "Block Explorer",
+      "status": "Status",
+      "live": "Live",
+      "testnet": "Testnet",
+      "gasEstimation": "Gas Estimation",
+      "gasDesc": "Gas costs are estimated using current network conditions and may vary during deployment.",
+      "gasEstDesc": "Gas costs are estimated using current network conditions and may vary during deployment.",
+      "methodology": "Our gas estimation methodology",
+      "step1": "Simulate contract deployment",
+      "step2": "Calculate current gas prices",
+      "step3": "Add 20% safety margin",
+      "step4": "Convert to native token value",
+      "deploymentCost": "Base deployment cost estimation",
+      "premiumOverhead": "Premium features overhead calculation",
+      "platformFeeDesc": "Platform fee (2%) calculation",
+      "currentGasPrice": "Current gas price from network"
+    },
+    "deployment": {
+      "process": "Deployment Process",
+      "step1": "Select Template",
+      "step1Desc": "Choose from ERC20, NFT, DAO, or Token Lock",
+      "step2": "Configure Parameters",
+      "step2Desc": "Fill in contract-specific fields",
+      "step3": "Select Premium Features",
+      "step3Desc": "Add optional advanced functionality",
+      "step4": "Review & Preview",
+      "step4Desc": "Check generated code and costs",
+      "step5": "Connect Wallet",
+      "step5Desc": "Connect your Web3 wallet",
+      "step6": "Deploy",
+      "step6Desc": "Sign transaction and deploy to blockchain",
+      "tips": "Gas Optimization Tips",
+      "tip1": "Deploy during low network congestion",
+      "tip2": "Consider using L2 networks for lower costs",
+      "tip3": "Only select premium features you actually need",
+      "tip4": "Test on testnets before mainnet deployment",
+      "costBreakdown": "Cost Breakdown",
+      "gasCost": "Gas Cost",
+      "gasCostDesc": "Paid to network validators",
+      "platformFee": "Platform Fee (2%)",
+      "platformFeeDesc": "ContractForge.io service fee",
+      "totalCost": "Total Cost",
+      "testnetWarning": "Always test your contracts on testnets before deploying to mainnet!",
+      "title": "Deployment Process",
+      "gasOptimization": "Gas Optimization Tips",
+      "deployLowUsage": "Deploy during low network usage",
+      "deployLowUsageDesc": "Gas prices are typically lower on weekends and at night",
+      "considerL2": "Consider L2 networks",
+      "considerL2Desc": "Polygon, Arbitrum, and Optimism offer significantly lower fees",
+      "selectNeeded": "Select only needed features",
+      "selectNeededDesc": "Each premium feature adds to deployment cost",
+      "baseDeployment": "Base Deployment",
+      "networkGasFees": "Network gas fees",
+      "premiumFeaturesPrice": "0.005-0.05 ETH each",
+      "platformFeePercent": "2% of total cost",
+      "autoVerification": "All contracts are automatically verified on Etherscan and compatible explorers."
+    },
+    "security": {
+      "title": "Security & Best Practices",
+      "overview": "Security Overview",
+      "smartContractSecurity": "Smart Contract Security",
+      "contractSecurity": "Smart Contract Security",
+      "openzeppelinBase": "OpenZeppelin Base",
+      "openzeppelinBaseDesc": "All contracts inherit from audited OpenZeppelin implementations",
+      "latestSolidity": "Latest Solidity",
+      "latestSolidityDesc": "Using Solidity ^0.8.20 with latest security features",
+      "autoVerification": "Automatic Verification",
+      "autoVerificationDesc": "Contracts are verified on block explorers automatically",
+      "standardCompliance": "Standard Compliance",
+      "standardComplianceDesc": "ERC20, ERC721, ERC1155 standards are followed strictly",
+      "importantWarnings": "Important Warnings",
+      "immutableWarning": "Smart contracts are immutable once deployed. Review all parameters carefully.",
+      "testnetFirst": "Test extensively on testnets before mainnet deployment.",
+      "privateKeySecurity": "Keep your private keys secure. ContractForge never stores wallet information.",
+      "platformSecurity": "Platform Security",
+      "clientSideComp": "Client-Side Compilation",
+      "clientSideCompDesc": "Smart contracts are compiled in your browser for privacy",
+      "noPrivateKeyStorage": "No Private Key Storage",
+      "noPrivateKeyStorageDesc": "Your wallet keys never leave your device",
+      "openSource": "Open Source",
+      "openSourceDesc": "Platform code is open source and auditable",
+      "noBackendDeps": "No Backend Dependencies",
+      "noBackendDepsDesc": "Direct blockchain interaction without centralized servers",
+      "bestPractices": "Best Practices",
+      "reviewCode": "• Always review generated code before deployment",
+      "testFirst": "• Test first on testnets (Sepolia, Mumbai)",
+      "useMultisig": "• Use multi-sig wallets for important contracts",
+      "separateKeys": "• Keep deployment keys separate from daily-use wallets",
+      "documentParams": "• Document contract parameters and features used",
+      "considerUpgrade": "• Consider upgrade patterns for long-term projects"
+    }
+  },
+  "subscription": {
+    "title": "My Subscription",
+    "subtitle": "Manage your ContractForge.io plan",
+    "viewAllPlans": "View all plans",
+    "upgrade": "Upgrade",
+    "start": "Get Started",
+    "connectWallet": "Connect Your Wallet",
+    "connectWalletDesc": "To view and manage your subscriptions, connect your Web3 wallet",
+    "loading": "Loading your subscription...",
+    "loadingError": "Loading error",
+    "retry": "Retry",
+    "currentPlan": "Current Plan",
+    "paymentMethod": "Payment method",
+    "crypto": "Crypto",
+    "creditCard": "Credit Card",
+    "noncustodial": "Non-custodial",
+    "recurring": "Recurring",
+    "multichain": "Multi-chain",
+    "expiresIn": "Expires in",
+    "days": "days",
+    "expiredOn": "Expired on",
+    "usageThisMonth": "Usage this month",
+    "deployments": "Deployments",
+    "compilations": "Compilations",
+    "unlimited": "unlimited",
+    "apiCalls": "API Calls",
+    "includedBenefits": "Included benefits",
+    "currentNetwork": "Current network",
+    "maxSecurity": "Maximum security on Ethereum",
+    "reducedFees": "Reduced fees on Layer 2",
+    "subscriptionPlans": "Subscription Plans",
+    "upgradeTo": "Upgrade to",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "description": "Development tools + pay-as-you-go deployments",
+        "features": [
+          "Unlimited compilation",
+          "Contract preview",
+          "Gas simulation",
+          "Basic templates",
+          "Testnet preview",
+          "Community support",
+          "Pay-per-deployment (2% fees)",
+          "No monthly limits"
+        ]
+      },
+      "starter": {
+        "name": "Starter",
+        "description": "Get started with reduced fees and basic deployments",
+        "features": [
+          "5 deployments per month",
+          "Reduced fees 1.5%",
+          "Basic templates",
+          "Mainnet deployment",
+          "Custom subdomain",
+          "Email support"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "Advanced features for serious developers",
+        "features": [
+          "100 deployments per month",
+          "Standard fees 2%",
+          "All templates",
+          "Premium features",
+          "Basic analytics",
+          "Priority support",
+          "Custom branding"
+        ]
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "description": "Complete platform for teams and organizations",
+        "features": [
+          "1000 deployments per month",
+          "Reduced fees 1.5%",
+          "Custom domain",
+          "White-label solution",
+          "Full API",
+          "Advanced analytics",
+          "Dedicated support",
+          "SLA guaranteed"
+        ]
+      }
+    },
+    "choosePlan": "Choose your plan",
+    "upgradeYourPlan": "Upgrade your plan",
+    "choosePlanDesc": "Powerful tools for all your smart contract needs",
+    "upgradeDesc": "Unlock more features with a higher plan",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save2Months": "2 months free",
+    "deploymentsPerMonth": "deployments/month",
+    "platformFees": "platform fees",
+    "chooseThisPlan": "Choose this plan",
+    "alwaysFree": "Pay-as-you-go",
+    "mostPopular": "Most popular",
+    "connectWalletToSee": "Connect your wallet",
+    "save": "Save",
+    "subscribeToTitle": "Subscribe to",
+    "choosePaymentMethod": "Choose your preferred payment method",
+    "cryptoPayment": "Crypto Payment",
+    "cryptoPaymentDesc": "ETH or USDC • Non-custodial • Multi-chain",
+    "creditCardPayment": "Credit Card",
+    "creditCardPaymentDesc": "Visa, Mastercard • Recurring payment",
+    "upgradeToUnlock": "Subscribe for better rates",
+    "status": {
+      "active": "active",
+      "expired": "expired",
+      "canceled": "canceled",
+      "trial": "trial"
+    },
+    "freePlanTooltip": {
+      "title": "Free Plan",
+      "features": [
+        "• Unlimited compilation",
+        "• Contract preview",
+        "• Pay-per-deployment available",
+        "**Subscribe for reduced fees!**"
+      ]
+    },
+    "paidPlanTooltip": {
+      "title": "Plan {plan}",
+      "deployments": "• Deployments allowed",
+      "fees": "• Fees: {rate}%",
+      "starterLimit": "• 5 deployments/month",
+      "proLimit": "• 100 deployments/month",
+      "enterpriseLimit": "• 1000 deployments/month"
+    }
+  },
+  "account": {
+    "title": "Account Dashboard",
+    "connectWallet": "Connect Your Wallet",
+    "connectWalletDesc": "Please connect your wallet to access your account",
+    "upgrade": "Upgrade",
+    "stats": {
+      "contractsDeployed": "Contracts Deployed",
+      "compilations": "Compilations",
+      "apiCalls": "API Calls"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "deployments": "Deployments",
+      "tools": "Tools",
+      "billing": "Billing"
+    },
+    "subscription": {
+      "title": "Subscription Details",
+      "currentPlan": "Current Plan",
+      "expiresOn": "Expires On",
+      "monthlyDeployments": "Monthly Deployments",
+      "viewPlans": "View Available Plans"
+    },
+    "recentActivity": "Recent Activity",
+    "noRecentActivity": "No recent activity to display",
+    "tools": {
+      "mintPages": "NFT Mint Pages",
+      "mintPagesUpgradeRequired": "Mint page generation is available for subscribed users only.",
+      "apiKeys": "API Keys",
+      "apiKeysComingSoon": "API key management coming soon..."
+    }
+  },
+  "deployments": {
+    "searchPlaceholder": "Search by address or name...",
+    "filterByChain": "Chain",
+    "filterByTemplate": "Template",
+    "allChains": "All Chains",
+    "allTemplates": "All Templates",
+    "noContracts": "No deployed contracts found",
+    "noMatchingContracts": "No contracts match your search criteria",
+    "contract": "Contract",
+    "template": "Template",
+    "chain": "Chain",
+    "date": "Date",
+    "status": "Status",
+    "cost": "Cost",
+    "actions": "Actions",
+    "copyAddress": "Copy Address",
+    "viewOnExplorer": "View on Explorer",
+    "viewCode": "View Code",
+    "viewMintPage": "View Mint Page",
+    "statusValues": {
+      "success": "Success",
+      "failed": "Failed",
+      "pending": "Pending"
+    },
+    "summary": "Summary",
+    "totalContracts": "Total Contracts",
+    "uniqueChains": "Unique Chains",
+    "successRate": "Success Rate",
+    "customPages": "Custom Pages"
+  },
+  "mintPage": {
+    "steps": {
+      "selectContract": "Select NFT Contract",
+      "chooseSubdomain": "Choose Subdomain",
+      "basicInfo": "Basic Information",
+      "customization": "Customization"
+    },
+    "selectContractDesc": "Select the NFT contract you want to create a mint page for",
+    "subdomainDesc": "Choose a unique subdomain for your mint page",
+    "nftContract": "NFT Contract",
+    "subdomain": "Subdomain",
+    "checking": "Checking...",
+    "subdomainTaken": "This subdomain is already taken. Please choose another one.",
+    "title": "Page Title",
+    "description": "Description",
+    "price": "Mint Price",
+    "maxSupply": "Max Supply",
+    "maxPerWallet": "Max Per Wallet",
+    "colors": "Colors",
+    "primaryColor": "Primary Color",
+    "backgroundColor": "Background Color",
+    "displayOptions": "Display Options",
+    "showRemainingSupply": "Show Remaining Supply",
+    "showMintedCount": "Show Minted Count",
+    "socialLinks": "Social Links",
+    "preview": "Preview",
+    "review": "Review & Create",
+    "url": "Page URL",
+    "contract": "Contract",
+    "createPage": "Create Page",
+    "creating": "Creating...",
+    "info": "Create a custom mint page for your NFT collection. This page will be hosted on a subdomain of contractforge.io and allow users to mint your NFTs directly.",
+    "noNftContracts": "No NFT contracts found. Please deploy an NFT contract first in the Deploy section.",
+    "descriptionPlaceholder": "Describe your NFT collection...",
+    "previewTitle": "Mint Page Preview",
+    "alreadyMinted": "Already minted",
+    "success": {
+      "title": "Mint Page Created Successfully!",
+      "description": "Your custom mint page is now live and ready to use.",
+      "viewPage": "View Page",
+      "createAnother": "Create Another"
+    }
+  }
+}

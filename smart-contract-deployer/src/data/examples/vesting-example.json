@@ -1,0 +1,16 @@
+[
+  {
+    "beneficiary": "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6",
+    "amount": 10000,
+    "startTime": 1640995200,
+    "duration": 31536000,
+    "cliff": 15768000
+  },
+  {
+    "beneficiary": "0x8ba1f109551bD432803012645Hac136c772c3c7c",
+    "amount": 5000,
+    "startTime": 1640995200,
+    "duration": 15768000,
+    "cliff": 7884000
+  }
+]

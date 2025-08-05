@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    
+    <!-- Main pages -->
+    <url>
+        <loc>https://contractforge.io/</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://contractforge.io/" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://contractforge.io/fr" />
+    </url>
+    
+    <!-- Contract Templates -->
+    <url>
+        <loc>https://contractforge.io/templates/erc20</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://contractforge.io/templates/erc20" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://contractforge.io/fr/templates/erc20" />
+    </url>
+    
+    <url>
+        <loc>https://contractforge.io/templates/nft</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://contractforge.io/templates/nft" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://contractforge.io/fr/templates/nft" />
+    </url>
+    
+    <url>
+        <loc>https://contractforge.io/templates/dao</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://contractforge.io/templates/dao" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://contractforge.io/fr/templates/dao" />
+    </url>
+    
+    <url>
+        <loc>https://contractforge.io/templates/token-lock</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://contractforge.io/templates/token-lock" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://contractforge.io/fr/templates/token-lock" />
+    </url>
+    
+    <!-- Documentation -->
+    <url>
+        <loc>https://contractforge.io/docs</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://contractforge.io/docs/getting-started</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://contractforge.io/docs/premium-features</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <!-- Supported Networks -->
+    <url>
+        <loc>https://contractforge.io/networks</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Legal pages -->
+    <url>
+        <loc>https://contractforge.io/terms</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    
+    <url>
+        <loc>https://contractforge.io/privacy</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    
+    <!-- French version -->
+    <url>
+        <loc>https://contractforge.io/fr</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://contractforge.io/" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://contractforge.io/fr" />
+    </url>
+    
+</urlset> 
